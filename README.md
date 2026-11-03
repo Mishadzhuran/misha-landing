@@ -1,32 +1,23 @@
-# Appigon
+# Misha Landing
 
-Aggressive agency site for an app development studio — dark/red, scroll-driven 3D product journey, multi-page.
-
-## What Appigon does
-
-- App development (iOS / Android)
-- Landing pages
-- App Store support
-- Google Play / Android support
-- Market release
-- Ongoing product support
+Personal landing for Misha Dzhuran — Apple-light portfolio and product partner site.
 
 ## Stack
 
 - Next.js (App Router)
 - Tailwind CSS v4
-- Framer Motion (scroll unlock chapters)
-- React Three Fiber / Drei (3D phone + orbiting store badges)
+- Framer Motion
+- React Three Fiber / Drei
 - Lenis smooth scroll
 
 ## Pages
 
-- `/` — cinematic home with scroll-unlocked 3D journey
-- `/services` — full service stack
+- `/` — home with phone hero, outcomes, work, and contact
+- `/services` — services
 - `/cases` — shipped products
-- `/about` — studio + team
+- `/about` — about
 - `/contact` — project brief
-- `/privacy` · `/terms` — legal
+- `/privacy` · `/terms` · `/cookies` — legal
 
 ## Develop
 
@@ -34,3 +25,5 @@ Aggressive agency site for an app development studio — dark/red, scroll-driven
 npm install
 npm run dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000).
