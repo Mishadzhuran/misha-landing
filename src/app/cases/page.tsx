@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { cases } from "@/data/site";
 import {
   MagneticButton,
@@ -45,6 +46,15 @@ export default function CasesPage() {
                         {c.summary}
                       </p>
                       <p className="mt-5 text-[15px] text-text/85">{c.result}</p>
+                      <Link
+                        href={`/drafts/${c.slug}`}
+                        className="pressable mt-6 inline-flex items-center gap-2 rounded-full bg-[#1d1d1f] px-5 py-2.5 text-[13px] font-semibold !text-white transition-colors duration-200 hover:bg-black"
+                      >
+                        View details
+                        <span aria-hidden className="text-white/70">
+                          →
+                        </span>
+                      </Link>
                     </div>
                     <div className="flex flex-col justify-between rounded-[22px] border border-line bg-bg/60 p-7 text-center md:text-left">
                       <div>

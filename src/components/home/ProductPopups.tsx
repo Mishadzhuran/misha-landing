@@ -336,7 +336,7 @@ function WorkCard() {
           <CardTitle>Recent ships</CardTitle>
         </div>
         <Link
-          href="/#work"
+          href="/drafts"
           className="pressable text-[13px] font-semibold tracking-[-0.01em] text-[#0071e3]"
         >
           See all
@@ -352,7 +352,7 @@ function WorkCard() {
             transition={{ delay: 0.1 + i * 0.05, duration: 0.35, ease: easeOut }}
           >
             <Link
-              href="/#work"
+              href={`/drafts/${c.slug}`}
               className="group flex items-center gap-3 rounded-[16px] px-1.5 py-2 transition-colors duration-200 hover:bg-[#f5f5f7]"
             >
               <span
@@ -367,8 +367,13 @@ function WorkCard() {
               <p className="min-w-0 flex-1 truncate text-[14px] font-semibold tracking-[-0.015em] text-[#1d1d1f]">
                 {c.title}
               </p>
-              <span className="shrink-0 text-[12px] tabular-nums text-[#86868b]">
-                {c.year}
+              <span className="relative flex h-4 w-12 shrink-0 items-center justify-end">
+                <span className="absolute text-[12px] tabular-nums text-[#86868b] transition-opacity duration-200 group-hover:opacity-0">
+                  {c.year}
+                </span>
+                <span className="absolute text-[12px] font-semibold text-[#0071e3] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                  View →
+                </span>
               </span>
             </Link>
           </motion.li>

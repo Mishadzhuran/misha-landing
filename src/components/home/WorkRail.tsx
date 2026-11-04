@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { cases } from "@/data/site";
@@ -64,6 +65,24 @@ function CaseRow({
           <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-[#6e6e73]">
             {item.summary}
           </p>
+          <div className="mt-7 flex flex-wrap items-center gap-2.5">
+            <Link
+              href={`/drafts/${item.slug}`}
+              className="pressable inline-flex items-center gap-2 rounded-full bg-[#1d1d1f] px-5 py-2.5 text-[13px] font-semibold !text-white shadow-[0_8px_24px_rgba(0,0,0,0.16)] transition-[background-color,box-shadow] duration-200 hover:bg-black hover:shadow-[0_12px_28px_rgba(0,0,0,0.2)]"
+            >
+              View details
+              <span aria-hidden className="text-white/70">
+                →
+              </span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => onOpen(item)}
+              className="pressable inline-flex items-center rounded-full bg-[#f5f5f7] px-4 py-2.5 text-[13px] font-semibold text-[#1d1d1f] ring-1 ring-black/[0.04] transition-colors duration-200 hover:bg-[#ebebed]"
+            >
+              Preview
+            </button>
+          </div>
         </div>
       </div>
     </motion.article>
@@ -149,11 +168,14 @@ export function WorkSection() {
                   <h3 className="mt-1 text-2xl font-semibold tracking-tight text-[#1d1d1f]">
                     {active.title}
                   </h3>
+                  <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-[#6e6e73]">
+                    {active.summary}
+                  </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setActive(null)}
-                  className="pressable rounded-full bg-black/5 px-3 py-1.5 text-[13px] font-semibold text-[#1d1d1f] hover:bg-black/10"
+                  className="pressable shrink-0 rounded-full bg-black/5 px-3 py-1.5 text-[13px] font-semibold text-[#1d1d1f] hover:bg-black/10"
                 >
                   Close
                 </button>
@@ -175,6 +197,20 @@ export function WorkSection() {
                     </div>
                   ),
                 )}
+              </div>
+              <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-black/[0.06] pt-6">
+                <Link
+                  href={`/drafts/${active.slug}`}
+                  className="pressable inline-flex items-center gap-2 rounded-full bg-[#1d1d1f] px-5 py-3 text-[14px] font-semibold !text-white shadow-[0_10px_28px_rgba(0,0,0,0.18)] transition-[background-color] duration-200 hover:bg-black"
+                >
+                  View full details
+                  <span aria-hidden className="text-white/70">
+                    →
+                  </span>
+                </Link>
+                <p className="text-[13px] text-[#86868b]">
+                  Open the Apple-style product draft
+                </p>
               </div>
             </motion.div>
           </motion.div>
