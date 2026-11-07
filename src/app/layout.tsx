@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import {
+  Caveat,
   Fraunces,
   Instrument_Serif,
   Italianno,
@@ -46,6 +47,13 @@ const hand = Italianno({
   display: "swap",
 });
 
+const write = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  display: "swap",
+});
+
 const body = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
@@ -75,7 +83,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${serif.variable} ${editorial.variable} ${hand.variable} ${body.variable} h-full antialiased`}
+      className={`${display.variable} ${serif.variable} ${editorial.variable} ${hand.variable} ${write.variable} ${body.variable} h-full antialiased`}
     >
       <body className="min-h-full font-body text-text">
         <SmoothScroll>

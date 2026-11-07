@@ -29,14 +29,12 @@ import { CapabilitiesBox } from "@/components/home/CapabilitiesBox";
 import { Shell } from "@/components/ui/Primitives";
 import { easeOut, springSoft, springUi } from "@/lib/motion";
 
-const widgetShadow =
-  "0 0 0 0.5px rgba(255,255,255,0.12), 0 8px 28px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2)";
-const widgetShadowHover =
-  "0 0 0 0.5px rgba(255,255,255,0.18), 0 14px 36px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.22)";
-const darkWidgetShadow =
-  "0 0 0 0.5px rgba(255,255,255,0.16), 0 8px 28px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.25)";
-const darkWidgetShadowHover =
-  "0 0 0 0.5px rgba(255,255,255,0.22), 0 14px 36px rgba(0,0,0,0.48), 0 4px 12px rgba(0,0,0,0.28)";
+const widgetShadow = "0 18px 50px rgba(0,0,0,0.35)";
+const widgetShadowHover = "0 22px 56px rgba(0,0,0,0.4)";
+const darkWidgetShadow = "0 18px 50px rgba(0,0,0,0.35)";
+const darkWidgetShadowHover = "0 22px 56px rgba(0,0,0,0.4)";
+const darkPanel =
+  "linear-gradient(165deg, rgba(44,44,46,0.55) 0%, rgba(28,28,30,0.42) 100%)";
 
 const sf =
   'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif';
@@ -71,8 +69,13 @@ function Widget({
           ? undefined
           : { y: -2, boxShadow: shadowHover, transition: springUi }
       }
-      className={`relative flex h-full flex-col overflow-hidden rounded-[28px] md:rounded-[32px] ${className}`}
-      style={{ fontFamily: sf, boxShadow: shadow, ...style }}
+      className={`relative flex h-full flex-col overflow-hidden rounded-[28px] backdrop-blur-xl md:rounded-[32px] ${className}`}
+      style={{
+        fontFamily: sf,
+        boxShadow: shadow,
+        background: tone === "dark" ? darkPanel : undefined,
+        ...style,
+      }}
     >
       {children}
     </motion.div>
@@ -93,7 +96,6 @@ function CalendarCard() {
       delay={0.02}
       tone="dark"
       className="relative p-5 md:min-h-[300px] md:p-6"
-      style={{ background: "#1c1c1e" }}
     >
       <div className="flex gap-5">
         <div className="flex w-[72px] shrink-0 flex-col items-center border-r border-white/[0.08] pt-0.5 pr-4">
@@ -159,8 +161,12 @@ function StocksCard() {
   ];
 
   return (
-    <Widget delay={0.06} className="bg-white p-5 md:min-h-[300px] md:p-6">
-      <p className="text-[15px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">
+    <Widget
+      delay={0.06}
+      tone="dark"
+      className="p-5 md:min-h-[300px] md:p-6"
+    >
+      <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
         Results
       </p>
       <ul className="mt-3 flex-1">
@@ -172,14 +178,14 @@ function StocksCard() {
             viewport={{ once: true }}
             transition={{ ...springSoft, delay: 0.14 + i * 0.05 }}
             className={`flex items-center justify-between gap-3 py-[11px] ${
-              i < rows.length - 1 ? "border-b border-black/[0.05]" : ""
+              i < rows.length - 1 ? "border-b border-white/[0.08]" : ""
             }`}
           >
-            <p className="min-w-0 truncate text-[13px] font-medium text-[#6e6e73]">
+            <p className="min-w-0 truncate text-[13px] font-medium text-white/45">
               {r.label}
             </p>
             <div className="flex shrink-0 items-center gap-2">
-              <p className="text-[17px] font-semibold tabular-nums tracking-[-0.03em] text-[#1d1d1f]">
+              <p className="text-[17px] font-semibold tabular-nums tracking-[-0.03em] text-white">
                 {r.value}
               </p>
               <span className="min-w-[42px] rounded-[6px] bg-[#34C759] px-1.5 py-[3px] text-center text-[11px] font-semibold tabular-nums leading-none !text-white">
@@ -234,7 +240,6 @@ function FitnessCard() {
       delay={0.1}
       tone="dark"
       className="relative p-5 md:min-h-[300px] md:p-6"
-      style={{ background: "#1c1c1e" }}
     >
       <div className="relative flex h-full flex-col">
         <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
@@ -376,51 +381,45 @@ function ResponseCard() {
   return (
     <Widget
       delay={0.05}
+      tone="dark"
       className="relative flex flex-col p-5 md:min-h-[300px] md:p-6"
-      style={{
-        background:
-          "linear-gradient(180deg, #f2f2f7 0%, #ffffff 55%, #ffffff 100%)",
-      }}
     >
       <div ref={ref} className="flex h-full flex-col">
-        {/* Contact = the client (the other guy) */}
-        <div className="flex items-center gap-2.5 border-b border-black/[0.05] pb-3">
+        <div className="flex items-center gap-2.5 border-b border-white/[0.08] pb-3">
           <div
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#30D158] via-[#64D2FF] to-[#0A84FF] text-[18px] shadow-sm ring-2 ring-white"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#30D158] via-[#64D2FF] to-[#0A84FF] text-[18px] shadow-sm ring-2 ring-white/15"
             aria-hidden
           >
             👋
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[15px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">
+            <p className="truncate text-[15px] font-semibold tracking-[-0.02em] text-white">
               Alex
             </p>
-            <p className="text-[11px] font-medium text-[#8e8e93]">iMessage</p>
+            <p className="text-[11px] font-medium text-white/45">iMessage</p>
           </div>
         </div>
 
         <div className="mt-auto flex flex-col gap-2.5 pt-5">
-          {/* Incoming ask from the client */}
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 8, scale: 0.96 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true }}
             transition={{ ...springSoft, delay: 0.08 }}
-            className="max-w-[90%] self-start rounded-[20px] rounded-bl-[5px] bg-[#e9e9eb] px-3.5 py-2.5"
+            className="max-w-[90%] self-start rounded-[20px] rounded-bl-[5px] bg-[#3a3a3c] px-3.5 py-2.5"
           >
-            <p className="text-[15px] font-normal leading-snug tracking-[-0.01em] text-[#1d1d1f]">
+            <p className="text-[15px] font-normal leading-snug tracking-[-0.01em] text-white">
               Hey, can we talk about a new product?
             </p>
           </motion.div>
 
-          {/* You typing, then your blue reply */}
           {phase === "typing" ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               className="self-end"
             >
-              <div className="rounded-[20px] rounded-br-[5px] bg-[#e9e9eb] px-3.5 py-3">
+              <div className="rounded-[20px] rounded-br-[5px] bg-[#3a3a3c] px-3.5 py-3">
                 <TypingDots />
               </div>
             </motion.div>
@@ -434,7 +433,7 @@ function ResponseCard() {
                 transition={{ ...springSoft, duration: 0.45 }}
                 className="flex items-end justify-end gap-2 self-end"
               >
-                <div className="max-w-[85%] rounded-[20px] rounded-br-[5px] bg-[#007AFF] px-3.5 py-2.5 shadow-[0_6px_16px_rgba(0,122,255,0.22)]">
+                <div className="max-w-[85%] rounded-[20px] rounded-br-[5px] bg-[#0A84FF] px-3.5 py-2.5 shadow-[0_6px_16px_rgba(10,132,255,0.28)]">
                   <p className="text-[15px] font-normal leading-snug tracking-[-0.01em] !text-white">
                     Absolutely. I usually reply within{" "}
                     <span className="font-semibold">{site.responseTime}</span>.
@@ -445,7 +444,7 @@ function ResponseCard() {
                 initial={reduce ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.25, duration: 0.35 }}
-                className="self-end pr-1 text-[11px] font-medium text-[#8e8e93]"
+                className="self-end pr-1 text-[11px] font-medium text-white/40"
               >
                 Delivered
               </motion.p>
@@ -660,7 +659,6 @@ function MusicCard() {
       delay={0.09}
       tone="dark"
       className="relative overflow-hidden p-5 md:min-h-[300px] md:p-6"
-      style={{ background: "#1c1c1e" }}
     >
       <div
         aria-hidden
@@ -818,8 +816,12 @@ function TogetherCard() {
   ];
 
   return (
-    <Widget delay={0.13} className="bg-white p-5 md:min-h-[300px] md:p-6">
-      <p className="text-[15px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">
+    <Widget
+      delay={0.13}
+      tone="dark"
+      className="p-5 md:min-h-[300px] md:p-6"
+    >
+      <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
         Working together
       </p>
 
@@ -840,7 +842,7 @@ function TogetherCard() {
                   setDone((d) => d.map((v, j) => (j === i ? !v : v)))
                 }
                 className={`flex w-full items-center gap-3 py-2.5 text-left ${
-                  i < items.length - 1 ? "border-b border-black/[0.05]" : ""
+                  i < items.length - 1 ? "border-b border-white/[0.08]" : ""
                 }`}
               >
                 <span
@@ -869,8 +871,8 @@ function TogetherCard() {
                 <span
                   className={`text-[14px] font-medium tracking-[-0.015em] ${
                     checked
-                      ? "text-[#8e8e93] line-through decoration-[#c7c7cc]"
-                      : "text-[#1d1d1f]"
+                      ? "text-white/40 line-through decoration-white/25"
+                      : "text-white"
                   }`}
                 >
                   {item.title}
@@ -883,8 +885,8 @@ function TogetherCard() {
 
       <Link
         href="/contact"
-        className="pressable mt-3 flex items-center justify-center rounded-full bg-[#007AFF] py-3 text-[14px] font-semibold !text-white transition-[filter] hover:brightness-110"
-        style={{ boxShadow: "0 8px 20px rgba(0,122,255,0.25)" }}
+        className="pressable mt-3 flex items-center justify-center rounded-full bg-[#0A84FF] py-3 text-[14px] font-semibold !text-white transition-[filter] hover:brightness-110"
+        style={{ boxShadow: "0 8px 20px rgba(10,132,255,0.3)" }}
       >
         Start a conversation
       </Link>
@@ -897,7 +899,7 @@ const PAGE_BG = "#f5f5f7";
 const MID_BG = "#2c2c2e";
 const STAGE_BG = "#0a0a0a";
 /** Black finishes inside the pin — before any cards enter */
-const EXIT = [0, 0.35, 0.72] as const;
+const EXIT = [0, 0.35, 0.72];
 
 function setPageBlack(on: boolean) {
   const bg = on ? STAGE_BG : "";
@@ -940,6 +942,77 @@ function StageTitleLetter({
   );
 }
 
+/** Piecewise lerp — avoids framer range-transform edge cases */
+function lerpStops(v: number, stops: number[], values: number[]) {
+  if (v <= stops[0]) return values[0];
+  if (v >= stops[stops.length - 1]) return values[values.length - 1];
+  for (let i = 0; i < stops.length - 1; i++) {
+    const a = stops[i];
+    const b = stops[i + 1];
+    if (v >= a && v <= b) {
+      const t = (v - a) / (b - a);
+      return values[i] + (values[i + 1] - values[i]) * t;
+    }
+  }
+  return values[values.length - 1];
+}
+
+/**
+ * Italianno script — one string, scroll-linked write (undoes on scroll up).
+ */
+function OverviewHandwrite({ reduce }: { reduce: boolean | null }) {
+  const ref = useRef<HTMLHeadingElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.98", "start 0.42"],
+  });
+
+  // Function form of useTransform — stable in FM 13; reverses on scroll up
+  const clipPath = useTransform(scrollYProgress, (v) => {
+    const wipe = lerpStops(v, [0, 0.15, 0.55, 1], [102, 78, 22, -2]);
+    return `inset(-10% ${wipe}% -14% -3%)`;
+  });
+  const opacity = useTransform(scrollYProgress, (v) =>
+    lerpStops(v, [0, 0.06, 0.18, 1], [0, 0.4, 1, 1]),
+  );
+  const y = useTransform(scrollYProgress, (v) => lerpStops(v, [0, 1], [22, 0]));
+  const scale = useTransform(scrollYProgress, (v) =>
+    lerpStops(v, [0, 0.35, 1], [0.94, 0.985, 1]),
+  );
+  const filter = useTransform(scrollYProgress, (v) => {
+    const blur = lerpStops(v, [0, 0.25, 0.7, 1], [10, 5, 1.2, 0]);
+    return `blur(${blur}px)`;
+  });
+  const letterSpacing = useTransform(scrollYProgress, (v) => {
+    const em = lerpStops(v, [0, 1], [0.05, 0.012]);
+    return `${em}em`;
+  });
+
+  return (
+    <motion.h3
+      ref={ref}
+      className="script-write pointer-events-none relative z-30 -mb-6 -translate-y-3 w-full overflow-visible pt-1 text-center text-[clamp(5.75rem,20vw,11rem)] text-white -rotate-[1.4deg] md:-mb-9 md:-translate-y-5 lg:-mb-11 lg:-translate-y-6"
+      aria-label="Overview"
+      style={
+        reduce
+          ? undefined
+          : {
+              clipPath,
+              opacity,
+              y,
+              scale,
+              filter,
+              letterSpacing,
+              transformOrigin: "50% 70%",
+              willChange: "clip-path, opacity, filter, transform",
+            }
+      }
+    >
+      Overview
+    </motion.h3>
+  );
+}
+
 export function TrustSection() {
   const reduce = useReducedMotion();
   const pinRef = useRef<HTMLDivElement>(null);
@@ -957,33 +1030,41 @@ export function TrustSection() {
     EXIT,
     [PAGE_BG, MID_BG, STAGE_BG],
   );
-  const titleScale = useTransform(scrollYProgress, [0, 0.58], [1, 1.55]);
-  const titleOpacity = useTransform(scrollYProgress, [0.08, 0.55], [1, 0]);
-  const titleBlur = useTransform(scrollYProgress, [0.08, 0.55], [0, 18]);
-  const titleFilter = useTransform(titleBlur, (b) => `blur(${b}px)`);
-
-  const boardRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: boardProgress } = useScroll({
-    target: boardRef,
-    offset: ["start 0.92", "start 0.38"],
-  });
-  // Overview above the cards — reveals with scroll, not a static label
-  const overviewOpacity = useTransform(boardProgress, [0, 0.55, 1], [0, 0.85, 1]);
-  const overviewY = useTransform(boardProgress, [0, 1], [56, 0]);
-  const overviewScale = useTransform(boardProgress, [0, 1], [0.92, 1]);
-  const overviewBlur = useTransform(boardProgress, [0, 0.7, 1], [14, 2, 0]);
-  const overviewFilter = useTransform(overviewBlur, (b) => `blur(${b}px)`);
-  const overviewTrack = useTransform(boardProgress, [0, 1], [0.06, 0.01]);
-  const overviewLetterSpacing = useTransform(
-    overviewTrack,
-    (v) => `${v}em`,
+  // Heavy Gaussian dissolve — long haze before it fully vanishes
+  const titleScale = useTransform(
+    scrollYProgress,
+    [0, 0.18, 0.4, 0.68],
+    [1, 1.12, 1.35, 1.7],
+  );
+  const titleOpacity = useTransform(
+    scrollYProgress,
+    [0.06, 0.18, 0.32, 0.48, 0.62, 0.72],
+    [1, 0.7, 0.4, 0.18, 0.05, 0],
+  );
+  const titleBlur = useTransform(
+    scrollYProgress,
+    [0.06, 0.16, 0.3, 0.46, 0.62, 0.72],
+    [0, 12, 36, 64, 90, 110],
+  );
+  const titleFilter = useTransform(
+    titleBlur,
+    (b) => `blur(${b.toFixed(2)}px)`,
   );
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     if (reduce) return;
-    const on = v >= EXIT[2];
-    setLockedBlack(on);
-    setPageBlack(on);
+    if (v >= EXIT[2]) {
+      setLockedBlack(true);
+      setPageBlack(true);
+      return;
+    }
+    // Only unlock while scrolling back through the pin — not after it leaves view
+    const top = pinRef.current?.getBoundingClientRect().top ?? -Infinity;
+    const stillInPin = top > -48 && top < window.innerHeight * 0.6;
+    if (v < EXIT[2] - 0.08 && stillInPin) {
+      setLockedBlack(false);
+      setPageBlack(false);
+    }
   });
   useEffect(() => {
     return () => setPageBlack(false);
@@ -998,11 +1079,10 @@ export function TrustSection() {
           : { backgroundColor: stageBg }
       }
     >
-      {/* Pin: Deep Dive only */}
       <div ref={pinRef} className="relative h-[120vh] md:h-[125vh]">
         <div className="sticky top-0 flex h-svh w-full items-center justify-center overflow-hidden">
           <motion.div
-            className="px-3 text-center sm:px-6"
+            className="px-3 text-center sm:px-6 will-change-[opacity,filter,transform]"
             style={
               reduce
                 ? { opacity: 0 }
@@ -1010,6 +1090,7 @@ export function TrustSection() {
                     scale: titleScale,
                     opacity: titleOpacity,
                     filter: titleFilter,
+                    transformOrigin: "50% 50%",
                   }
             }
           >
@@ -1032,12 +1113,12 @@ export function TrustSection() {
         </div>
       </div>
 
-      <div ref={boardRef} className="relative">
+      <div className="relative">
         <Shell>
           <div className="relative mx-auto max-w-5xl overflow-visible">
             <div
               aria-hidden
-              className="pointer-events-none absolute left-1/2 top-[42%] z-0 h-[78%] w-[118%] -translate-x-1/2 -translate-y-1/2"
+              className="pointer-events-none absolute left-1/2 top-[48%] z-0 h-[78%] w-[118%] -translate-x-1/2 -translate-y-1/2"
               style={{
                 background:
                   "radial-gradient(ellipse at center, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 38%, transparent 68%)",
@@ -1045,27 +1126,7 @@ export function TrustSection() {
               }}
             />
 
-            <motion.h3
-              className="relative z-20 mb-8 block w-full pt-6 text-center text-[clamp(5.5rem,18vw,11rem)] leading-[0.9] text-white will-change-transform md:mb-10 md:pt-8"
-              style={
-                reduce
-                  ? {
-                      fontFamily:
-                        "var(--font-italianno), var(--font-instrument), 'Segoe Script', Georgia, cursive",
-                    }
-                  : {
-                      opacity: overviewOpacity,
-                      y: overviewY,
-                      scale: overviewScale,
-                      filter: overviewFilter,
-                      letterSpacing: overviewLetterSpacing,
-                      fontFamily:
-                        "var(--font-italianno), var(--font-instrument), 'Segoe Script', Georgia, cursive",
-                    }
-              }
-            >
-              Overview
-            </motion.h3>
+            <OverviewHandwrite reduce={reduce} />
 
             <div className="relative z-10 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
               <CalendarCard />

@@ -9,12 +9,14 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     <ReactLenis
       root
       options={{
-        lerp: 0.09,
-        duration: 1.1,
+        lerp: 0.075,
+        duration: 1.2,
         smoothWheel: true,
         syncTouch: false,
-        wheelMultiplier: 0.85,
-        touchMultiplier: 1.1,
+        wheelMultiplier: 0.78,
+        touchMultiplier: 1,
+        // Keeps sticky / pinned stages from hitching mid-gesture
+        autoRaf: true,
       }}
     >
       {children}

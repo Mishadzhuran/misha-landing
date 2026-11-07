@@ -26,6 +26,9 @@ export function Navbar() {
     return pathname === href;
   };
 
+  // Home uses a full-bleed dark stage — no floating pill chrome
+  if (pathname === "/") return null;
+
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-[max(1rem,env(safe-area-inset-top))] md:pt-5">

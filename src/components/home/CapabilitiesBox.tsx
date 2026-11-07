@@ -54,35 +54,34 @@ export function CapabilitiesBox() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45, ease: easeOut }}
-      className="mt-5 overflow-hidden rounded-[28px] md:mt-6 md:rounded-[32px]"
+      className="mt-5 overflow-hidden rounded-[28px] backdrop-blur-xl md:mt-6 md:rounded-[32px]"
       style={{
         fontFamily:
           'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif',
-        background: "#ffffff",
-        boxShadow:
-          "0 0 0 0.5px rgba(255,255,255,0.12), 0 8px 28px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2)",
+        background:
+          "linear-gradient(165deg, rgba(44,44,46,0.55) 0%, rgba(28,28,30,0.42) 100%)",
+        boxShadow: "0 18px 50px rgba(0,0,0,0.35)",
       }}
     >
       <div className="flex items-baseline justify-between gap-4 px-6 pt-5 md:px-7 md:pt-5">
-        <p className="text-[15px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">
+        <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
           Systems & integrations
         </p>
-        <p className="shrink-0 text-[13px] font-medium tabular-nums text-[#8e8e93]">
+        <p className="shrink-0 text-[13px] font-medium tabular-nums text-white/45">
           {index + 1} of {TOTAL}
         </p>
       </div>
 
       <div className="px-4 pb-5 pt-2 md:px-5 md:pb-6">
         <div
-          className="relative overflow-hidden rounded-[14px] bg-[#f2f2f7]"
+          className="relative overflow-hidden rounded-[14px] bg-[#2c2c2e]"
           style={{ height: VIEW_H }}
         >
-          {/* Selection capsule only. no divider lines */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-2 top-1/2 z-[1] h-[42px] -translate-y-1/2 rounded-[10px] bg-white/70 md:inset-x-3"
+            className="pointer-events-none absolute inset-x-2 top-1/2 z-[1] h-[42px] -translate-y-1/2 rounded-[10px] bg-white/[0.08] md:inset-x-3"
             style={{
-              boxShadow: "0 0.5px 0 rgba(0,0,0,0.04)",
+              boxShadow: "0 0 0 0.5px rgba(255,255,255,0.06)",
             }}
           />
 
@@ -112,8 +111,8 @@ export function CapabilitiesBox() {
                   <span
                     className={`max-w-full truncate tracking-[-0.022em] ${
                       active
-                        ? "text-[16px] font-semibold text-[#1d1d1f] md:text-[17px]"
-                        : "text-[15px] font-medium text-[#6e6e73]"
+                        ? "text-[16px] font-semibold text-white md:text-[17px]"
+                        : "text-[15px] font-medium text-white/45"
                     }`}
                   >
                     {row.name}
@@ -128,7 +127,7 @@ export function CapabilitiesBox() {
             className="pointer-events-none absolute inset-x-0 top-0 z-[3] h-11"
             style={{
               background:
-                "linear-gradient(180deg, #f2f2f7 0%, rgba(242,242,247,0.75) 50%, transparent 100%)",
+                "linear-gradient(180deg, #2c2c2e 0%, rgba(44,44,46,0.75) 50%, transparent 100%)",
             }}
           />
           <div
@@ -136,7 +135,7 @@ export function CapabilitiesBox() {
             className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-11"
             style={{
               background:
-                "linear-gradient(0deg, #f2f2f7 0%, rgba(242,242,247,0.75) 50%, transparent 100%)",
+                "linear-gradient(0deg, #2c2c2e 0%, rgba(44,44,46,0.75) 50%, transparent 100%)",
             }}
           />
         </div>
