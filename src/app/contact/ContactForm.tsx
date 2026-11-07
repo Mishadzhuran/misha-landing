@@ -46,9 +46,9 @@ export function ContactForm() {
             </div>
             <div>
               <p className="text-[12px] font-medium uppercase tracking-[0.12em] text-muted-soft">
-                Bases
+                Reply
               </p>
-              <p className="mt-2 text-xl md:text-2xl">{site.locations.join(" · ")}</p>
+              <p className="mt-2 text-xl md:text-2xl">Within {site.responseTime}</p>
             </div>
           </div>
 

@@ -18,7 +18,7 @@ import {
 
 const SPACE = "#050508";
 
-/** In-memory studio env — reflections without downloading HDR */
+/** In-memory studio env. reflections without downloading HDR */
 function SoftEnvironment() {
   const { gl, scene } = useThree();
 
@@ -100,7 +100,7 @@ function SoftContactShadow() {
 }
 
 /**
- * Outro stage: no pedestal disc — rings float on the space background.
+ * Outro stage: no pedestal disc. rings float on the space background.
  * Soft ease-in so the land transition feels continuous with the scroll.
  */
 function OutroGround({
@@ -155,7 +155,7 @@ function OutroGround({
 
   useFrame(() => {
     const outro = snapshotRef.current.outro;
-    // Smoothstep so rings ease in with the phone land — no pop
+    // Smoothstep so rings ease in with the phone land. no pop
     const show = outro * outro * (3 - 2 * outro);
 
     mats.wash.opacity = show * 0.55;
@@ -172,7 +172,7 @@ function OutroGround({
 
   return (
     <group ref={group} visible={false}>
-      {/* Soft red wash only — no grey disc, blends into space bg */}
+      {/* Soft red wash only. no grey disc, blends into space bg */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, y + 0.01, 0]}
@@ -215,7 +215,7 @@ function OutroGround({
         <ringGeometry args={[2.74, 2.9, 96]} />
       </mesh>
 
-      {/* Thin raised rim — slight 3D without a platform slab */}
+      {/* Thin raised rim. slight 3D without a platform slab */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, y + 0.048, 0]}
@@ -281,7 +281,7 @@ function ScrollRig({
       topFill.current.target.updateMatrixWorld();
     }
     if (ringGlow.current) {
-      // Soft under-glow only — no hard hot-spot orb
+      // Soft under-glow only. no hard hot-spot orb
       ringGlow.current.intensity = lerp(0, 0.85, oEase);
       ringGlow.current.position.set(sx.current, -2.2, sz.current);
     }

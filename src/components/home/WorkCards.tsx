@@ -150,7 +150,7 @@ export function WorkSection() {
               </BigTitle>
             </div>
             <p className="readable max-w-sm md:pb-2">
-              A slim cut of products, launches, and systems — craft over clutter.
+              A slim cut of products, launches, and systems, craft over clutter.
             </p>
           </div>
         </Reveal>

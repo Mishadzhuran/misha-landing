@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { cases } from "@/data/site";
+import { cases, featuredCases } from "@/data/site";
 import { Shell } from "@/components/ui/Primitives";
 
 import { easeOut, springUi } from "@/lib/motion";
@@ -129,7 +129,7 @@ export function WorkSection() {
         </motion.div>
 
         <div className="mt-12 space-y-8 md:mt-14 md:space-y-10">
-          {cases.map((item, i) => (
+          {featuredCases.map((item, i) => (
             <CaseRow
               key={item.slug}
               item={item}

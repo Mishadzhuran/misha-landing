@@ -11,7 +11,7 @@ import {
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "Selected work by Misha Dzhuran — fintech, social, health, logistics, and B2B products shipped end to end.",
+    "Selected work by Misha Dzhuran: fintech, social, health, logistics, and B2B products shipped end to end.",
 };
 
 export default function CasesPage() {

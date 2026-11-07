@@ -1,6 +1,6 @@
 import { CHAPTER_COUNT } from "@/lib/journeyMotion";
 
-/** Red hologram silhouettes — one mark per stage (+ brand) */
+/** Red hologram silhouettes. one mark per stage (+ brand) */
 export type HoloStage = {
   label: string;
   draw: (ctx: CanvasRenderingContext2D, s: number) => void;
@@ -24,7 +24,7 @@ function round(
   ctx.closePath();
 }
 
-/** Brand — bold APPIGON wordmark */
+/** Brand. bold APPIGON wordmark */
 function drawAppigon(ctx: CanvasRenderingContext2D, s: number) {
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -35,7 +35,7 @@ function drawAppigon(ctx: CanvasRenderingContext2D, s: number) {
   ctx.fill();
 }
 
-/** Build — phone silhouette */
+/** Build. phone silhouette */
 function drawBuild(ctx: CanvasRenderingContext2D, s: number) {
   const w = s * 0.48;
   const h = s * 0.92;
@@ -51,7 +51,7 @@ function drawBuild(ctx: CanvasRenderingContext2D, s: number) {
   ctx.restore();
 }
 
-/** Landing — browser window */
+/** Landing. browser window */
 function drawLanding(ctx: CanvasRenderingContext2D, s: number) {
   const w = s * 1.05;
   const h = s * 0.78;
@@ -73,7 +73,7 @@ function drawLanding(ctx: CanvasRenderingContext2D, s: number) {
   ctx.restore();
 }
 
-/** App Store — proper Apple logo silhouette */
+/** App Store. proper Apple logo silhouette */
 function drawApple(ctx: CanvasRenderingContext2D, s: number) {
   // Simple Icons / classic Apple path (viewBox 0 0 24 24)
   ctx.save();
@@ -112,7 +112,7 @@ function drawApple(ctx: CanvasRenderingContext2D, s: number) {
   ctx.restore();
 }
 
-/** Android — robot */
+/** Android. robot */
 function drawAndroid(ctx: CanvasRenderingContext2D, s: number) {
   ctx.lineWidth = s * 0.045;
   ctx.lineCap = "round";
@@ -144,7 +144,7 @@ function drawAndroid(ctx: CanvasRenderingContext2D, s: number) {
   ctx.fill();
 }
 
-/** Release — rocket */
+/** Release. rocket */
 function drawRelease(ctx: CanvasRenderingContext2D, s: number) {
   ctx.beginPath();
   ctx.moveTo(0, -s * 0.7);
@@ -174,7 +174,7 @@ function drawRelease(ctx: CanvasRenderingContext2D, s: number) {
   ctx.fill();
 }
 
-/** Support — shield */
+/** Support. shield */
 function drawSupport(ctx: CanvasRenderingContext2D, s: number) {
   ctx.beginPath();
   ctx.moveTo(0, -s * 0.68);

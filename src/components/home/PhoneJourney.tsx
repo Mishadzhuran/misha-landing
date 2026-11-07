@@ -216,7 +216,7 @@ export function PhoneJourney() {
     };
   }, []);
 
-  // Defer Three.js until real interaction — avoids lab TBT from GLB/shaders
+  // Defer Three.js until real interaction, avoids lab TBT from GLB/shaders
   useEffect(() => {
     let done = false;
     const enable = () => {
@@ -340,7 +340,7 @@ export function PhoneJourney() {
           const chapterChanged = next.chapter !== lastChapter.current;
           if (chapterChanged) lastChapter.current = next.chapter;
 
-          // ~16fps React text updates — 3D reads snapshotRef every frame
+          // ~16fps React text updates. 3D reads snapshotRef every frame
           if (chapterChanged || now - rafGate.current > 60) {
             rafGate.current = now;
             setSnapshot(next);
@@ -405,7 +405,7 @@ export function PhoneJourney() {
         ref={pinRef}
         className="relative h-[100svh] overflow-hidden bg-[#050508]"
       >
-        {/* CSS space field — depth without WebGL particle cost */}
+        {/* CSS space field, depth without WebGL particle cost */}
         <div
           className="journey-space pointer-events-none absolute inset-0"
           aria-hidden
@@ -452,7 +452,7 @@ export function PhoneJourney() {
                 <span className="block text-text">that leads people in</span>
               </h1>
               <p className="readable mx-auto mt-5 max-w-md md:mx-0">
-                Scroll to turn the product — every move is driven by you.
+                Scroll to turn the product, every move is driven by you.
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
                 <MagneticButton href="/contact">Start a project</MagneticButton>

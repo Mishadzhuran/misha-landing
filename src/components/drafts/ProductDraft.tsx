@@ -96,7 +96,7 @@ export function ProductDraftView({ draft }: { draft: Draft }) {
         </div>
       </div>
 
-      {/* Hero — brand first, full-bleed media */}
+      {/* Hero, brand first, full-bleed media */}
       <section className="relative overflow-hidden">
         <div className="relative min-h-[78vh] md:min-h-[88vh]">
           <Image
@@ -375,7 +375,7 @@ export function ProductDraftView({ draft }: { draft: Draft }) {
               Want a product page that feels this clear?
             </h2>
             <p className="relative mx-auto mt-4 max-w-md text-[16px] leading-relaxed text-white/65">
-              I design and build the whole loop — from first frame to a calm launch.
+              I design and build the whole loop, from first frame to a calm launch.
             </p>
             <Link
               href="/contact"

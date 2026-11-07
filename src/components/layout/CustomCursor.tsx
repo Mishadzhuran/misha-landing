@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-/** Lightweight custom cursor — no Framer Motion springs */
+/** Lightweight custom cursor. no Framer Motion springs */
 export function CustomCursor() {
   const ref = useRef<HTMLDivElement>(null);
 

@@ -76,7 +76,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Press feedback — scale, never opacity-only */
+/* Press feedback. scale, never opacity-only */
 .pressable {
   transition:
     transform var(--duration-press) var(--ease-out),
@@ -134,7 +134,7 @@ textarea {
   box-shadow: var(--shadow);
 }
 
-/* Functional-layer glass only (nav, bars) — not content cards */
+/* Functional-layer glass only (nav, bars). not content cards */
 .liquid-glass {
   background: linear-gradient(
     160deg,

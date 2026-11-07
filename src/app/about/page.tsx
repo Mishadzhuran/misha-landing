@@ -12,7 +12,7 @@ import {
 
 export const metadata: Metadata = {
   title: "About",
-  description: `About ${site.name} — product designer & developer helping people ship apps and websites end to end.`,
+  description: `About ${site.name}: product designer & developer helping people ship apps and websites end to end.`,
 };
 
 export default function AboutPage() {
@@ -33,7 +33,7 @@ export default function AboutPage() {
                   src="/me/portrait.jpg"
                   alt={site.name}
                   fill
-                  className="object-cover object-[center_18%]"
+                  className="object-cover object-[center_12%]"
                   sizes="320px"
                 />
               </div>
@@ -48,14 +48,13 @@ export default function AboutPage() {
               </BigTitle>
               <div className="mt-6 space-y-5 text-[16px] leading-relaxed text-[#6e6e73]">
                 <p>
-                  Product designer & developer based across{" "}
-                  {site.locations.join(", ")}. I help people turn ideas into
-                  polished apps and websites — Figma, engineering, TestFlight,
+                  Product designer & developer. I help people turn ideas into
+                  polished apps and websites. Figma, engineering, TestFlight,
                   App Store, and the work after launch so users actually stay.
                 </p>
                 <p>
                   Right now that means Lifemaxxing (a location-anchored social
-                  network — “the IMDb of your life”), Big Red Map (cinematic
+                  network: “the IMDb of your life”), Big Red Map (cinematic
                   travel map-as-profile), Anita (AI personal finance), and client
                   brands like Mitkovt Coaching.
                 </p>
@@ -63,7 +62,7 @@ export default function AboutPage() {
                   The through-line is restraint: fewer elements, sharper
                   decisions, and interfaces that feel expensive without needing
                   to shout. If you need someone who will take care of your app or
-                  website like it’s theirs — that’s the work.
+                  website like it’s theirs, that’s the work.
                 </p>
               </div>
               <div className="mt-8">

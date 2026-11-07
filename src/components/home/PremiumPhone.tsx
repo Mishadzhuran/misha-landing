@@ -81,18 +81,20 @@ function ScreenTalk() {
         transition={{ delay: 1.95, ...soft }}
         className="mt-auto"
       >
-        <Glass className="flex items-center justify-between px-3.5 py-2.5">
-          <div>
+        <Glass className="flex items-center justify-between gap-2.5 px-3 py-2.5">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0071e3]/12 text-[13px] font-semibold text-[#0071e3] ring-2 ring-white">
+            30
+          </div>
+          <div className="min-w-0 flex-1">
             <p className="text-[12px] font-semibold text-[#1d1d1f]">
               Discovery call
             </p>
-            <p className="text-[10px] text-[#6e6e73]">30 min · Meet</p>
           </div>
           <motion.span
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 2.15, ...spring }}
-            className="rounded-full bg-[#34c759]/15 px-2.5 py-0.5 text-[10px] font-semibold text-[#248a3d]"
+            className="shrink-0 rounded-full bg-[#34c759]/15 px-2.5 py-0.5 text-[10px] font-semibold text-[#248a3d]"
           >
             Booked
           </motion.span>
@@ -394,7 +396,7 @@ const TAB_ICONS = [
 function DynamicIsland({ live }: { live: boolean }) {
   /**
    * Opaque black mask above the device PNG (z above frame).
-   * Sized from the asset’s island: ~3.25–7.1% tall, ~28% wide.
+   * Sized from the asset’s island: ~3.25 to 7.1% tall, ~28% wide.
    */
   return (
     <div className="pointer-events-none absolute inset-0 z-50">
@@ -404,7 +406,7 @@ function DynamicIsland({ live }: { live: boolean }) {
           className="absolute left-0 right-0 mx-auto overflow-hidden rounded-full"
           style={{ top: "3.2%", height: "4.05%" }}
         >
-        {/* Dedicated paint layer — solid mask over PNG cameras */}
+        {/* Dedicated paint layer. solid mask over PNG cameras */}
         <div
           className="absolute inset-[-2px] rounded-full"
           style={{ backgroundColor: "#000000" }}

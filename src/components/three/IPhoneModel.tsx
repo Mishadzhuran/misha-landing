@@ -72,13 +72,13 @@ export function IPhoneModel({
       sharpenMaps(mat);
 
       if (KEEP_ORIGINAL.has(name)) {
-        // Lenses / logos — keep textures, add a bit of reflection punch
+        // Lenses / logos. keep textures, add a bit of reflection punch
         mat.envMapIntensity = 1.25;
         mat.needsUpdate = true;
         return;
       }
 
-      // Black iPhone body: tint ONLY — never strip maps or swap material types
+      // Black iPhone body: tint ONLY. never strip maps or swap material types
       if (mat.map) {
         mat.color.set("#121218");
       } else {

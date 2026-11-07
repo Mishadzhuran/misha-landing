@@ -40,7 +40,7 @@ function Sphere({
   );
 }
 
-/** Soft Apple-like ambient — glossy spheres + blur orbs, no badge spam */
+/** Soft Apple-like ambient. glossy spheres + blur orbs, no badge spam */
 export function SoftAmbient() {
   return (
     <div

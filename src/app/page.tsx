@@ -1,6 +1,5 @@
 import { Hero } from "@/components/home/Hero";
-import { ConvinceRail } from "@/components/home/ConvinceRail";
-import { ProductPopups } from "@/components/home/ProductPopups";
+import { TrustSection } from "@/components/home/TrustSection";
 import {
   FinalCTA,
   ScrollChapters,
@@ -11,8 +10,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <ConvinceRail />
-      <ProductPopups />
+      <TrustSection />
       <ScrollChapters />
       <WorkSection />
       <FinalCTA />

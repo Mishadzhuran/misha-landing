@@ -28,7 +28,7 @@ export function Footer() {
                 {site.email}
               </a>
               <p className="mt-2 text-[14px] text-muted-soft">
-                {site.locations.join(" · ")}
+                {site.role}
               </p>
             </div>
 

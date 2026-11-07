@@ -98,7 +98,7 @@ export function paintHeroPhoneScreen(
     ctx.font = "400 25px -apple-system, BlinkMacSystemFont, sans-serif";
     wrap(
       ctx,
-      "Apps and websites — clear design, clean code, calm launch.",
+      "Apps and websites, clear design, clean code, calm launch.",
       44,
       450,
       W - 88,
@@ -183,7 +183,7 @@ export function paintHeroPhoneScreen(
     return;
   }
 
-  // ready — soft blue glass feel
+  // ready, soft blue glass feel
   const g = ctx.createLinearGradient(0, 0, W, H);
   g.addColorStop(0, "#2997ff");
   g.addColorStop(1, "#0071e3");
@@ -205,7 +205,7 @@ export function paintHeroPhoneScreen(
   ctx.font = "400 26px -apple-system, BlinkMacSystemFont, sans-serif";
   wrap(
     ctx,
-    "One clear path from idea to launch — so you always know what’s next.",
+    "One clear path from idea to launch, so you always know what’s next.",
     44,
     480,
     W - 88,

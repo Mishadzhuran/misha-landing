@@ -10,12 +10,12 @@ const steps = [
     n: "01",
     title: "We talk",
     line: "You share the idea. I ask a few simple questions.",
-    detail: "15–30 min",
+    detail: "15 to 30 min",
   },
   {
     n: "02",
     title: "We agree",
-    line: "Clear plan, timeline, and price — in writing.",
+    line: "Clear plan, timeline, and price, in writing.",
     detail: "Scope locked",
   },
   {
@@ -66,7 +66,7 @@ export function ScrollChapters() {
             How we work
           </h2>
           <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-[#6e6e73]">
-            Four calm steps — the same flow you see on the phone.
+            Four calm steps, the same flow you see on the phone.
           </p>
         </div>
 

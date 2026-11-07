@@ -65,14 +65,14 @@ export default function CookiesPage() {
             </p>
             <ul>
               <li>
-                <strong>appigon_consent</strong> — stores your cookie choices (necessary)
+                <strong>appigon_consent</strong>, stores your cookie choices (necessary)
               </li>
               <li>
-                <strong>Session / CSRF tokens</strong> — security and form integrity
+                <strong>Session / CSRF tokens</strong>, security and form integrity
                 (necessary)
               </li>
               <li>
-                <strong>Analytics IDs</strong> — traffic measurement (analytics; consent where
+                <strong>Analytics IDs</strong>, traffic measurement (analytics; consent where
                 required)
               </li>
             </ul>

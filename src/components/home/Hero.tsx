@@ -46,7 +46,7 @@ export function Hero() {
             products that feel easy.
           </h1>
           <p className="mx-auto mt-3.5 max-w-[22rem] text-[15px] leading-relaxed text-[#6e6e73] md:mt-4 md:max-w-md md:text-[17px]">
-            Apps and websites — from idea to launch, with calm process and clear
+            Apps and websites, from idea to launch, with calm process and clear
             scope.
           </p>
           <div className="mt-7 flex flex-col items-stretch justify-center gap-2.5 px-1 sm:mt-8 sm:flex-row sm:items-center sm:gap-3 sm:px-0">
@@ -97,7 +97,7 @@ export function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.2, ease: easeOut }}
         >
-          {site.name} · {site.locations[0]}
+          {site.name} · {site.role}
         </motion.p>
       </div>
     </section>

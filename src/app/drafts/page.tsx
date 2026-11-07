@@ -26,7 +26,7 @@ export default function DraftsIndexPage() {
             Apple-light drafts for each product
           </h1>
           <p className="mx-auto mt-4 max-w-md text-[17px] leading-relaxed tracking-[-0.015em] text-[#6e6e73]">
-            Design explorations — calm hero, clear hierarchy, soft motion. Pick a product.
+            Design explorations, calm hero, clear hierarchy, soft motion. Pick a product.
           </p>
         </motion.div>
 

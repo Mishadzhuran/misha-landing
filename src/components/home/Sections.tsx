@@ -49,7 +49,7 @@ export function ConversionSection() {
                 Clear <span className="text-red">commercials.</span>
               </BigTitle>
               <p className="readable mt-6 max-w-md">
-                Agency buyers stall on price, IP, and risk — not on pretty process diagrams.
+                Agency buyers stall on price, IP, and risk, not on pretty process diagrams.
                 Pick a path, get answers, then book a scope call.
               </p>
             </Reveal>
@@ -97,7 +97,7 @@ export function ConversionSection() {
                 before they <span className="text-red">pay</span>
               </h3>
               <p className="mt-4 max-w-md text-[15px] leading-relaxed text-muted">
-                Straight answers on cost, timeline, IP, store risk, and refunds — the
+                Straight answers on cost, timeline, IP, store risk, and refunds, the
                 questions that usually kill agency deals off-page.
               </p>
             </Reveal>
@@ -215,7 +215,7 @@ export function FinalCTA() {
             <span className="text-red">your app?</span>
           </h2>
           <p className="readable mx-auto mt-6 max-w-lg">
-            Book a scope call. We map build, landings, store release, and support — with
+            Book a scope call. We map build, landings, store release, and support, with
             commercials you can sign.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-3">

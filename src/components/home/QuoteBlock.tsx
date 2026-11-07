@@ -25,7 +25,7 @@ export function QuoteBlock() {
                 alt={site.name}
                 fill
                 sizes="(max-width:1024px) 100vw, 33vw"
-                className="object-cover object-[center_18%]"
+                className="object-cover object-[center_12%]"
               />
             </div>
             <div className="flex flex-col justify-center px-8 py-10 md:px-12 lg:col-span-8 lg:py-14">
@@ -37,7 +37,7 @@ export function QuoteBlock() {
               </blockquote>
               <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-[#6e6e73]">
                 That mindset shows up in Lifemaxxing, Big Red Map, Anita, and
-                every client launch — polish without noise, and a release process
+                every client launch, polish without noise, and a release process
                 that doesn’t leave you guessing on launch day.
               </p>
               <div className="mt-8">

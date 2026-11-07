@@ -20,7 +20,7 @@ export function FinalCTA() {
           </h2>
           <p className="mx-auto mt-4 max-w-md text-[16px] leading-relaxed text-[#6e6e73]">
             Tell me what you’re building. I’ll help make it clear, polished, and
-            ready for people — reply within {site.responseTime}.
+            ready for people, reply within {site.responseTime}.
           </p>
           <div className="mt-8 flex flex-col items-stretch justify-center gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
             <a

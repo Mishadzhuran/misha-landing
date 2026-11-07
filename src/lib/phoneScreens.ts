@@ -15,7 +15,7 @@ export type ScreenReveal = {
   time?: number;
 };
 
-/** Half-res screen texture — sharp enough on phone mesh, ~4× cheaper to paint */
+/** Half-res screen texture. sharp enough on phone mesh, ~4× cheaper to paint */
 export const SCREEN_W = 540;
 export const SCREEN_H = 1168;
 const RED = "#ef1a12";
@@ -62,7 +62,7 @@ function getHoloBuf() {
   return holoBuf;
 }
 
-/** Crisp red hologram — glitch confined to the mark (no getImageData) */
+/** Crisp red hologram. glitch confined to the mark (no getImageData) */
 export function paintPhoneScreen(
   ctx: CanvasRenderingContext2D,
   state: ScreenReveal
@@ -148,7 +148,7 @@ export function paintPhoneScreen(
   );
   bctx.restore();
 
-  // Cheap scanlines — no getImageData
+  // Cheap scanlines. no getImageData
   bctx.save();
   bctx.globalCompositeOperation = "source-atop";
   bctx.globalAlpha = 0.1 * flicker;

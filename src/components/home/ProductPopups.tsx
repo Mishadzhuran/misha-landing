@@ -85,7 +85,7 @@ function PulseCard() {
     },
     {
       label: "First TestFlight",
-      meta: "Week 2–3",
+      meta: "Week 2 to 3",
       tone: "text-[#1d1d1f] bg-black/[0.04]",
     },
   ];

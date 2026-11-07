@@ -53,7 +53,7 @@ export default function ServicesPage() {
                 built to <span className="text-red">close</span>
               </BigTitle>
               <p className="readable mt-5 max-w-lg">
-                Pick a path with clear commercials — not a vague &quot;let&apos;s figure it
+                Pick a path with clear commercials, not a vague &quot;let&apos;s figure it
                 out.&quot; Every engagement ends in a written agreement before invoices land.
               </p>
             </div>

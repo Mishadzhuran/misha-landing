@@ -3,7 +3,7 @@
 import { ReactLenis } from "lenis/react";
 import { ReactNode } from "react";
 
-/** Lenis only — GSAP stays in the journey chunk, not the root layout */
+/** Lenis only. GSAP stays in the journey chunk, not the root layout */
 export function SmoothScroll({ children }: { children: ReactNode }) {
   return (
     <ReactLenis

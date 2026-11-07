@@ -33,7 +33,7 @@ export const productDrafts: ProductDraft[] = [
     tagline: bySlug.lifemaxxing.tagline,
     headline: "Your life, mapped as experiences.",
     support:
-      "Post what you did, where it happened, and who was there — then watch a living map of your life take shape.",
+      "Post what you did, where it happened, and who was there, then watch a living map of your life take shape.",
     accent: "#c9a227",
     accentSoft: "rgba(201,162,39,0.14)",
     ink: "#1d1d1f",
@@ -52,7 +52,7 @@ export const productDrafts: ProductDraft[] = [
     features: [
       {
         title: "Experience-first posts",
-        copy: "Activity, place, date, and media — not another empty feed.",
+        copy: "Activity, place, date, and media, not another empty feed.",
       },
       {
         title: "Life map",
@@ -76,7 +76,7 @@ export const productDrafts: ProductDraft[] = [
       {
         kicker: "Feed",
         title: "Moments that feel real.",
-        copy: "A calm social surface built around what you did — not what you performed.",
+        copy: "A calm social surface built around what you did, not what you performed.",
         image: "/work/lifemaxxing-feed.png",
       },
       {
@@ -101,7 +101,7 @@ export const productDrafts: ProductDraft[] = [
     tagline: bySlug["big-red-map"].tagline,
     headline: "Paint the world you’ve lived.",
     support:
-      "A cinematic map-as-profile — countries go red, memories go gold, and your public page tells the story in one glance.",
+      "A cinematic map-as-profile, countries go red, memories go gold, and your public page tells the story in one glance.",
     accent: "#ef1a12",
     accentSoft: "rgba(239,26,18,0.12)",
     ink: "#1d1d1f",
@@ -119,7 +119,7 @@ export const productDrafts: ProductDraft[] = [
     features: [
       {
         title: "Country paint",
-        copy: "Tap a country and it turns red — travel progress you can feel.",
+        copy: "Tap a country and it turns red, travel progress you can feel.",
       },
       {
         title: "Gold memory pins",
@@ -149,7 +149,7 @@ export const productDrafts: ProductDraft[] = [
       {
         kicker: "Story",
         title: "Tokyo nights, mapped.",
-        copy: "Atmosphere and product in the same frame — the site sells the feeling.",
+        copy: "Atmosphere and product in the same frame, the site sells the feeling.",
         image: "/work/bigred-tokyo.jpg",
       },
       {
@@ -168,7 +168,7 @@ export const productDrafts: ProductDraft[] = [
     tagline: bySlug.anita.tagline,
     headline: "Money, in a conversation.",
     support:
-      "An AI finance companion that answers in plain language — goals, spending, and optional bank data without spreadsheet anxiety.",
+      "An AI finance companion that answers in plain language, goals, spending, and optional bank data without spreadsheet anxiety.",
     accent: "#34c759",
     accentSoft: "rgba(52,199,89,0.12)",
     ink: "#1d1d1f",
@@ -193,7 +193,7 @@ export const productDrafts: ProductDraft[] = [
       },
       {
         title: "Quiet confidence",
-        copy: "Soft surfaces, soft answers — finance that doesn’t shout.",
+        copy: "Soft surfaces, soft answers, finance that doesn’t shout.",
       },
     ],
     stats: [
@@ -211,7 +211,7 @@ export const productDrafts: ProductDraft[] = [
       {
         kicker: "Tone",
         title: "Soft green, soft answers.",
-        copy: "A visual system that feels safe — not like a bank ad.",
+        copy: "A visual system that feels safe, not like a bank ad.",
       },
       {
         kicker: "Build",
@@ -228,7 +228,7 @@ export const productDrafts: ProductDraft[] = [
     tagline: bySlug.mitkovt.tagline,
     headline: "Discipline, made visible.",
     support:
-      "A high-contrast coaching brand and conversion landing for Slobodan Mitkov — athletic presence, bilingual flow, real checkout paths.",
+      "A high-contrast coaching brand and conversion landing for Slobodan Mitkov, athletic presence, bilingual flow, real checkout paths.",
     accent: "#ffffff",
     accentSoft: "rgba(255,255,255,0.08)",
     ink: "#f5f5f7",
@@ -241,7 +241,7 @@ export const productDrafts: ProductDraft[] = [
     features: [
       {
         title: "Athletic brand",
-        copy: "Hard contrast and strong type — no soft template look.",
+        copy: "Hard contrast and strong type, no soft template look.",
       },
       {
         title: "DE / EN",
@@ -265,13 +265,13 @@ export const productDrafts: ProductDraft[] = [
       {
         kicker: "Presence",
         title: "Built through experience.",
-        copy: "The hero carries the coach’s physicality — dark, sharp, impossible to ignore.",
+        copy: "The hero carries the coach’s physicality, dark, sharp, impossible to ignore.",
         image: "/work/mitkovt-hero.jpg",
       },
       {
         kicker: "Stage",
         title: "Driven by discipline.",
-        copy: "Every frame reinforces performance — from photography to legal pages.",
+        copy: "Every frame reinforces performance, from photography to legal pages.",
         image: "/work/mitkovt-stage.jpg",
       },
       {

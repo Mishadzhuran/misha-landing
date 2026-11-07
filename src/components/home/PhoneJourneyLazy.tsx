@@ -18,7 +18,7 @@ function JourneyFallback() {
             <span className="block text-text">that leads people in</span>
           </h1>
           <p className="readable mx-auto mt-5 max-w-md md:mx-0">
-            Scroll to turn the product — every move is driven by you.
+            Scroll to turn the product, every move is driven by you.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
             <MagneticButton href="/contact">Start a project</MagneticButton>

@@ -39,7 +39,7 @@ export default function TermsPage() {
               A and B.
             </p>
 
-            <h2>2. Part A — Website & inquiries</h2>
+            <h2>2. Part A: Website & inquiries</h2>
             <h3>2.1 Informational content</h3>
             <p>
               Case studies, metrics, timelines, and pricing hints on the site are illustrative.
@@ -67,11 +67,11 @@ export default function TermsPage() {
               its licensors. You may not copy or exploit them without written permission.
             </p>
 
-            <h2>3. Part B — Paid services</h2>
+            <h2>3. Part B: Paid services</h2>
             <h3>3.1 Scope</h3>
             <p>
               Services may include mobile/web product development, UX/UI, landing pages, App
-              Store / Google Play preparation, release support, and retainers — as defined in
+              Store / Google Play preparation, release support, and retainers, as defined in
               the SOW. Work outside scope requires a written change order and may adjust fees
               and dates.
             </p>
@@ -98,7 +98,7 @@ export default function TermsPage() {
                 states otherwise
               </li>
               <li>
-                Invoices are due as stated (commonly Net 7–14). Late amounts may accrue
+                Invoices are due as stated (commonly Net 7 to 14). Late amounts may accrue
                 statutory interest and pause work until cured
               </li>
               <li>

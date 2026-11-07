@@ -6,7 +6,7 @@ import { easeOut } from "@/lib/motion";
 const reasons = [
   {
     title: "One person. Full loop.",
-    line: "Design, build, and launch — without handing your product between five freelancers.",
+    line: "Design, build, and launch, without handing your product between five freelancers.",
   },
   {
     title: "Written plan first.",
@@ -14,7 +14,7 @@ const reasons = [
   },
   {
     title: "You see progress.",
-    line: "Regular updates you can open and check — no black boxes.",
+    line: "Regular updates you can open and check, no black boxes.",
   },
   {
     title: "Launch without panic.",
@@ -22,11 +22,11 @@ const reasons = [
   },
   {
     title: "Still here after.",
-    line: "Fixes, polish, and care after day one — so users keep coming back.",
+    line: "Fixes, polish, and care after day one, so users keep coming back.",
   },
   {
     title: "Built for people.",
-    line: "Interfaces that feel clear and soft — so your product is easy to trust.",
+    line: "Interfaces that feel clear and soft, so your product is easy to trust.",
   },
 ];
 
@@ -55,7 +55,7 @@ export function ConvinceRail() {
           Why people work with me
         </h2>
         <p className="mt-2.5 text-[15px] leading-relaxed text-[#6e6e73]">
-          Swipe the cards — everything that keeps the project safe and clear.
+          Swipe the cards, everything that keeps the project safe and clear.
         </p>
       </div>
 

@@ -26,7 +26,7 @@ export default function PrivacyPage() {
               This Privacy Policy is designed for visitors, prospects, and clients of an
               agency that provides paid digital product services. It is informed by practices
               common among EU/EEA studios (including GDPR transparency standards). It is not
-              a substitute for counsel — replace entity, registration, and DPO details before
+              a substitute for counsel, replace entity, registration, and DPO details before
               go-live.
             </p>
 
@@ -84,26 +84,26 @@ export default function PrivacyPage() {
             <p>We process personal data for:</p>
             <ul>
               <li>
-                <strong>Responding to inquiries & preparing proposals</strong> — legitimate
+                <strong>Responding to inquiries & preparing proposals</strong>, legitimate
                 interests and/or steps prior to contract (Art. 6(1)(b)/(f) GDPR)
               </li>
               <li>
-                <strong>Performing paid services & billing</strong> — contract necessity and
+                <strong>Performing paid services & billing</strong>, contract necessity and
                 legal obligation (tax/accounting)
               </li>
               <li>
-                <strong>Operating, securing, and improving the website</strong> — legitimate
+                <strong>Operating, securing, and improving the website</strong>, legitimate
                 interests
               </li>
               <li>
-                <strong>Analytics (if enabled)</strong> — consent where required
+                <strong>Analytics (if enabled)</strong>, consent where required
               </li>
               <li>
-                <strong>Marketing about our studio</strong> — consent or soft opt-in where
+                <strong>Marketing about our studio</strong>, consent or soft opt-in where
                 permitted; you may opt out anytime
               </li>
               <li>
-                <strong>Legal claims, compliance, fraud prevention</strong> — legitimate
+                <strong>Legal claims, compliance, fraud prevention</strong>, legitimate
                 interests / legal obligation
               </li>
             </ul>
@@ -142,7 +142,7 @@ export default function PrivacyPage() {
               </li>
               <li>
                 <strong>Contracts, invoices, tax records:</strong> as required by applicable
-                law (often 5–10 years depending on jurisdiction)
+                law (often 5 to 10 years depending on jurisdiction)
               </li>
               <li>
                 <strong>Analytics cookies:</strong> per tool settings and your consent

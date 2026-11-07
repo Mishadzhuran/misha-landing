@@ -36,7 +36,7 @@ export const CHAPTER_LAYOUTS: TextLayout[] = [
 ];
 
 /**
- * Hold poses — more distinct angles per stage (still readable face-on).
+ * Hold poses. more distinct angles per stage (still readable face-on).
  */
 export const REST_POSES = [
   { x: 0.52, yaw: Math.PI + 0.2, pitch: 0.06, roll: -0.2 },
@@ -48,7 +48,7 @@ export const REST_POSES = [
 ] as const;
 
 /**
- * Per-stage turn flavor — moderate side peek + unique bank/depth.
+ * Per-stage turn flavor. moderate side peek + unique bank/depth.
  * yawPeek ≈ radians of extra side reveal mid-turn (settles face-on).
  */
 export const TURN_STYLE = [
@@ -250,7 +250,7 @@ function mixRest(
 
 /**
  * Fully continuous pose from scroll progress.
- * One curve — no chapter-boundary restarts that fight each other.
+ * One curve. no chapter-boundary restarts that fight each other.
  */
 export function phonePoseFromProgress(p: number): PhonePose {
   const outro = outroAmount(p);

@@ -4,19 +4,19 @@ export const site = {
   legalName: "Misha Dzhuran",
   tagline: "I help people ship products that feel great.",
   description:
-    "Misha Dzhuran — product designer & developer. I help people turn ideas into polished apps and websites, from first sketch to App Store.",
+    "Misha Dzhuran, product designer & developer. I help people turn ideas into polished apps and websites, from first sketch to App Store.",
   email: "hello@mishadzhuran.com",
   phone: "",
-  locations: ["Warsaw", "Kyiv", "Remote"],
+  locations: [] as string[],
   socials: [] as { label: string; href: string }[],
   governingLaw: "Poland",
-  headOffice: "Warsaw, Poland",
+  headOffice: "",
   responseTime: "1 business day",
   role: "Product design & development",
   quote:
-    "Your product should feel calm, clear, and ready — so people open it, trust it, and come back.",
+    "Your product should feel calm, clear, and ready, so people open it, trust it, and come back.",
   pitch:
-    "I help people build apps and websites that make life easier — design, development, and a clean launch.",
+    "I help people build apps and websites that make life easier: design, development, and a clean launch.",
 };
 
 export const navLinks = [
@@ -45,7 +45,7 @@ export const footerLinks = footerNav.legal;
 export const sellingPoints = [
   {
     title: "End-to-end ownership",
-    copy: "One person who can take the product from brief to App Store — design, build, release, and post-launch care.",
+    copy: "One person who can take the product from brief to App Store: design, build, release, and post-launch care.",
   },
   {
     title: "Ships that don’t panic",
@@ -53,7 +53,7 @@ export const sellingPoints = [
   },
   {
     title: "Interfaces people return to",
-    copy: "Soft, clear product UI — fewer screens, sharper decisions, the kind of polish that feels expensive without shouting.",
+    copy: "Soft, clear product UI: fewer screens, sharper decisions, the kind of polish that feels expensive without shouting.",
   },
   {
     title: "Still there after go-live",
@@ -79,11 +79,59 @@ export const techStack = [
   { name: "OpenAI", tone: "#10a37f" },
 ];
 
+/**
+ * Production systems & APIs across shipped work (Lifemaxxing, Big Red Map,
+ * Anita, landings, admin). Professional naming, keep in sync with real stacks.
+ * No vendor parentheses in display names.
+ */
+export const capabilities = [
+  { name: "Geospatial Resolution & Geocoding" },
+  { name: "Location Intelligence Systems" },
+  { name: "PostGIS Spatial Analytics" },
+  { name: "Interactive Mapping Systems" },
+  { name: "Mobile Cartography" },
+  { name: "Device Geolocation Services" },
+  { name: "Image Optimization Pipelines" },
+  { name: "EXIF Metadata Processing" },
+  { name: "Cloud Object Storage" },
+  { name: "Presigned Media Upload Flows" },
+  { name: "Video Playback Infrastructure" },
+  { name: "Banking System Integration" },
+  { name: "Stripe Financial Connections" },
+  { name: "Subscription Billing Systems" },
+  { name: "Payment Webhook Architecture" },
+  { name: "Conversational AI Integration" },
+  { name: "Real-Time WebSocket Systems" },
+  { name: "NestJS API Architecture" },
+  { name: "Express Service Development" },
+  { name: "Supabase Data Infrastructure" },
+  { name: "Row-Level Security Design" },
+  { name: "JWT Authentication Systems" },
+  { name: "Sign in with Apple" },
+  { name: "Google OAuth Integration" },
+  { name: "Secure Credential Storage" },
+  { name: "Push Notification Systems" },
+  { name: "Universal & App Deep Linking" },
+  { name: "Cross-Platform Mobile Development" },
+  { name: "Native iOS Development" },
+  { name: "TestFlight & App Store Release" },
+  { name: "App Store Compliance & Privacy" },
+  { name: "Application Error Monitoring" },
+  { name: "Product Analytics" },
+  { name: "Transactional Email Delivery" },
+  { name: "Internationalization" },
+  { name: "Admin Dashboard Engineering" },
+  { name: "Conversion Landing Pages" },
+  { name: "3D Web Visualization" },
+  { name: "Schema Validation" },
+  { name: "Full-Stack Web Applications" },
+];
+
 export const focusAreas = [
   {
     id: "01",
     title: "Product systems",
-    copy: "End-to-end product thinking — from sharp problem framing to interfaces people actually return to.",
+    copy: "End-to-end product thinking, from sharp problem framing to interfaces people actually return to.",
   },
   {
     id: "02",
@@ -135,7 +183,7 @@ export const engagementModels = [
   {
     id: "01",
     title: "Discovery sprint",
-    timeline: "5–10 days",
+    timeline: "5 to 10 days",
     priceHint: "Fixed fee",
     copy: "Scope, architecture, store risk review, and a written build plan with timeline + budget.",
     outcome: "Signed SOW-ready brief",
@@ -161,15 +209,15 @@ export const engagementModels = [
 export const conversionFaqs = [
   {
     q: "What kinds of projects do you take?",
-    a: "Mobile products, launch landings, and store-ready releases — especially when clarity, craft, and market timing matter.",
+    a: "Mobile products, launch landings, and store-ready releases, especially when clarity, craft, and market timing matter.",
   },
   {
     q: "How do engagements usually start?",
     a: "With a short discovery or scope call. You leave with a clear path, not a vague pitch deck.",
   },
   {
-    q: "Where are you based?",
-    a: "Warsaw / Kyiv / remote. Time zones flex around the work. Reply within 1 business day.",
+    q: "How fast do you reply?",
+    a: "Typically within 1 business day. Time zones flex around the work.",
   },
 ];
 
@@ -191,7 +239,7 @@ export const cases = [
     metric: "Live product",
     tagline: "The IMDb of your life",
     summary:
-      "A location-anchored social network where every post is an Experience — activity, place, date, media. Builds a life map, feed, and place pages people actually return to.",
+      "A location-anchored social network where every post is an Experience, activity, place, date, media. Builds a life map, feed, and place pages people actually return to.",
     result: "iOS / Android · NestJS · Supabase · Mapbox",
     highlights: [
       "Experience-first social graph (not another feed clone)",
@@ -200,6 +248,7 @@ export const cases = [
     ],
     color: "#c9a227",
     image: "/work/lifemaxxing-cover.jpg",
+    icon: "/work/icons/lifemaxxing.png",
     coverMode: "cover" as const,
     gallery: [
       "/work/lifemaxxing-map.png",
@@ -216,7 +265,7 @@ export const cases = [
     metric: "Hero product",
     tagline: "Live wild. Collect moments. Leave a map.",
     summary:
-      "A cinematic map-as-profile product: paint countries red, drop gold memory pins, and leave a public page for the life you’ve lived — phone-first storytelling from day one.",
+      "A cinematic map-as-profile product: paint countries red, drop gold memory pins, and leave a public page for the life you’ve lived, phone-first storytelling from day one.",
     result: "Brand system · Launch site · MapLibre · Supabase",
     highlights: [
       "Bold red brand language that reads in one glance",
@@ -225,6 +274,7 @@ export const cases = [
     ],
     color: "#ef1a12",
     image: "/work/bigred-cover.jpg",
+    icon: "/work/icons/big-red-map.png",
     coverMode: "cover" as const,
     gallery: [
       "/work/bigred-phone.png",
@@ -241,7 +291,7 @@ export const cases = [
     metric: "In build",
     tagline: "Chat with your money",
     summary:
-      "AI-native personal finance companion — conversational money clarity, goals, spending, and optional bank linking via Stripe, synced across SwiftUI iOS and React web.",
+      "AI-native personal finance companion, conversational money clarity, goals, spending, and optional bank linking via Stripe, synced across SwiftUI iOS and React web.",
     result: "SwiftUI · Express · Supabase · Stripe · PostHog",
     highlights: [
       "Chat-first finance UX instead of spreadsheet dashboards",
@@ -250,6 +300,7 @@ export const cases = [
     ],
     color: "#9fe870",
     image: "/work/anita-mock.png",
+    icon: "/work/icons/anita.png",
     coverMode: "cover" as const,
     gallery: ["/work/anita-mock.png"],
   },
@@ -261,7 +312,7 @@ export const cases = [
     metric: "Brand site",
     tagline: "Built through experience. Driven by discipline.",
     summary:
-      "High-contrast coaching brand and conversion landing for Slobodan Mitkov — athletic visual system, DE/EN, PayPal/SEPA checkout paths, and German legal pages.",
+      "High-contrast coaching brand and conversion landing for Slobodan Mitkov, athletic visual system, DE/EN, PayPal/SEPA checkout paths, and German legal pages.",
     result: "Landing · Visual identity · Checkout",
     highlights: [
       "Hard athletic brand presence without template fluff",
@@ -270,16 +321,31 @@ export const cases = [
     ],
     color: "#1d1d1f",
     image: "/work/mitkovt-hero.jpg",
+    icon: "/work/mitkovt-hero.jpg",
     coverMode: "cover" as const,
     gallery: ["/work/mitkovt-hero.jpg", "/work/mitkovt-stage.jpg"],
   },
 ];
 
 export const stats = [
-  { value: "120+", label: "Apps & landings shipped" },
-  { value: "38", label: "Markets launched" },
-  { value: "4.9", label: "Avg. client score" },
-  { value: "1 day", label: "Typical reply time" },
+  { value: "20+", label: "Projects delivered" },
+  { value: "170+", label: "Markets" },
+  { value: "40+", label: "Systems wired" },
+  { value: "4.9", label: "Client rating" },
+  { value: "1 day", label: "Typical reply" },
+];
+
+/** Aggregate people on live products (Lifemaxxing and related ships). */
+export const liveUsersCount = 5000;
+
+/** Production systems & APIs across shipped work (see capabilities). */
+export const systemsWiredCount = 40;
+
+/** Home showcases. Mitkovt off; BRM last in the Music queue. */
+export const featuredCases = [
+  cases.find((c) => c.slug === "lifemaxxing")!,
+  cases.find((c) => c.slug === "anita")!,
+  cases.find((c) => c.slug === "big-red-map")!,
 ];
 
 export const team = [
