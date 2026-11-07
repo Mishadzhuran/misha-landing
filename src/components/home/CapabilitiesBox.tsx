@@ -60,7 +60,7 @@ export function CapabilitiesBox() {
           'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif',
         background: "#ffffff",
         boxShadow:
-          "0 0 0 0.5px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.04), 0 12px 28px rgba(0,0,0,0.06)",
+          "0 0 0 0.5px rgba(255,255,255,0.12), 0 8px 28px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2)",
       }}
     >
       <div className="flex items-baseline justify-between gap-4 px-6 pt-5 md:px-7 md:pt-5">

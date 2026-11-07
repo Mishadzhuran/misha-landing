@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Outfit, Syne } from "next/font/google";
+import {
+  Fraunces,
+  Instrument_Serif,
+  Italianno,
+  Outfit,
+  Syne,
+} from "next/font/google";
 import {
   CustomCursor,
   PageLoader,
@@ -22,6 +28,21 @@ const serif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+const editorial = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const hand = Italianno({
+  variable: "--font-italianno",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -54,7 +75,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${serif.variable} ${body.variable} h-full antialiased`}
+      className={`${display.variable} ${serif.variable} ${editorial.variable} ${hand.variable} ${body.variable} h-full antialiased`}
     >
       <body className="min-h-full font-body text-text">
         <SmoothScroll>

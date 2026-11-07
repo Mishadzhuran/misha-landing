@@ -56,16 +56,16 @@ export function ScrollChapters() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 50% 45%, rgba(0,113,227,0.1), transparent 68%)",
+            "radial-gradient(ellipse 60% 50% at 50% 45%, rgba(0,113,227,0.18), transparent 68%)",
         }}
       />
 
       <Shell className="relative">
         <div className="mx-auto max-w-xl text-center">
-          <h2 className="text-[clamp(1.9rem,4vw,2.7rem)] font-semibold tracking-[-0.04em] text-[#1d1d1f]">
+          <h2 className="font-display text-[clamp(1.95rem,4.2vw,2.85rem)] font-semibold tracking-[-0.035em] text-white">
             How we work
           </h2>
-          <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-[#6e6e73]">
+          <p className="mx-auto mt-3 max-w-md text-[16px] leading-relaxed text-white/55">
             Four calm steps, the same flow you see on the phone.
           </p>
         </div>

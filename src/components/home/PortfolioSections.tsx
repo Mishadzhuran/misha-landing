@@ -11,11 +11,11 @@ export function FinalCTA() {
   return (
     <section className="pb-24 pt-6 md:pb-32">
       <Shell>
-        <div className="rounded-[28px] bg-white px-7 py-12 text-center shadow-[0_12px_40px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04] sm:rounded-[32px] sm:px-8 sm:py-14 md:px-16 md:py-20">
+        <div className="rounded-[28px] bg-white px-7 py-12 text-center shadow-[0_12px_40px_rgba(0,0,0,0.25)] ring-1 ring-white/10 sm:rounded-[32px] sm:px-8 sm:py-14 md:px-16 md:py-20">
           <p className="text-[12px] font-semibold tracking-[0.16em] text-[#86868b] uppercase">
             Contact
           </p>
-          <h2 className="mx-auto mt-4 max-w-xl text-[clamp(2rem,4.5vw,3.2rem)] font-semibold tracking-[-0.04em] text-[#1d1d1f]">
+          <h2 className="font-serif mx-auto mt-4 max-w-xl text-[clamp(2.15rem,4.8vw,3.4rem)] font-normal italic leading-[1.08] tracking-[-0.02em] text-[#1d1d1f]">
             Have a product in mind?
           </h2>
           <p className="mx-auto mt-4 max-w-md text-[16px] leading-relaxed text-[#6e6e73]">

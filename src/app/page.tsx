@@ -11,9 +11,11 @@ export default function HomePage() {
     <>
       <Hero />
       <TrustSection />
-      <ScrollChapters />
-      <WorkSection />
-      <FinalCTA />
+      <div className="bg-[#0a0a0a] text-white">
+        <ScrollChapters />
+        <WorkSection />
+        <FinalCTA />
+      </div>
     </>
   );
 }

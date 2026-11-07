@@ -120,10 +120,10 @@ export function WorkSection() {
           style={{ y: headY, opacity: headOp }}
           className="mx-auto max-w-xl text-center"
         >
-          <p className="text-[12px] font-semibold tracking-[0.16em] text-[#86868b] uppercase">
+          <p className="text-[12px] font-semibold tracking-[0.16em] text-white/45 uppercase">
             Selected work
           </p>
-          <h2 className="mt-3 text-[clamp(2rem,4vw,3rem)] font-semibold tracking-[-0.04em] text-[#1d1d1f]">
+          <h2 className="mt-3 text-[clamp(2rem,4vw,3rem)] font-semibold tracking-[-0.04em] text-white">
             Things I’ve shipped
           </h2>
         </motion.div>

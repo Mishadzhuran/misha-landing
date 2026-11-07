@@ -41,6 +41,8 @@
   --color-red-deep: #0058b0;
   --font-display: var(--font-syne);
   --font-serif: var(--font-instrument);
+  --font-editorial: var(--font-fraunces);
+  --font-hand: var(--font-italianno);
   --font-body: var(--font-outfit);
   --font-mono: var(--font-outfit);
   --radius-sm: var(--radius-sm);
@@ -138,22 +140,36 @@ textarea {
 .liquid-glass {
   background: linear-gradient(
     160deg,
-    rgba(255, 255, 255, 0.78) 0%,
-    rgba(255, 255, 255, 0.52) 48%,
-    rgba(255, 255, 255, 0.62) 100%
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(255, 255, 255, 0.84) 48%,
+    rgba(255, 255, 255, 0.9) 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow:
-    0 10px 36px rgba(0, 0, 0, 0.07),
-    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 10px 36px rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
     0 -0.5px 0 rgba(0, 0, 0, 0.04) inset;
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+}
+
+.liquid-glass-nav {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 @media (prefers-reduced-transparency: reduce) {
   .liquid-glass {
-    background: rgba(255, 255, 255, 0.94);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .liquid-glass-nav {
+    background: #ffffff;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -218,6 +234,18 @@ textarea {
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.02em;
+}
+
+.editorial-display {
+  font-family: var(--font-fraunces), "Times New Roman", serif;
+  font-variation-settings: "SOFT" 45, "opsz" 144, "WONK" 0.5;
+}
+
+.hand-script {
+  font-family: var(--font-italianno), "Apple Chancery", "Segoe Script", cursive;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
 }
 
 @keyframes fadeIn {

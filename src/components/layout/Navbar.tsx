@@ -29,10 +29,10 @@ export function Navbar() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-[max(1rem,env(safe-area-inset-top))] md:pt-5">
-        <div className="liquid-glass flex w-full max-w-[720px] items-center justify-between gap-2 rounded-full px-2 py-2 md:px-2.5">
+        <div className="liquid-glass-nav flex w-full max-w-[720px] items-center justify-between gap-2 rounded-full px-2 py-2 md:px-2.5">
           <Link
             href="/"
-            className="pressable rounded-full px-4 py-2 font-display text-[15px] font-bold tracking-[-0.04em] text-text"
+            className="pressable rounded-full px-4 py-2 font-display text-[15px] font-bold tracking-[-0.04em] text-black"
           >
             {site.shortName}
           </Link>
@@ -44,10 +44,8 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`rounded-full px-3.5 py-2 text-[13px] font-medium tracking-[-0.01em] transition-[color,background-color] duration-[var(--duration-ui)] ease-[var(--ease-out)] ${
-                    active
-                      ? "bg-black/[0.06] text-text"
-                      : "text-muted hover:text-text"
+                  className={`rounded-full px-3.5 py-2 text-[13px] font-medium tracking-[-0.01em] text-black transition-[font-weight] duration-[var(--duration-ui)] ease-[var(--ease-out)] ${
+                    active ? "font-semibold" : "font-medium hover:font-semibold"
                   }`}
                 >
                   {link.label}
@@ -59,9 +57,9 @@ export function Navbar() {
           <div className="flex items-center gap-1.5">
             <Link
               href="/contact"
-              className="pressable rounded-full bg-[#1d1d1f] px-3.5 py-2 text-[13px] font-medium !text-white hover:bg-black sm:px-4"
+              className="pressable rounded-full bg-black px-3.5 py-2 text-[13px] font-semibold !text-white hover:bg-black/90 sm:px-4"
             >
-              Contact
+              Let&apos;s talk
             </Link>
             <button
               type="button"
@@ -71,13 +69,13 @@ export function Navbar() {
               className="pressable relative z-[60] flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-full sm:hidden"
             >
               <span
-                className={`h-px w-4 bg-text transition-[transform,opacity] duration-[var(--duration-ui)] ease-[var(--ease-out)] ${open ? "translate-y-[3.5px] rotate-45" : ""}`}
+                className={`h-px w-4 bg-black transition-[transform,opacity] duration-[var(--duration-ui)] ease-[var(--ease-out)] ${open ? "translate-y-[3.5px] rotate-45" : ""}`}
               />
               <span
-                className={`h-px w-4 bg-text transition-opacity duration-[var(--duration-ui)] ease-[var(--ease-out)] ${open ? "opacity-0" : ""}`}
+                className={`h-px w-4 bg-black transition-opacity duration-[var(--duration-ui)] ease-[var(--ease-out)] ${open ? "opacity-0" : ""}`}
               />
               <span
-                className={`h-px w-4 bg-text transition-[transform,opacity] duration-[var(--duration-ui)] ease-[var(--ease-out)] ${open ? "-translate-y-[3.5px] -rotate-45" : ""}`}
+                className={`h-px w-4 bg-black transition-[transform,opacity] duration-[var(--duration-ui)] ease-[var(--ease-out)] ${open ? "-translate-y-[3.5px] -rotate-45" : ""}`}
               />
             </button>
           </div>
@@ -105,7 +103,7 @@ export function Navbar() {
                 href="/contact"
                 className="pressable flex w-full items-center justify-center rounded-full bg-[#1d1d1f] px-6 py-3.5 text-[15px] font-semibold !text-white"
               >
-                Contact
+                Let&apos;s talk
               </Link>
               <p className="text-center text-base text-muted">{site.email}</p>
             </div>
