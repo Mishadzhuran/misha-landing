@@ -3,18 +3,19 @@
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { capabilities } from "@/data/site";
-import { easeOut } from "@/lib/motion";
+import { springSoft } from "@/lib/motion";
 
 const TOTAL = capabilities.length;
 const TICK_MS = 2600;
 const ROW = 46;
 const VIEW_H = ROW * 3;
 const WINDOW = 7;
+const PICKER_BG = "#1c1c1e";
 
 const wheelSpring = {
   type: "spring" as const,
   bounce: 0,
-  duration: 0.7,
+  duration: 0.55,
 };
 
 function wrapIndex(n: number) {
@@ -50,30 +51,35 @@ export function CapabilitiesBox() {
   return (
     <motion.div
       ref={ref}
-      initial={reduce ? false : { opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.45, ease: easeOut }}
-      className="trust-widget--dark mt-4 overflow-hidden rounded-[22px] md:mt-6 md:rounded-[32px]"
+      initial={
+        reduce
+          ? false
+          : { opacity: 0, transform: "translateY(28px) scale(0.97)" }
+      }
+      whileInView={{ opacity: 1, transform: "translateY(0px) scale(1)" }}
+      viewport={{ once: true, amount: 0.22, margin: "0px 0px -8% 0px" }}
+      transition={reduce ? { duration: 0 } : { ...springSoft, bounce: 0.1 }}
+      className="trust-widget--dark mt-1 overflow-hidden rounded-[28px] md:mt-6 md:rounded-[32px]"
       style={{
         fontFamily:
           'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif',
-        boxShadow: "0 18px 50px rgba(0,0,0,0.35)",
+        boxShadow:
+          "inset 0 0.5px 0 rgba(255,255,255,0.16), 0 0 0 0.5px rgba(255,255,255,0.12), 0 18px 50px rgba(0,0,0,0.45)",
       }}
     >
-      <div className="flex items-baseline justify-between gap-3 px-5 pt-5 sm:gap-4 sm:px-7">
-        <p className="min-w-0 text-[15px] font-semibold leading-snug tracking-[-0.02em] text-white">
-          Systems & integrations
+      <div className="flex items-baseline justify-between gap-3 px-6 pt-6 sm:gap-4 sm:px-7 sm:pt-5">
+        <p className="min-w-0 flex-1 text-[16px] font-semibold leading-snug tracking-[-0.02em] text-white sm:text-[15px]">
+          Systems &amp; integrations
         </p>
         <p className="shrink-0 text-[13px] font-medium tabular-nums text-white/45">
           {index + 1} of {TOTAL}
         </p>
       </div>
 
-      <div className="px-4 pb-6 pt-2 sm:px-5">
+      <div className="px-5 pb-7 pt-3 sm:px-5 sm:pb-6 sm:pt-2">
         <div
-          className="relative overflow-hidden rounded-[14px] bg-[#2c2c2e]"
-          style={{ height: VIEW_H }}
+          className="relative overflow-hidden rounded-[14px]"
+          style={{ height: VIEW_H, background: PICKER_BG }}
         >
           <div
             aria-hidden
@@ -124,16 +130,14 @@ export function CapabilitiesBox() {
             aria-hidden
             className="pointer-events-none absolute inset-x-0 top-0 z-[3] h-11"
             style={{
-              background:
-                "linear-gradient(180deg, #2c2c2e 0%, rgba(44,44,46,0.75) 50%, transparent 100%)",
+              background: `linear-gradient(180deg, ${PICKER_BG} 0%, rgba(28,28,30,0.75) 50%, transparent 100%)`,
             }}
           />
           <div
             aria-hidden
             className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-11"
             style={{
-              background:
-                "linear-gradient(0deg, #2c2c2e 0%, rgba(44,44,46,0.75) 50%, transparent 100%)",
+              background: `linear-gradient(0deg, ${PICKER_BG} 0%, rgba(28,28,30,0.75) 50%, transparent 100%)`,
             }}
           />
         </div>

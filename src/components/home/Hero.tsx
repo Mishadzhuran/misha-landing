@@ -8,6 +8,11 @@ import { ToolIcons } from "./ToolIcons";
 
 const HEADLINE = ["Turn your idea", "into a live product."];
 
+/**
+ * Letter write — same layout as before.
+ * Safari-safe: opacity + translateY only (no scale / blur — those glitch
+ * the first glyph on iOS, especially with script fonts + inline-block).
+ */
 function HandwrittenHeadline({ reduce }: { reduce: boolean | null }) {
   let charIndex = 0;
 
@@ -20,6 +25,8 @@ function HandwrittenHeadline({ reduce }: { reduce: boolean | null }) {
         <span key={line} className="block">
           {line.split("").map((ch) => {
             const i = charIndex++;
+            const delay = 0.12 + i * 0.028 + lineIndex * 0.04;
+
             if (reduce) {
               return (
                 <span key={`${line}-${i}`} className="inline-block">
@@ -27,15 +34,16 @@ function HandwrittenHeadline({ reduce }: { reduce: boolean | null }) {
                 </span>
               );
             }
+
             return (
               <motion.span
                 key={`${line}-${i}`}
-                className="inline-block origin-bottom"
-                initial={{ opacity: 0, y: 14, scale: 0.86 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
+                className="inline-block [backface-visibility:hidden]"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  duration: 0.34,
-                  delay: 0.08 + i * 0.026 + lineIndex * 0.03,
+                  duration: 0.32,
+                  delay,
                   ease: easeOut,
                 }}
               >
@@ -51,12 +59,11 @@ function HandwrittenHeadline({ reduce }: { reduce: boolean | null }) {
 
 export function Hero() {
   const reduce = useReducedMotion();
-  // Match HandwrittenHeadline: last char delay + duration + small breath
   const charCount = HEADLINE.join("").length;
   const lastLineIndex = HEADLINE.length - 1;
   const writeDone = reduce
     ? 0
-    : 0.08 + (charCount - 1) * 0.026 + lastLineIndex * 0.03 + 0.34 + 0.08;
+    : 0.12 + (charCount - 1) * 0.028 + lastLineIndex * 0.04 + 0.32 + 0.08;
 
   return (
     <section className="relative overflow-x-clip pt-[max(14vh,env(safe-area-inset-top)+5.5rem)] pb-[max(1.5rem,env(safe-area-inset-bottom))] md:pb-10 md:pt-32">
@@ -103,7 +110,6 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Phone + icons wait until the headline has finished writing */}
         <motion.div
           className="relative mt-8 overflow-x-clip md:mt-16 md:overflow-visible"
           initial={reduce ? false : { opacity: 0, y: 28, scale: 0.975 }}

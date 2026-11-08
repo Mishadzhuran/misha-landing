@@ -31,8 +31,10 @@ import { easeOut, springSoft, springUi } from "@/lib/motion";
 
 const widgetShadow = "0 18px 50px rgba(0,0,0,0.35)";
 const widgetShadowHover = "0 22px 56px rgba(0,0,0,0.4)";
-const darkWidgetShadow = "0 18px 50px rgba(0,0,0,0.35)";
-const darkWidgetShadowHover = "0 22px 56px rgba(0,0,0,0.4)";
+const darkWidgetShadow =
+  "inset 0 0.5px 0 rgba(255,255,255,0.16), 0 0 0 0.5px rgba(255,255,255,0.12), 0 18px 50px rgba(0,0,0,0.45)";
+const darkWidgetShadowHover =
+  "inset 0 0.5px 0 rgba(255,255,255,0.2), 0 0 0 0.5px rgba(255,255,255,0.16), 0 24px 56px rgba(0,0,0,0.5)";
 const sf =
   'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif';
 
@@ -47,6 +49,31 @@ function useCanHover() {
   }, []);
   return canHover;
 }
+
+/** Always starts false so SSR + first client paint match; flips after mount. */
+function useIsPhone() {
+  const [phone, setPhone] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const sync = () => setPhone(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  return phone;
+}
+
+/** Card rise — transform string stays on the compositor. */
+const widgetEnter = {
+  ...springSoft,
+  bounce: 0.1,
+};
+
+/** Row / bubble stagger after the card lands. */
+const rowEnter = {
+  duration: 0.32,
+  ease: easeOut,
+};
 
 function Widget({
   children,
@@ -63,28 +90,46 @@ function Widget({
 }) {
   const reduce = useReducedMotion();
   const canHover = useCanHover();
+  const phone = useIsPhone();
   const shadow = tone === "dark" ? darkWidgetShadow : widgetShadow;
   const shadowHover = tone === "dark" ? darkWidgetShadowHover : widgetShadowHover;
 
   return (
     <motion.div
-      initial={reduce ? false : { opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2, margin: "0px 0px -24px 0px" }}
+      initial={
+        reduce
+          ? false
+          : { opacity: 0, transform: "translateY(28px) scale(0.97)" }
+      }
+      whileInView={{ opacity: 1, transform: "translateY(0px) scale(1)" }}
+      viewport={{
+        once: true,
+        amount: 0.22,
+        margin: "0px 0px -8% 0px",
+      }}
       transition={
-        reduce ? { duration: 0 } : { ...springSoft, delay, duration: 0.5 }
+        reduce
+          ? { duration: 0 }
+          : { ...widgetEnter, delay: phone ? delay * 0.45 : delay }
       }
       whileHover={
         reduce || !canHover
           ? undefined
-          : { y: -2, boxShadow: shadowHover, transition: springUi }
+          : {
+              transform: "translateY(-3px) scale(1)",
+              boxShadow: shadowHover,
+              transition: springUi,
+            }
       }
       whileTap={
         reduce || canHover
           ? undefined
-          : { scale: 0.985, transition: { duration: 0.12, ease: easeOut } }
+          : {
+              transform: "translateY(0px) scale(0.985)",
+              transition: { duration: 0.12, ease: easeOut },
+            }
       }
-      className={`trust-widget relative flex h-full flex-col overflow-hidden rounded-[22px] md:rounded-[32px] ${
+      className={`trust-widget relative flex h-full min-w-0 flex-col overflow-hidden rounded-[32px] ${
         tone === "dark" ? "trust-widget--dark" : ""
       } ${className}`}
       style={{
@@ -109,19 +154,19 @@ function CalendarCard() {
 
   return (
     <Widget
-      delay={0.02}
+      delay={0.04}
       tone="dark"
-      className="relative min-h-[300px] p-5 sm:p-6"
+      className="relative min-h-[340px] p-7 sm:min-h-[300px] sm:p-6"
     >
       <div className="flex h-full gap-4 sm:gap-5">
-        <div className="flex w-[64px] shrink-0 flex-col items-center border-r border-white/[0.08] pt-0.5 pr-3 sm:w-[72px] sm:pr-4">
+        <div className="flex w-[72px] shrink-0 flex-col items-center border-r border-white/[0.08] pt-0.5 pr-3.5 sm:w-[72px] sm:pr-4">
           <p className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#FF453A]">
             Mon
           </p>
-          <p className="mt-0.5 text-[44px] font-semibold leading-none tracking-[-0.05em] tabular-nums text-white sm:text-[52px]">
+          <p className="mt-0.5 text-[52px] font-semibold leading-none tracking-[-0.05em] tabular-nums text-white sm:text-[52px]">
             1
           </p>
-          <p className="mt-2 text-center text-[11px] font-medium leading-tight text-white/45">
+          <p className="mt-2 text-center text-[12px] font-medium leading-tight text-white/45 sm:text-[11px]">
             First
             <br />
             week
@@ -132,27 +177,31 @@ function CalendarCard() {
           {events.map((e, i) => (
             <motion.li
               key={e.title}
-              initial={reduce ? false : { opacity: 0, x: 8 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ ...springSoft, delay: 0.16 + i * 0.06 }}
-              className={`flex items-start gap-2.5 py-2 sm:py-2.5 ${
-                i < events.length - 1 ? "border-b border-white/[0.08]" : ""
+              initial={
+                reduce
+                  ? false
+                  : { opacity: 0, transform: "translateY(10px)" }
+              }
+              whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ ...rowEnter, delay: 0.16 + i * 0.06 }}
+              className={`flex items-start gap-2.5 py-3 sm:py-2.5 ${
+                i < events.length - 1 ? "border-b border-white/[0.1]" : ""
               }`}
             >
               <span
-                className="mt-[6px] h-[7px] w-[7px] shrink-0 rounded-full"
+                className="mt-[7px] h-[8px] w-[8px] shrink-0 rounded-full"
                 style={{
                   background: e.color,
                   boxShadow: `0 0 8px ${e.color}66`,
                 }}
               />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[14px] font-semibold tracking-[-0.02em] text-white">
+                <p className="text-[16px] font-semibold tracking-[-0.02em] text-white sm:text-[14px]">
                   {e.title}
                 </p>
                 <p
-                  className="mt-0.5 text-[12px] font-medium tabular-nums"
+                  className="mt-0.5 text-[13px] font-medium tabular-nums sm:text-[12px]"
                   style={{ color: e.color }}
                 >
                   {e.time}
@@ -166,45 +215,48 @@ function CalendarCard() {
   );
 }
 
-/** Stocks. delivery volume (not the same as Activity) */
+const RESULT_ROWS = [
+  { label: "Projects delivered", value: stats[0].value, delta: "+4" },
+  { label: "Markets", value: stats[1].value, delta: "Map" },
+  { label: "Systems wired", value: stats[2].value, delta: "Stack" },
+  { label: "Typical reply", value: stats[4].value, delta: "SLA" },
+] as const;
+
+/** Stocks. delivery volume — same on every breakpoint */
 function StocksCard() {
   const reduce = useReducedMotion();
-  const rows = [
-    { label: "Projects delivered", value: stats[0].value, delta: "+4" },
-    { label: "Markets", value: stats[1].value, delta: "Map" },
-    { label: "Systems wired", value: stats[2].value, delta: "Stack" },
-    { label: "Typical reply", value: stats[4].value, delta: "SLA" },
-  ];
 
   return (
     <Widget
       delay={0.06}
       tone="dark"
-      className="min-h-[300px] p-5 sm:p-6"
+      className="min-h-[340px] p-7 sm:min-h-[300px] sm:p-6"
     >
-      <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
+      <p className="text-[17px] font-semibold tracking-[-0.02em] text-white sm:text-[15px]">
         Results
       </p>
-      <ul className="mt-2 flex flex-1 flex-col justify-center sm:mt-3">
-        {rows.map((r, i) => (
+      <ul className="mt-4 flex flex-1 flex-col justify-center sm:mt-3">
+        {RESULT_ROWS.map((r, i) => (
           <motion.li
             key={r.label}
-            initial={reduce ? false : { opacity: 0, y: 4 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ ...springSoft, delay: 0.14 + i * 0.05 }}
-            className={`flex items-center justify-between gap-3 py-3 ${
-              i < rows.length - 1 ? "border-b border-white/[0.08]" : ""
+            initial={
+              reduce ? false : { opacity: 0, transform: "translateY(10px)" }
+            }
+            whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+            viewport={{ once: true, amount: 0.35 }}
+            transition={{ ...rowEnter, delay: 0.14 + i * 0.06 }}
+            className={`flex items-center justify-between gap-3 py-3.5 sm:py-3 ${
+              i < RESULT_ROWS.length - 1 ? "border-b border-white/[0.1]" : ""
             }`}
           >
-            <p className="min-w-0 flex-1 truncate text-[14px] font-medium text-white/45">
+            <p className="min-w-0 flex-1 pr-2 text-[15px] font-medium leading-snug text-white/50 sm:text-[14px]">
               {r.label}
             </p>
             <div className="flex shrink-0 items-center gap-2.5">
-              <p className="text-[18px] font-semibold tabular-nums tracking-[-0.03em] text-white">
+              <p className="text-[22px] font-semibold tabular-nums tracking-[-0.03em] text-white sm:text-[18px]">
                 {r.value}
               </p>
-              <span className="min-w-[44px] rounded-[6px] bg-[#34C759] px-1.5 py-[4px] text-center text-[11px] font-semibold tabular-nums leading-none !text-white">
+              <span className="min-w-[48px] rounded-[6px] bg-[#34C759] px-1.5 py-[6px] text-center text-[12px] font-semibold tabular-nums leading-none !text-white sm:min-w-[44px] sm:py-[4px] sm:text-[11px]">
                 {r.delta}
               </span>
             </div>
@@ -253,41 +305,45 @@ function FitnessCard() {
 
   return (
     <Widget
-      delay={0.1}
+      delay={0.08}
       tone="dark"
-      className="relative min-h-[300px] p-5 sm:p-6"
+      className="relative min-h-[340px] p-7 sm:min-h-[300px] sm:p-6"
     >
       <div className="relative flex h-full flex-col">
-        <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
+        <p className="text-[17px] font-semibold tracking-[-0.02em] text-white sm:text-[15px]">
           Activity
         </p>
 
-        <div className="mt-auto flex items-center justify-between gap-3 pt-3">
-          <ul className="min-w-0 space-y-3">
+        <div className="mt-auto flex min-w-0 items-center justify-between gap-4 pt-4 sm:gap-3 sm:pt-3">
+          <ul className="min-w-0 flex-1 space-y-4 sm:space-y-3">
             {metrics.map((m, i) => (
               <motion.li
                 key={m.key}
-                initial={reduce ? false : { opacity: 0, x: -6 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ ...springSoft, delay: 0.2 + i * 0.08 }}
-                className="flex items-baseline gap-2"
+                initial={
+                  reduce
+                    ? false
+                    : { opacity: 0, transform: "translateY(10px)" }
+                }
+                whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={{ ...rowEnter, delay: 0.18 + i * 0.07 }}
+                className="flex items-baseline gap-2.5"
               >
                 <span
-                  className="mt-[2px] h-2 w-2 shrink-0 rounded-full"
+                  className="mt-[2px] h-2.5 w-2.5 shrink-0 rounded-full sm:h-2 sm:w-2"
                   style={{
                     background: m.color,
                     boxShadow: `0 0 8px ${m.color}`,
                   }}
                 />
-                <div>
+                <div className="min-w-0">
                   <p
-                    className="text-[18px] font-semibold leading-none tracking-[-0.04em] tabular-nums sm:text-[20px]"
+                    className="text-[22px] font-semibold leading-none tracking-[-0.04em] tabular-nums sm:text-[20px]"
                     style={{ color: m.color }}
                   >
                     {m.value}
                   </p>
-                  <p className="mt-0.5 text-[11px] font-medium text-white/75">
+                  <p className="mt-0.5 text-[13px] font-medium leading-snug text-white/75 sm:text-[11px]">
                     {m.label}
                   </p>
                 </div>
@@ -296,7 +352,7 @@ function FitnessCard() {
           </ul>
 
           <svg
-            className="h-[100px] w-[100px] shrink-0 sm:h-[124px] sm:w-[124px]"
+            className="h-[112px] w-[112px] shrink-0 sm:h-[124px] sm:w-[124px]"
             width="124"
             height="124"
             viewBox="0 0 124 124"
@@ -402,46 +458,51 @@ function ResponseCard() {
 
   return (
     <Widget
-      delay={0.05}
+      delay={0.08}
       tone="dark"
-      className="relative flex min-h-[300px] flex-col p-5 sm:p-6"
+      className="relative flex min-h-[340px] flex-col p-7 sm:min-h-[300px] sm:p-6"
     >
       <div ref={ref} className="flex h-full flex-col">
-        <div className="flex items-center gap-2.5 border-b border-white/[0.08] pb-3">
+        <div className="flex items-center gap-3 border-b border-white/[0.1] pb-3.5 sm:gap-2.5 sm:pb-3">
           <div
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#30D158] via-[#64D2FF] to-[#0A84FF] text-[18px] shadow-sm ring-2 ring-white/15"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#30D158] via-[#64D2FF] to-[#0A84FF] text-[19px] shadow-sm ring-2 ring-white/15 sm:h-9 sm:w-9 sm:text-[18px]"
             aria-hidden
           >
             👋
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[15px] font-semibold tracking-[-0.02em] text-white">
+            <p className="truncate text-[16px] font-semibold tracking-[-0.02em] text-white sm:text-[15px]">
               Alex
             </p>
-            <p className="text-[11px] font-medium text-white/45">iMessage</p>
+            <p className="text-[12px] font-medium text-white/45 sm:text-[11px]">
+              iMessage
+            </p>
           </div>
         </div>
 
-        <div className="mt-auto flex flex-col gap-2.5 pt-5">
+        <div className="mt-auto flex flex-col gap-3 pt-6 sm:gap-2.5 sm:pt-5">
           <motion.div
-            initial={reduce ? false : { opacity: 0, y: 8, scale: 0.96 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            initial={
+              reduce ? false : { opacity: 0, transform: "translateY(12px)" }
+            }
+            whileInView={{ opacity: 1, transform: "translateY(0px)" }}
             viewport={{ once: true }}
-            transition={{ ...springSoft, delay: 0.08 }}
-            className="max-w-[90%] self-start rounded-[20px] rounded-bl-[5px] bg-[#3a3a3c] px-3.5 py-2.5"
+            transition={{ ...rowEnter, delay: 0.12 }}
+            className="max-w-[92%] self-start rounded-[22px] rounded-bl-[6px] bg-[#1c1c1e] px-4 py-3 sm:rounded-[20px] sm:rounded-bl-[5px] sm:px-3.5 sm:py-2.5"
           >
-            <p className="text-[15px] font-normal leading-snug tracking-[-0.01em] text-white">
+            <p className="text-[16px] font-normal leading-snug tracking-[-0.01em] text-white sm:text-[15px]">
               Hey, can we talk about a new product?
             </p>
           </motion.div>
 
           {phase === "typing" ? (
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, transform: "translateY(8px)" }}
+              animate={{ opacity: 1, transform: "translateY(0px)" }}
+              transition={rowEnter}
               className="self-end"
             >
-              <div className="rounded-[20px] rounded-br-[5px] bg-[#3a3a3c] px-3.5 py-3">
+              <div className="rounded-[22px] rounded-br-[6px] bg-[#1c1c1e] px-4 py-3.5 sm:rounded-[20px] sm:rounded-br-[5px] sm:px-3.5 sm:py-3">
                 <TypingDots />
               </div>
             </motion.div>
@@ -450,13 +511,20 @@ function ResponseCard() {
           {phase === "reply" ? (
             <>
               <motion.div
-                initial={reduce ? false : { opacity: 0, y: 10, scale: 0.94 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ ...springSoft, duration: 0.45 }}
+                initial={
+                  reduce
+                    ? false
+                    : { opacity: 0, transform: "translateY(12px) scale(0.98)" }
+                }
+                animate={{
+                  opacity: 1,
+                  transform: "translateY(0px) scale(1)",
+                }}
+                transition={{ ...springSoft, duration: 0.48 }}
                 className="flex items-end justify-end gap-2 self-end"
               >
-                <div className="max-w-[85%] rounded-[20px] rounded-br-[5px] bg-[#0A84FF] px-3.5 py-2.5 shadow-[0_6px_16px_rgba(10,132,255,0.28)]">
-                  <p className="text-[15px] font-normal leading-snug tracking-[-0.01em] !text-white">
+                <div className="max-w-[88%] rounded-[22px] rounded-br-[6px] bg-[#0A84FF] px-4 py-3 shadow-[0_6px_16px_rgba(10,132,255,0.28)] sm:rounded-[20px] sm:rounded-br-[5px] sm:px-3.5 sm:py-2.5">
+                  <p className="text-[16px] font-normal leading-snug tracking-[-0.01em] !text-white sm:text-[15px]">
                     Absolutely. I usually reply within{" "}
                     <span className="font-semibold">{site.responseTime}</span>.
                   </p>
@@ -465,8 +533,8 @@ function ResponseCard() {
               <motion.p
                 initial={reduce ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.25, duration: 0.35 }}
-                className="self-end pr-1 text-[11px] font-medium text-white/40"
+                transition={{ delay: 0.22, duration: 0.3, ease: easeOut }}
+                className="self-end pr-1 text-[12px] font-medium text-white/40 sm:text-[11px]"
               >
                 Delivered
               </motion.p>
@@ -680,7 +748,7 @@ function MusicCard() {
     <Widget
       delay={0.09}
       tone="dark"
-      className="relative min-h-[300px] overflow-hidden p-5 sm:p-6"
+      className="relative min-h-[360px] overflow-hidden p-7 sm:min-h-[300px] sm:p-6"
     >
       <div
         aria-hidden
@@ -691,20 +759,30 @@ function MusicCard() {
       />
 
       <div ref={ref} className="relative flex h-full flex-col">
-        <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
+        <p className="text-[17px] font-semibold tracking-[-0.02em] text-white sm:text-[15px]">
           Selected work
         </p>
 
-        <ul className="mt-3 flex-1">
+        <ul className="mt-4 flex-1 sm:mt-3">
           {playlist.map((c, i) => {
             const active = i === index;
             return (
-              <li key={c.slug}>
+              <motion.li
+                key={c.slug}
+                initial={
+                  reduce
+                    ? false
+                    : { opacity: 0, transform: "translateY(10px)" }
+                }
+                whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={{ ...rowEnter, delay: 0.14 + i * 0.06 }}
+              >
                 <Link
                   href={`/drafts/${c.slug}`}
                   onFocus={() => selectTrack(i)}
                   onClick={() => selectTrack(i)}
-                  className={`flex min-h-[44px] items-center gap-3 rounded-[10px] px-1.5 py-2.5 transition-colors duration-[var(--duration-ui)] ease-[var(--ease-out)] ${
+                  className={`flex min-h-[48px] items-center gap-3 rounded-[12px] px-1.5 py-3 transition-colors duration-[var(--duration-ui)] ease-[var(--ease-out)] sm:min-h-[44px] sm:rounded-[10px] sm:py-2.5 ${
                     active ? "bg-white/[0.08]" : "hover:bg-white/[0.04]"
                   }`}
                 >
@@ -720,7 +798,7 @@ function MusicCard() {
                   </span>
                   <span className="min-w-0 flex-1">
                     <span
-                      className="block truncate text-[15px] font-semibold tracking-[-0.02em]"
+                      className="block truncate text-[16px] font-semibold tracking-[-0.02em] sm:text-[15px]"
                       style={{ color: active ? MUSIC_RED : "#FFFFFF" }}
                     >
                       {c.title}
@@ -743,7 +821,7 @@ function MusicCard() {
                     </span>
                   )}
                 </Link>
-              </li>
+              </motion.li>
             );
           })}
         </ul>
@@ -839,36 +917,38 @@ function TogetherCard() {
 
   return (
     <Widget
-      delay={0.13}
+      delay={0.1}
       tone="dark"
-      className="min-h-[300px] p-5 sm:p-6"
+      className="min-h-[340px] p-7 sm:min-h-[300px] sm:p-6"
     >
-      <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
+      <p className="text-[17px] font-semibold tracking-[-0.02em] text-white sm:text-[15px]">
         Working together
       </p>
 
-      <ul className="mt-4 flex-1 space-y-0">
+      <ul className="mt-5 flex-1 space-y-0 sm:mt-4">
         {items.map((item, i) => {
           const checked = done[i];
           return (
             <motion.li
               key={item.title}
-              initial={reduce ? false : { opacity: 0, y: 4 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ ...springSoft, delay: 0.14 + i * 0.05 }}
+              initial={
+                reduce ? false : { opacity: 0, transform: "translateY(10px)" }
+              }
+              whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ ...rowEnter, delay: 0.16 + i * 0.06 }}
             >
               <button
                 type="button"
                 onClick={() =>
                   setDone((d) => d.map((v, j) => (j === i ? !v : v)))
                 }
-                className={`flex min-h-[44px] w-full items-center gap-3 py-2.5 text-left ${
-                  i < items.length - 1 ? "border-b border-white/[0.08]" : ""
+                className={`flex min-h-[48px] w-full items-center gap-3.5 py-3 text-left sm:min-h-[44px] sm:gap-3 sm:py-2.5 ${
+                  i < items.length - 1 ? "border-b border-white/[0.1]" : ""
                 }`}
               >
                 <span
-                  className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full transition-colors ${
+                  className={`flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full transition-colors sm:h-[22px] sm:w-[22px] ${
                     checked ? "" : "bg-transparent"
                   }`}
                   style={{
@@ -879,7 +959,7 @@ function TogetherCard() {
                   }}
                 >
                   {checked ? (
-                    <svg width="11" height="11" viewBox="0 0 10 10" fill="none" aria-hidden>
+                    <svg width="12" height="12" viewBox="0 0 10 10" fill="none" aria-hidden>
                       <path
                         d="M2 5.2L4.1 7.2L8 2.8"
                         stroke="white"
@@ -891,7 +971,7 @@ function TogetherCard() {
                   ) : null}
                 </span>
                 <span
-                  className={`text-[14px] font-medium tracking-[-0.015em] ${
+                  className={`text-[16px] font-medium tracking-[-0.015em] sm:text-[14px] ${
                     checked
                       ? "text-white/40 line-through decoration-white/25"
                       : "text-white"
@@ -907,7 +987,7 @@ function TogetherCard() {
 
       <Link
         href="/contact"
-        className="pressable mt-3 flex min-h-[48px] items-center justify-center rounded-full bg-[#0A84FF] py-3 text-[15px] font-semibold !text-white transition-[filter] hover:brightness-110"
+        className="pressable mt-4 flex min-h-[52px] items-center justify-center rounded-full bg-[#0A84FF] py-3.5 text-[16px] font-semibold !text-white transition-[filter] hover:brightness-110 sm:mt-3 sm:min-h-[48px] sm:py-3 sm:text-[15px]"
         style={{ boxShadow: "0 8px 20px rgba(10,132,255,0.3)" }}
       >
         Start a conversation
@@ -999,9 +1079,17 @@ function mixHex(a: string, b: string, t: number) {
  */
 function OverviewHandwrite({ reduce }: { reduce: boolean | null }) {
   const ref = useRef<HTMLHeadingElement>(null);
+  const phone = useIsPhone();
+  const [motionReady, setMotionReady] = useState(false);
+  useEffect(() => {
+    setMotionReady(true);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 0.98", "start 0.42"],
+    offset: phone
+      ? ["start 0.95", "start 0.5"]
+      : ["start 0.98", "start 0.42"],
   });
 
   // Function form of useTransform — stable in FM 13; reverses on scroll up
@@ -1012,11 +1100,15 @@ function OverviewHandwrite({ reduce }: { reduce: boolean | null }) {
   const opacity = useTransform(scrollYProgress, (v) =>
     lerpStops(v, [0, 0.06, 0.18, 1], [0, 0.4, 1, 1]),
   );
-  const y = useTransform(scrollYProgress, (v) => lerpStops(v, [0, 1], [22, 0]));
+  const y = useTransform(scrollYProgress, (v) =>
+    lerpStops(v, [0, 1], [phone ? 18 : 22, 0]),
+  );
   const scale = useTransform(scrollYProgress, (v) =>
-    lerpStops(v, [0, 0.35, 1], [0.94, 0.985, 1]),
+    lerpStops(v, [0, 0.35, 1], [phone ? 0.96 : 0.94, 0.985, 1]),
   );
   const filter = useTransform(scrollYProgress, (v) => {
+    // Blur is paint-heavy on iOS — keep the style key stable, zero it on phone
+    if (phone) return "blur(0px)";
     const blur = lerpStops(v, [0, 0.25, 0.7, 1], [8, 4, 1, 0]);
     return `blur(${blur}px)`;
   });
@@ -1028,11 +1120,11 @@ function OverviewHandwrite({ reduce }: { reduce: boolean | null }) {
   return (
     <motion.h3
       ref={ref}
-      className="script-write pointer-events-none relative z-30 -mb-4 w-full overflow-visible px-1 pt-1 text-center text-[clamp(3.75rem,16vw,11rem)] leading-[0.92] text-white -rotate-[1.2deg] md:-mb-9 md:-translate-y-5 md:leading-[1.12] md:will-change-[clip-path,opacity,filter,transform] lg:-mb-11 lg:-translate-y-6"
+      className="script-write pointer-events-none relative z-30 -mb-6 w-full overflow-visible px-0.5 pt-2 text-center text-[clamp(6.25rem,26vw,11rem)] leading-[0.95] text-white -rotate-[1.4deg] sm:text-[clamp(5.5rem,20vw,11rem)] md:-mb-9 md:-translate-y-5 md:text-[clamp(5.5rem,18vw,11rem)] md:will-change-[clip-path,opacity,filter,transform] lg:-mb-11 lg:-translate-y-6"
       aria-label="Overview"
       style={
-        reduce
-          ? undefined
+        reduce || !motionReady
+          ? { transformOrigin: "50% 70%" }
           : {
               clipPath,
               opacity,
@@ -1051,11 +1143,18 @@ function OverviewHandwrite({ reduce }: { reduce: boolean | null }) {
 
 export function TrustSection() {
   const reduce = useReducedMotion();
+  const phone = useIsPhone();
   const pinRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const titleInView = useInView(titleRef, { once: true, amount: 0.35 });
   const [lockedBlack, setLockedBlack] = useState(false);
   const [coarse, setCoarse] = useState(false);
+  /** Gate scroll-linked styles until after hydrate — avoids opacity number/string mismatch. */
+  const [motionReady, setMotionReady] = useState(false);
+
+  useEffect(() => {
+    setMotionReady(true);
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia("(pointer: coarse)");
@@ -1081,10 +1180,14 @@ export function TrustSection() {
     return mixHex(MID_BG, STAGE_BG, t);
   });
 
-  // Gaussian dissolve — still lush on phone, just not 110px paint-heavy
-  const blurPeak = coarse ? [0, 10, 24, 42, 58, 72] : [0, 12, 36, 64, 90, 110];
+  // Soft dissolve — skip heavy blur on phone for scroll smoothness
+  const blurPeak = coarse || phone ? [0, 6, 14, 22, 30, 36] : [0, 12, 36, 64, 90, 110];
   const titleScale = useTransform(scrollYProgress, (v) =>
-    lerpStops(v, [0, 0.18, 0.4, 0.68], [1, 1.12, 1.32, 1.6]),
+    lerpStops(
+      v,
+      [0, 0.18, 0.4, 0.68],
+      phone ? [1, 1.06, 1.16, 1.28] : [1, 1.12, 1.32, 1.6],
+    ),
   );
   const titleOpacity = useTransform(scrollYProgress, (v) =>
     lerpStops(
@@ -1094,6 +1197,7 @@ export function TrustSection() {
     ),
   );
   const titleFilter = useTransform(scrollYProgress, (v) => {
+    if (phone) return "blur(0px)";
     const blur = lerpStops(
       v,
       [0.06, 0.16, 0.3, 0.46, 0.62, 0.72],
@@ -1133,11 +1237,14 @@ export function TrustSection() {
       <div ref={pinRef} className="relative h-[115svh] md:h-[125vh]">
         <div className="sticky top-0 flex h-svh w-full items-center justify-center overflow-hidden px-4 sm:px-6">
           <motion.div
-            className="px-2 text-center sm:px-6 md:will-change-[opacity,filter,transform]"
+            className={`px-2 text-center sm:px-6 md:will-change-[opacity,filter,transform] ${
+              reduce ? "opacity-0" : ""
+            }`}
             style={
-              reduce
-                ? { opacity: 0 }
+              reduce || !motionReady
+                ? { transformOrigin: "50% 50%" }
                 : {
+                    // Same keys every client frame — phone zeros blur inside titleFilter
                     scale: titleScale,
                     opacity: titleOpacity,
                     filter: titleFilter,
@@ -1147,7 +1254,7 @@ export function TrustSection() {
           >
             <h2
               ref={titleRef}
-              className="editorial-display mx-auto flex w-full max-w-[min(96vw,1100px)] flex-wrap justify-center pb-[0.18em] text-[clamp(2.85rem,10.5vw,6.25rem)] font-medium leading-[1.12] tracking-[-0.035em] text-[#1d1d1f]"
+              className="editorial-display mx-auto flex w-full max-w-[min(96vw,1100px)] flex-wrap justify-center pb-[0.18em] text-[clamp(3.1rem,11vw,6.25rem)] font-medium leading-[1.12] tracking-[-0.035em] text-[#1d1d1f]"
               aria-label="Deep Dive"
             >
               {STAGE_TITLE.split("").map((letter, i) => (
@@ -1164,9 +1271,8 @@ export function TrustSection() {
         </div>
       </div>
 
-      <div className="relative overflow-x-clip pb-[max(1.25rem,env(safe-area-inset-bottom))]">
-        {/* Mobile: inset like a phone widget stack, not edge-to-edge wide */}
-        <Shell className="max-md:!w-[min(calc(100%-2.75rem),21.5rem)]">
+      <div className="relative overflow-x-clip pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        <Shell className="max-md:!w-[calc(100%-1.5rem)]">
           <div className="relative mx-auto max-w-5xl overflow-x-clip md:overflow-visible">
             <div
               aria-hidden
@@ -1180,8 +1286,11 @@ export function TrustSection() {
 
             <OverviewHandwrite reduce={reduce} />
 
-            {/* iOS widget stack spacing (~12–16pt) on phone; desktop keeps airier gap */}
-            <div className="relative z-10 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5 lg:grid-cols-3">
+            {/*
+              Phone: 1 full-width column (bigger, native). Tablet: 2. Large: 3.
+              Each widget rises in as it enters the viewport.
+            */}
+            <div className="relative z-10 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-4 md:gap-5 lg:grid-cols-3">
               <CalendarCard />
               <StocksCard />
               <FitnessCard />
@@ -1190,7 +1299,7 @@ export function TrustSection() {
               <TogetherCard />
             </div>
 
-            <div className="relative z-10 mt-1 md:mt-0">
+            <div className="relative z-10 mt-5 sm:mt-4 md:mt-5">
               <CapabilitiesBox />
             </div>
           </div>
