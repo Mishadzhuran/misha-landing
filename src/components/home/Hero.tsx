@@ -59,7 +59,7 @@ export function Hero() {
     : 0.08 + (charCount - 1) * 0.026 + lastLineIndex * 0.03 + 0.34 + 0.08;
 
   return (
-    <section className="relative overflow-x-clip pt-[max(14vh,env(safe-area-inset-top)+5.5rem)] pb-[max(1.5rem,env(safe-area-inset-bottom))] md:overflow-visible md:pb-10 md:pt-32">
+    <section className="relative overflow-x-clip pt-[max(14vh,env(safe-area-inset-top)+5.5rem)] pb-[max(1.5rem,env(safe-area-inset-bottom))] md:pb-10 md:pt-32">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -105,7 +105,7 @@ export function Hero() {
 
         {/* Phone + icons wait until the headline has finished writing */}
         <motion.div
-          className="relative mt-8 overflow-visible md:mt-16"
+          className="relative mt-8 overflow-x-clip md:mt-16 md:overflow-visible"
           initial={reduce ? false : { opacity: 0, y: 28, scale: 0.975 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{
@@ -113,9 +113,9 @@ export function Hero() {
             delay: writeDone + 0.18,
           }}
         >
-          <div className="relative mx-auto max-w-[520px] md:max-w-[780px]">
+          <div className="relative mx-auto max-w-[520px] overflow-x-clip md:max-w-[780px] md:overflow-visible">
             <motion.div
-              className="relative overflow-visible"
+              className="relative overflow-x-clip md:overflow-visible"
               initial={reduce ? false : { y: 12 }}
               animate={{ y: 0 }}
               transition={{
@@ -125,9 +125,9 @@ export function Hero() {
               }}
             >
               <ToolIcons startDelay={writeDone + 0.55} />
-              <div className="relative z-30 flex justify-center px-12 pb-28 pt-6 sm:px-14 sm:pb-32 sm:pt-8 md:px-20 md:pb-40 md:pt-10">
+              <div className="relative z-30 flex isolate justify-center px-[18%] pb-20 pt-6 sm:px-[16%] sm:pb-24 sm:pt-8 md:px-20 md:pb-40 md:pt-10">
                 <motion.div
-                  className="relative"
+                  className="relative z-30"
                   initial={reduce ? false : { y: 14, scale: 0.98 }}
                   animate={{ y: 0, scale: 1 }}
                   transition={{

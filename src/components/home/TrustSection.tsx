@@ -33,11 +33,20 @@ const widgetShadow = "0 18px 50px rgba(0,0,0,0.35)";
 const widgetShadowHover = "0 22px 56px rgba(0,0,0,0.4)";
 const darkWidgetShadow = "0 18px 50px rgba(0,0,0,0.35)";
 const darkWidgetShadowHover = "0 22px 56px rgba(0,0,0,0.4)";
-const darkPanel =
-  "linear-gradient(165deg, rgba(44,44,46,0.55) 0%, rgba(28,28,30,0.42) 100%)";
-
 const sf =
   'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif';
+
+function useCanHover() {
+  const [canHover, setCanHover] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const sync = () => setCanHover(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  return canHover;
+}
 
 function Widget({
   children,
@@ -53,27 +62,34 @@ function Widget({
   tone?: "light" | "dark";
 }) {
   const reduce = useReducedMotion();
+  const canHover = useCanHover();
   const shadow = tone === "dark" ? darkWidgetShadow : widgetShadow;
   const shadowHover = tone === "dark" ? darkWidgetShadowHover : widgetShadowHover;
 
   return (
     <motion.div
-      initial={reduce ? false : { opacity: 0, y: 14, scale: 0.98 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.25, margin: "0px 0px -32px 0px" }}
+      initial={reduce ? false : { opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2, margin: "0px 0px -24px 0px" }}
       transition={
-        reduce ? { duration: 0 } : { ...springSoft, delay, duration: 0.58 }
+        reduce ? { duration: 0 } : { ...springSoft, delay, duration: 0.5 }
       }
       whileHover={
-        reduce
+        reduce || !canHover
           ? undefined
           : { y: -2, boxShadow: shadowHover, transition: springUi }
       }
-      className={`relative flex h-full flex-col overflow-hidden rounded-[32px] backdrop-blur-xl ${className}`}
+      whileTap={
+        reduce || canHover
+          ? undefined
+          : { scale: 0.985, transition: { duration: 0.12, ease: easeOut } }
+      }
+      className={`trust-widget relative flex h-full flex-col overflow-hidden rounded-[22px] md:rounded-[32px] ${
+        tone === "dark" ? "trust-widget--dark" : ""
+      } ${className}`}
       style={{
         fontFamily: sf,
         boxShadow: shadow,
-        background: tone === "dark" ? darkPanel : undefined,
         ...style,
       }}
     >
@@ -1012,7 +1028,7 @@ function OverviewHandwrite({ reduce }: { reduce: boolean | null }) {
   return (
     <motion.h3
       ref={ref}
-      className="script-write pointer-events-none relative z-30 -mb-3 -translate-y-1 w-full overflow-visible px-1 pt-1 text-center text-[clamp(3.35rem,12.5vw,11rem)] text-white -rotate-[1.4deg] md:-mb-9 md:-translate-y-5 md:will-change-[clip-path,opacity,filter,transform] lg:-mb-11 lg:-translate-y-6"
+      className="script-write pointer-events-none relative z-30 -mb-4 w-full overflow-visible px-1 pt-1 text-center text-[clamp(3.75rem,16vw,11rem)] leading-[0.92] text-white -rotate-[1.2deg] md:-mb-9 md:-translate-y-5 md:leading-[1.12] md:will-change-[clip-path,opacity,filter,transform] lg:-mb-11 lg:-translate-y-6"
       aria-label="Overview"
       style={
         reduce
@@ -1148,12 +1164,13 @@ export function TrustSection() {
         </div>
       </div>
 
-      <div className="relative">
-        <Shell>
-          <div className="relative mx-auto max-w-5xl overflow-visible">
+      <div className="relative overflow-x-clip pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+        {/* Mobile: inset like a phone widget stack, not edge-to-edge wide */}
+        <Shell className="max-md:!w-[min(calc(100%-2.75rem),21.5rem)]">
+          <div className="relative mx-auto max-w-5xl overflow-x-clip md:overflow-visible">
             <div
               aria-hidden
-              className="pointer-events-none absolute left-1/2 top-[48%] z-0 h-[78%] w-[118%] -translate-x-1/2 -translate-y-1/2"
+              className="pointer-events-none absolute left-1/2 top-[42%] z-0 hidden h-[78%] w-[118%] -translate-x-1/2 -translate-y-1/2 md:block"
               style={{
                 background:
                   "radial-gradient(ellipse at center, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 38%, transparent 68%)",
@@ -1163,7 +1180,8 @@ export function TrustSection() {
 
             <OverviewHandwrite reduce={reduce} />
 
-            <div className="relative z-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {/* iOS widget stack spacing (~12–16pt) on phone; desktop keeps airier gap */}
+            <div className="relative z-10 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5 lg:grid-cols-3">
               <CalendarCard />
               <StocksCard />
               <FitnessCard />
@@ -1172,7 +1190,7 @@ export function TrustSection() {
               <TogetherCard />
             </div>
 
-            <div className="relative z-10">
+            <div className="relative z-10 mt-1 md:mt-0">
               <CapabilitiesBox />
             </div>
           </div>

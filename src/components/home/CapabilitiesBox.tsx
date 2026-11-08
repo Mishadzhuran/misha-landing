@@ -54,12 +54,10 @@ export function CapabilitiesBox() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45, ease: easeOut }}
-      className="mt-6 overflow-hidden rounded-[32px] backdrop-blur-xl"
+      className="trust-widget--dark mt-4 overflow-hidden rounded-[22px] md:mt-6 md:rounded-[32px]"
       style={{
         fontFamily:
           'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif',
-        background:
-          "linear-gradient(165deg, rgba(44,44,46,0.55) 0%, rgba(28,28,30,0.42) 100%)",
         boxShadow: "0 18px 50px rgba(0,0,0,0.35)",
       }}
     >

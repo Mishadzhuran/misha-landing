@@ -978,7 +978,7 @@ export function PremiumPhone({
   return (
     <div className={`relative mx-auto ${className}`}>
       <motion.div
-        className="relative mx-auto w-[min(300px,78vw)] md:w-[320px]"
+        className="relative mx-auto w-[min(280px,64vw)] md:w-[320px]"
         style={{ aspectRatio: "313 / 640" }}
         // Transform-only settle — parent stage handles hide-until-write
         initial={
@@ -988,21 +988,22 @@ export function PremiumPhone({
         transition={{ ...springUi, delay: reduce ? 0 : enterDelay }}
       >
         {/*
-          Screen lives only in the display hole. Device PNG sits on top.
-          Shadow follows the PNG alpha — no rectangular card behind the phone.
+          Screen fills the display hole edge-to-edge under the device chrome.
+          Slightly under the bezel lip so icons never show through the glass.
+          Device PNG sits on top; shadow follows PNG alpha only.
         */}
         <div
-          className="absolute z-0 overflow-hidden bg-[#f5f5f7]"
+          className="absolute z-[1] overflow-hidden bg-white"
           style={{
-            left: "5.1%",
-            right: "5.1%",
-            top: "2.05%",
-            bottom: "2.1%",
-            borderRadius: "16.5% / 7.8%",
+            left: "3.85%",
+            right: "3.85%",
+            top: "1.35%",
+            bottom: "1.4%",
+            borderRadius: "18.5% / 8.6%",
           }}
         >
           <div
-            className="absolute inset-0 flex flex-col overflow-hidden"
+            className="absolute inset-0 flex flex-col overflow-hidden bg-[#f5f5f7]"
             style={{ paddingTop: "8.8%" }}
           >
             <div className="flex min-h-0 flex-1 flex-col px-2.5 pb-[4.5rem] sm:px-3">
