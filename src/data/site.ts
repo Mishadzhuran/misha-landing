@@ -2,6 +2,7 @@ export const site = {
   name: "Misha Dzhuran",
   shortName: "Misha",
   legalName: "Misha Dzhuran",
+  url: "https://mishadzhuran.com",
   tagline: "I help people ship products that feel great.",
   description:
     "Misha Dzhuran, product designer & developer. I help people turn ideas into polished apps and websites, from first sketch to App Store.",
@@ -21,7 +22,7 @@ export const site = {
 
 export const navLinks = [
   { href: "/#work", label: "Work" },
-  { href: "/#services", label: "Services" },
+  { href: "/services", label: "Services" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -29,7 +30,7 @@ export const navLinks = [
 export const footerNav = {
   studio: [
     { href: "/#work", label: "Selected work" },
-    { href: "/#services", label: "Services" },
+    { href: "/services", label: "Services" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Get in touch" },
   ],
@@ -235,7 +236,7 @@ export const cases = [
     slug: "lifemaxxing",
     title: "Lifemaxxing",
     category: "Social · Flutter · Maps",
-    year: "2025",
+    year: "2026",
     metric: "Live product",
     tagline: "The IMDb of your life",
     summary:
@@ -247,21 +248,22 @@ export const cases = [
       "Production stack: Flutter, NestJS BFF, PostGIS, R2",
     ],
     color: "#c9a227",
-    image: "/work/lifemaxxing-cover.jpg",
+    image: "/work/lifemaxxing/01-feed.jpg",
     icon: "/work/icons/lifemaxxing.png",
     coverMode: "cover" as const,
     gallery: [
-      "/work/lifemaxxing-map.png",
-      "/work/lifemaxxing-home.png",
-      "/work/lifemaxxing-explore.png",
-      "/work/lifemaxxing-feed.png",
+      "/work/lifemaxxing/01-feed.jpg",
+      "/work/lifemaxxing/02-map.jpg",
+      "/work/lifemaxxing/03-profile.jpg",
+      "/work/lifemaxxing/04-explore.jpg",
+      "/work/lifemaxxing/05-places.jpg",
     ],
   },
   {
     slug: "big-red-map",
     title: "Big Red Map",
     category: "Travel · Next.js · Web",
-    year: "2025",
+    year: "2026",
     metric: "Hero product",
     tagline: "Live wild. Collect moments. Leave a map.",
     summary:
@@ -299,10 +301,17 @@ export const cases = [
       "Native iOS + web parity on one backend",
     ],
     color: "#9fe870",
-    image: "/work/anita-mock.png",
+    image: "/work/anita/01-hero.png",
     icon: "/work/icons/anita.png",
     coverMode: "cover" as const,
-    gallery: ["/work/anita-mock.png"],
+    gallery: [
+      "/work/anita/02-ai-assistant.png",
+      "/work/anita/03-overview.png",
+      "/work/anita/04-categories.jpg",
+      "/work/anita/05-limits-goals.png",
+      "/work/anita/06-assets.png",
+      "/work/anita/01-hero.png",
+    ],
   },
   {
     slug: "mitkovt",

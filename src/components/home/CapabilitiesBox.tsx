@@ -71,7 +71,7 @@ export function CapabilitiesBox() {
         <p className="min-w-0 flex-1 text-[16px] font-semibold leading-snug tracking-[-0.02em] text-white sm:text-[15px]">
           Systems &amp; integrations
         </p>
-        <p className="shrink-0 text-[13px] font-medium tabular-nums text-white/45">
+        <p className="shrink-0 text-[13px] font-medium tabular-nums text-white/60">
           {index + 1} of {TOTAL}
         </p>
       </div>
@@ -116,7 +116,7 @@ export function CapabilitiesBox() {
                     className={`max-w-full truncate tracking-[-0.022em] ${
                       active
                         ? "text-[16px] font-semibold text-white sm:text-[17px]"
-                        : "text-[14px] font-medium text-white/45 sm:text-[15px]"
+                        : "text-[14px] font-medium text-white/55 sm:text-[15px]"
                     }`}
                   >
                     {row.name}

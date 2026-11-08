@@ -51,8 +51,8 @@ function ScreenTalk() {
   return (
     <div className="flex h-full flex-col gap-2.5">
       <motion.div
-        initial={{ opacity: 0, y: 14, scale: 0.96 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
+        initial={{ opacity: 0, transform: "translateY(12px) scale(0.97)" }}
+        animate={{ opacity: 1, transform: "translateY(0px) scale(1)" }}
         transition={{ delay: 0.15, ...soft }}
         className="ml-auto max-w-[86%] rounded-[18px] rounded-br-[5px] bg-[#0071e3] px-3.5 py-2.5 shadow-[0_8px_20px_rgba(0,113,227,0.25)]"
       >
@@ -62,8 +62,8 @@ function ScreenTalk() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 14, scale: 0.96 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
+        initial={{ opacity: 0, transform: "translateY(12px) scale(0.97)" }}
+        animate={{ opacity: 1, transform: "translateY(0px) scale(1)" }}
         transition={{ delay: 0.75, ...soft }}
       >
         <Glass className="max-w-[90%] rounded-bl-[5px] px-3.5 py-2.5">
@@ -74,8 +74,8 @@ function ScreenTalk() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 14, scale: 0.96 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
+        initial={{ opacity: 0, transform: "translateY(12px) scale(0.97)" }}
+        animate={{ opacity: 1, transform: "translateY(0px) scale(1)" }}
         transition={{ delay: 1.35, ...soft }}
         className="ml-auto max-w-[86%] rounded-[18px] rounded-br-[5px] bg-[#0071e3] px-3.5 py-2.5 shadow-[0_8px_20px_rgba(0,113,227,0.25)]"
       >
@@ -85,8 +85,8 @@ function ScreenTalk() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, transform: "translateY(10px)" }}
+        animate={{ opacity: 1, transform: "translateY(0px)" }}
         transition={{ delay: 1.95, ...soft }}
         className="mt-auto"
       >
@@ -108,8 +108,8 @@ function ScreenTalk() {
             </p>
           </div>
           <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, transform: "scale(0.92)" }}
+            animate={{ opacity: 1, transform: "scale(1)" }}
             transition={{ delay: 2.15, ...spring }}
             className="shrink-0 rounded-full bg-[#34c759]/15 px-2.5 py-0.5 text-[10px] font-semibold text-[#248a3d]"
           >
@@ -977,15 +977,10 @@ export function PremiumPhone({
 
   return (
     <div className={`relative mx-auto ${className}`}>
-      <motion.div
-        className="relative mx-auto w-[min(280px,64vw)] md:w-[320px]"
+      {/* Static shell — no motion/filter on the LCP image path */}
+      <div
+        className="relative mx-auto w-[min(280px,64vw)] md:w-[320px] md:[filter:drop-shadow(0_28px_50px_rgba(0,0,0,0.18))_drop-shadow(0_8px_16px_rgba(0,0,0,0.08))]"
         style={{ aspectRatio: "313 / 640" }}
-        // Transform-only settle — parent stage handles hide-until-write
-        initial={
-          reduce ? false : { transform: "translateY(14px) scale(0.97)" }
-        }
-        animate={{ transform: "translateY(0px) scale(1)" }}
-        transition={{ ...springUi, delay: reduce ? 0 : enterDelay }}
       >
         {/*
           Screen fills the display hole edge-to-edge under the device chrome.
@@ -1013,15 +1008,15 @@ export function PremiumPhone({
                   initial={
                     reduce
                       ? false
-                      : { opacity: 0, y: 10, filter: "blur(4px)" }
+                      : { opacity: 0, transform: "translateY(10px)" }
                   }
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  animate={{ opacity: 1, transform: "translateY(0px)" }}
                   exit={
                     reduce
                       ? { opacity: 0 }
-                      : { opacity: 0, y: -6, filter: "blur(3px)" }
+                      : { opacity: 0, transform: "translateY(-8px)" }
                   }
-                  transition={{ duration: 0.28, ease }}
+                  transition={{ duration: 0.26, ease }}
                   className="flex min-h-0 flex-1 flex-col"
                 >
                   <p className="text-[20px] font-semibold tracking-[-0.045em] text-[#1d1d1f]">
@@ -1083,7 +1078,7 @@ export function PremiumPhone({
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/devices/iphone-device-sm.webp?v=7"
+          src="/devices/iphone-device-sm.webp"
           alt=""
           width={313}
           height={640}
@@ -1091,14 +1086,10 @@ export function PremiumPhone({
           fetchPriority="high"
           className="pointer-events-none absolute inset-0 z-30 h-full w-full select-none object-contain"
           draggable={false}
-          style={{
-            filter:
-              "drop-shadow(0 28px 50px rgba(0,0,0,0.18)) drop-shadow(0 8px 16px rgba(0,0,0,0.08))",
-          }}
         />
 
         <DynamicIsland live={false} />
-      </motion.div>
+      </div>
     </div>
   );
 }

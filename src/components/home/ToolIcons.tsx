@@ -1,8 +1,13 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useAnimationControls,
+  useReducedMotion,
+} from "framer-motion";
 import Image from "next/image";
 import {
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -10,11 +15,46 @@ import {
 } from "react";
 import { easeOut } from "@/lib/motion";
 
-/** Slow, soft fly-out from the phone — longer than springSoft. */
+/** True once PageLoader (or skip path) releases the hero enter signal. */
+function useHeroEnter(): { ready: boolean; skip: boolean } {
+  const [state, setState] = useState({ ready: false, skip: false });
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const read = () => {
+      const v = document.documentElement.getAttribute("data-enter");
+      if (v === "1" || v === "skip") {
+        setState({ ready: true, skip: v === "skip" });
+        return true;
+      }
+      return false;
+    };
+    if (read()) return;
+    const onEnter = () => {
+      read();
+    };
+    window.addEventListener("misha:enter", onEnter);
+    const obs = new MutationObserver(() => {
+      if (read()) obs.disconnect();
+    });
+    obs.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-enter"],
+    });
+    return () => {
+      window.removeEventListener("misha:enter", onEnter);
+      obs.disconnect();
+    };
+  }, []);
+
+  return state;
+}
+
+/** Soft burst from the phone — settles without overshoot thrash. */
 const flyOut = {
   type: "spring" as const,
-  duration: 1.15,
-  bounce: 0.12,
+  duration: 1.05,
+  bounce: 0.1,
 };
 
 type Tool = {
@@ -285,10 +325,14 @@ function IconChip({
   t,
   startDelay,
   reduce,
+  enterReady,
+  enterSkip,
 }: {
   t: Tool;
   startDelay: number;
   reduce: boolean | null;
+  enterReady: boolean;
+  enterSkip: boolean;
 }) {
   const behind = t.layer === "back";
   const enterAt = startDelay + t.delay;
@@ -303,28 +347,10 @@ function IconChip({
   const msize = t.msize ?? t.size;
 
   const ref = useRef<HTMLDivElement>(null);
-  const [burst, setBurst] = useState<{ x: number; y: number } | null>(null);
+  const controls = useAnimationControls();
+  const [floating, setFloating] = useState(false);
+  const played = useRef(false);
 
-  useLayoutEffect(() => {
-    if (reduce) {
-      setBurst({ x: 0, y: 0 });
-      return;
-    }
-    const el = ref.current;
-    const parent = el?.offsetParent as HTMLElement | null;
-    if (!el || !parent) return;
-
-    const pr = parent.getBoundingClientRect();
-    const er = el.getBoundingClientRect();
-    // Phone sits in the middle of this stage — burst origin
-    const phoneCx = pr.width * 0.5;
-    const phoneCy = pr.height * 0.48;
-    const iconCx = er.left - pr.left + er.width / 2;
-    const iconCy = er.top - pr.top + er.height / 2;
-    setBurst({ x: phoneCx - iconCx, y: phoneCy - iconCy });
-  }, [reduce]);
-
-  const ready = burst !== null;
   const seatStyle = {
     "--chip-x": t.x,
     "--chip-y": t.y,
@@ -340,73 +366,91 @@ function IconChip({
     zIndex: behind ? 1 : 20,
   } as CSSProperties;
 
-  // Invisible seat for one-frame measure before the burst plays
-  if (!ready) {
-    return (
-      <div
-        ref={ref}
-        aria-hidden
-        className={`tool-chip absolute opacity-0 ${
-          t.mobile === false ? "max-md:hidden" : ""
-        }`}
-        style={seatStyle}
-      />
-    );
-  }
+  useLayoutEffect(() => {
+    if (!enterReady || played.current) return;
 
-  return (
-    <motion.div
-      className={`tool-chip absolute will-change-transform ${
-        t.mobile === false ? "max-md:hidden" : ""
-      }`}
-      style={seatStyle}
-      initial={
-        reduce
-          ? false
-          : {
-              opacity: 0,
-              x: burst.x,
-              y: burst.y,
-              scale: 0.2,
-              rotate: spin,
-            }
-      }
-      animate={{
+    const el = ref.current;
+    const parent = el?.offsetParent as HTMLElement | null;
+
+    // Hidden on this breakpoint (display:none) — skip forever for this mount
+    if (!el || !parent) {
+      if (t.mobile === false) return;
+      controls.set({ opacity: behind ? 0.88 : 1, x: 0, y: 0, scale: 1, rotate: 0 });
+      played.current = true;
+      setFloating(Boolean(float));
+      return;
+    }
+
+    if (reduce || enterSkip) {
+      controls.set({ opacity: behind ? 0.88 : 1, x: 0, y: 0, scale: 1, rotate: 0 });
+      played.current = true;
+      setFloating(Boolean(float && !reduce));
+      return;
+    }
+
+    const pr = parent.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    const phoneCx = pr.width * 0.5;
+    const phoneCy = pr.height * 0.48;
+    const iconCx = er.left - pr.left + er.width / 2;
+    const iconCy = er.top - pr.top + er.height / 2;
+    const bx = phoneCx - iconCx;
+    const by = phoneCy - iconCy;
+
+    played.current = true;
+    controls.set({
+      opacity: 0,
+      x: bx,
+      y: by,
+      scale: 0.42,
+      rotate: spin,
+    });
+    void controls
+      .start({
         opacity: behind ? 0.88 : 1,
         x: 0,
         y: 0,
         scale: 1,
         rotate: 0,
-      }}
-      transition={
-        reduce
-          ? { duration: 0 }
-          : {
-              opacity: { duration: 0.55, delay: enterAt, ease: easeOut },
-              x: { ...flyOut, delay: enterAt },
-              y: { ...flyOut, delay: enterAt },
-              scale: { ...flyOut, delay: enterAt },
-              rotate: { duration: 1.05, delay: enterAt, ease: easeOut },
-            }
-      }
+        transition: {
+          opacity: { duration: 0.45, delay: enterAt, ease: easeOut },
+          x: { ...flyOut, delay: enterAt },
+          y: { ...flyOut, delay: enterAt },
+          scale: { ...flyOut, delay: enterAt },
+          rotate: { duration: 0.95, delay: enterAt, ease: easeOut },
+        },
+      })
+      .then(() => setFloating(Boolean(float)));
+    // enterReady / enterSkip / reduce gate the burst; other values are stable per chip
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- play once when enter fires
+  }, [enterReady, enterSkip, reduce]);
+
+  return (
+    <motion.div
+      ref={ref}
+      className={`tool-chip absolute will-change-transform ${
+        t.mobile === false ? "max-md:hidden" : ""
+      }`}
+      style={seatStyle}
+      initial={{ opacity: 0 }}
+      animate={controls}
     >
       <motion.div
         className="h-full w-full"
         animate={
-          float
+          floating
             ? {
                 y: [0, -floatAmp, 0],
-                x: [0, tilt >= 0 ? 3 : -3, 0],
+                x: [0, tilt >= 0 ? 2.5 : -2.5, 0],
               }
             : undefined
         }
         transition={
-          float
+          floating
             ? {
                 duration: floatDur,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: enterAt + 1.35,
               }
             : undefined
         }
@@ -437,6 +481,7 @@ function IconChip({
 
 export function ToolIcons({ startDelay = 0 }: { startDelay?: number }) {
   const reduce = useReducedMotion();
+  const { ready: enterReady, skip: enterSkip } = useHeroEnter();
 
   return (
     <div
@@ -451,6 +496,8 @@ export function ToolIcons({ startDelay = 0 }: { startDelay?: number }) {
             t={t}
             startDelay={startDelay}
             reduce={reduce}
+            enterReady={enterReady}
+            enterSkip={enterSkip}
           />
         ))}
       {tools
@@ -461,6 +508,8 @@ export function ToolIcons({ startDelay = 0 }: { startDelay?: number }) {
             t={t}
             startDelay={startDelay}
             reduce={reduce}
+            enterReady={enterReady}
+            enterSkip={enterSkip}
           />
         ))}
     </div>

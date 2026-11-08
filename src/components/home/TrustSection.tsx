@@ -27,28 +27,13 @@ import {
 } from "@/data/site";
 import { CapabilitiesBox } from "@/components/home/CapabilitiesBox";
 import { Shell } from "@/components/ui/Primitives";
-import { easeOut, springSoft, springUi } from "@/lib/motion";
+import { easeOut, springSoft } from "@/lib/motion";
 
 const widgetShadow = "0 18px 50px rgba(0,0,0,0.35)";
-const widgetShadowHover = "0 22px 56px rgba(0,0,0,0.4)";
 const darkWidgetShadow =
   "inset 0 0.5px 0 rgba(255,255,255,0.16), 0 0 0 0.5px rgba(255,255,255,0.12), 0 18px 50px rgba(0,0,0,0.45)";
-const darkWidgetShadowHover =
-  "inset 0 0.5px 0 rgba(255,255,255,0.2), 0 0 0 0.5px rgba(255,255,255,0.16), 0 24px 56px rgba(0,0,0,0.5)";
 const sf =
   'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif';
-
-function useCanHover() {
-  const [canHover, setCanHover] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const sync = () => setCanHover(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-  return canHover;
-}
 
 /** Always starts false so SSR + first client paint match; flips after mount. */
 function useIsPhone() {
@@ -66,12 +51,13 @@ function useIsPhone() {
 /** Card rise — transform string stays on the compositor. */
 const widgetEnter = {
   ...springSoft,
-  bounce: 0.1,
+  duration: 0.58,
+  bounce: 0.08,
 };
 
 /** Row / bubble stagger after the card lands. */
 const rowEnter = {
-  duration: 0.32,
+  duration: 0.28,
   ease: easeOut,
 };
 
@@ -89,10 +75,8 @@ function Widget({
   tone?: "light" | "dark";
 }) {
   const reduce = useReducedMotion();
-  const canHover = useCanHover();
   const phone = useIsPhone();
   const shadow = tone === "dark" ? darkWidgetShadow : widgetShadow;
-  const shadowHover = tone === "dark" ? darkWidgetShadowHover : widgetShadowHover;
 
   return (
     <motion.div
@@ -112,24 +96,7 @@ function Widget({
           ? { duration: 0 }
           : { ...widgetEnter, delay: phone ? delay * 0.45 : delay }
       }
-      whileHover={
-        reduce || !canHover
-          ? undefined
-          : {
-              transform: "translateY(-3px) scale(1)",
-              boxShadow: shadowHover,
-              transition: springUi,
-            }
-      }
-      whileTap={
-        reduce || canHover
-          ? undefined
-          : {
-              transform: "translateY(0px) scale(0.985)",
-              transition: { duration: 0.12, ease: easeOut },
-            }
-      }
-      className={`trust-widget relative flex h-full min-w-0 flex-col overflow-hidden rounded-[32px] ${
+      className={`trust-widget pointer-events-none relative flex h-full min-w-0 flex-col overflow-hidden rounded-[32px] [&_a]:pointer-events-auto [&_button]:pointer-events-auto [&_[role=slider]]:pointer-events-auto ${
         tone === "dark" ? "trust-widget--dark" : ""
       } ${className}`}
       style={{
@@ -166,7 +133,7 @@ function CalendarCard() {
           <p className="mt-0.5 text-[52px] font-semibold leading-none tracking-[-0.05em] tabular-nums text-white sm:text-[52px]">
             1
           </p>
-          <p className="mt-2 text-center text-[12px] font-medium leading-tight text-white/45 sm:text-[11px]">
+          <p className="mt-2 text-center text-[12px] font-medium leading-tight text-white/60 sm:text-[11px]">
             First
             <br />
             week
@@ -474,7 +441,7 @@ function ResponseCard() {
             <p className="truncate text-[16px] font-semibold tracking-[-0.02em] text-white sm:text-[15px]">
               Alex
             </p>
-            <p className="text-[12px] font-medium text-white/45 sm:text-[11px]">
+            <p className="text-[12px] font-medium text-white/60 sm:text-[11px]">
               iMessage
             </p>
           </div>
@@ -534,7 +501,7 @@ function ResponseCard() {
                 initial={reduce ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.22, duration: 0.3, ease: easeOut }}
-                className="self-end pr-1 text-[12px] font-medium text-white/40 sm:text-[11px]"
+                className="self-end pr-1 text-[12px] font-medium text-white/55 sm:text-[11px]"
               >
                 Delivered
               </motion.p>
@@ -642,7 +609,7 @@ const WORK_MARKS: Record<string, string> = {
   "big-red-map": "/work/icons/big-red-map.png",
 };
 
-/** Real app icons, locked to 44×44 so they never escape the tile. */
+/** Real app icons, locked to 44×44 — next/image so we don't ship 50KB for a tile. */
 function WorkMark({ slug, title }: { slug: string; title: string }) {
   const src = WORK_MARKS[slug];
   if (!src) {
@@ -664,14 +631,19 @@ function WorkMark({ slug, title }: { slug: string; title: string }) {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={`${src}?v=7`}
+        src={src.replace(/\.png$/, ".webp")}
         alt=""
         width={44}
         height={44}
         decoding="async"
+        loading="lazy"
         draggable={false}
         className="pointer-events-none absolute inset-0 block"
         style={{ width: 44, height: 44, maxWidth: 44, maxHeight: 44, objectFit: "cover" }}
+        onError={(e) => {
+          const el = e.currentTarget;
+          if (!el.src.endsWith(".png")) el.src = src;
+        }}
       />
     </span>
   );
@@ -973,7 +945,7 @@ function TogetherCard() {
                 <span
                   className={`text-[16px] font-medium tracking-[-0.015em] sm:text-[14px] ${
                     checked
-                      ? "text-white/40 line-through decoration-white/25"
+                      ? "text-white/55 line-through decoration-white/30"
                       : "text-white"
                   }`}
                 >
@@ -1031,11 +1003,15 @@ function StageTitleLetter({
   return (
     <motion.span
       className="inline-block"
-      initial={{ opacity: 0, y: 18 }}
-      animate={entered ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+      initial={{ opacity: 0, transform: "translateY(16px)" }}
+      animate={
+        entered
+          ? { opacity: 1, transform: "translateY(0px)" }
+          : { opacity: 0, transform: "translateY(16px)" }
+      }
       transition={{
-        duration: 0.4,
-        delay: 0.05 + index * 0.04,
+        duration: 0.36,
+        delay: 0.04 + index * 0.035,
         ease: easeOut,
       }}
     >

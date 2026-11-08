@@ -96,10 +96,106 @@ body {
   }
 }
 
+@keyframes hero-letter-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-cta-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-phone-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Phone always has a transform origin for the settle */
+.hero-phone {
+  transform-origin: 50% 80%;
+  will-change: transform;
+}
+
+/*
+  PageLoader sets data-enter="1" (play) or "skip" (instant).
+  Until then, SSR content stays fully visible for LCP.
+*/
+html[data-enter="1"] .hero-letter {
+  animation: hero-letter-in 300ms var(--ease-out) both;
+}
+
+html[data-enter="1"] .hero-cta {
+  animation: hero-cta-in 420ms var(--ease-out) 480ms both;
+}
+
+html[data-enter="1"] .hero-phone {
+  animation: hero-phone-in 560ms var(--ease-out) 360ms both;
+}
+
+html[data-enter="skip"] .hero-letter,
+html[data-enter="skip"] .hero-cta,
+html[data-enter="skip"] .hero-phone {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-enter="1"] .hero-letter,
+  html[data-enter="1"] .hero-cta,
+  html[data-enter="1"] .hero-phone {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus,
+.sr-only:focus-visible,
+.focus\:not-sr-only:focus {
+  position: fixed;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
 /* Below-fold sections skip layout until near viewport */
 .cv-auto {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 2400px;
+  contain-intrinsic-size: 1px 1200px;
 }
 
 /* Hero tool icons — resting tilt on every breakpoint */
@@ -375,6 +471,21 @@ textarea {
   animation: float-y 7s var(--ease-out) infinite;
 }
 
+@keyframes tech-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.tech-marquee {
+  animation: tech-marquee 42s linear infinite;
+  will-change: transform;
+  pointer-events: none;
+}
+
 .legal-prose h2 {
   margin-top: 2.5rem;
   margin-bottom: 0.85rem;
@@ -416,6 +527,7 @@ textarea {
 
 @media (prefers-reduced-motion: reduce) {
   .animate-float,
+  .tech-marquee,
   .panel-hover,
   .pressable {
     animation: none !important;

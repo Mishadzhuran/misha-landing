@@ -7,10 +7,8 @@ import {
   Outfit,
   Syne,
 } from "next/font/google";
-import {
-  CustomCursor,
-  PageLoader,
-} from "@/components/layout/ClientChrome";
+import { CustomCursor } from "@/components/layout/ClientChrome";
+import { PageLoader } from "@/components/layout/PageLoader";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
@@ -69,16 +67,31 @@ const body = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: {
     default: `${site.name} · ${site.tagline}`,
     template: `%s · ${site.shortName}`,
   },
   description: site.description,
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     title: `${site.name} · ${site.tagline}`,
     description: site.description,
     type: "website",
     siteName: site.name,
+    url: site.url,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name} · ${site.tagline}`,
+    description: site.description,
   },
   appleWebApp: {
     capable: true,
@@ -121,11 +134,19 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full font-body text-text">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2.5 focus:text-[14px] focus:font-semibold focus:text-black focus:shadow-lg"
+        >
+          Skip to content
+        </a>
         <SmoothScroll>
           <PageLoader />
           <CustomCursor />
           <Navbar />
-          <main className="flex-1">{children}</main>
+          <main id="main" className="flex-1">
+            {children}
+          </main>
           <Footer />
         </SmoothScroll>
       </body>

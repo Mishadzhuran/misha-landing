@@ -3,18 +3,41 @@
 import { useEffect, useState } from "react";
 import { site } from "@/data/site";
 
+/** Signal hero choreography — CSS + icon burst wait on this. */
+function releaseEnter(mode: "1" | "skip" = "1") {
+  try {
+    document.documentElement.setAttribute("data-enter", mode);
+    window.dispatchEvent(new Event("misha:enter"));
+  } catch {
+    /* ignore */
+  }
+}
+
 /**
  * Never renders on SSR / first paint — so it can't become LCP or hide the hero.
  * Only mounts after client checks (skipped for bots, reduced-motion, return visits).
+ * Releases enter so hero motion starts as the cover lifts — not underneath it.
  */
 export function PageLoader() {
   const [phase, setPhase] = useState<"idle" | "show" | "done">("idle");
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    let timer = 0;
+
+    const skip = () => {
+      setPhase("done");
+      releaseEnter("skip");
+      try {
+        sessionStorage.setItem("misha-loaded-v2", "1");
+      } catch {
+        /* ignore */
+      }
+    };
+
     try {
       if (sessionStorage.getItem("misha-loaded-v2")) {
-        setPhase("done");
+        skip();
         return;
       }
     } catch {
@@ -31,22 +54,18 @@ export function PageLoader() {
     );
 
     if (reduce || bot || saveData) {
-      setPhase("done");
-      try {
-        sessionStorage.setItem("misha-loaded-v2", "1");
-      } catch {
-        /* ignore */
-      }
+      skip();
       return;
     }
 
     setPhase("show");
     let value = 0;
-    let timer = 0;
     const tick = () => {
       value += Math.random() * 28 + 18;
       if (value >= 100) {
         setProgress(100);
+        // Start enter under the cover, then lift so the choreography is visible
+        releaseEnter("1");
         timer = window.setTimeout(() => {
           setPhase("done");
           try {
@@ -54,14 +73,26 @@ export function PageLoader() {
           } catch {
             /* ignore */
           }
-        }, 220);
+        }, 120);
         return;
       }
       setProgress(Math.min(100, Math.floor(value)));
       timer = window.setTimeout(tick, 28 + Math.random() * 32);
     };
     tick();
-    return () => window.clearTimeout(timer);
+
+    // Safety — never leave the page without an enter signal
+    const safety = window.setTimeout(() => {
+      if (document.documentElement.getAttribute("data-enter") == null) {
+        releaseEnter("1");
+        setPhase("done");
+      }
+    }, 2400);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.clearTimeout(safety);
+    };
   }, []);
 
   if (phase !== "show") return null;

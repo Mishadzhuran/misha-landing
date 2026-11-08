@@ -26,8 +26,8 @@ export function Navbar() {
     return pathname === href;
   };
 
-  // Home uses a full-bleed dark stage — no floating pill chrome
-  if (pathname === "/") return null;
+  // Home + individual product drafts use their own chrome
+  if (pathname === "/" || pathname.startsWith("/drafts/")) return null;
 
   return (
     <>

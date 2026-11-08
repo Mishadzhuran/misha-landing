@@ -2,220 +2,255 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { cases, featuredCases } from "@/data/site";
+import { motion, useReducedMotion } from "framer-motion";
+import { featuredCases } from "@/data/site";
 import { Shell } from "@/components/ui/Primitives";
+import { easeOut, springSoft } from "@/lib/motion";
 
-import { easeOut, springUi } from "@/lib/motion";
+type CaseItem = (typeof featuredCases)[number];
 
-const ease = easeOut;
-type CaseItem = (typeof cases)[number];
+const soft = { duration: 0.36, ease: easeOut } as const;
 
-function CaseRow({
+/** iOS continuous-corner squircle (~22.37%) */
+function AppIcon({ src, size = 64 }: { src: string; size?: number }) {
+  const webp = src.replace(/\.png$/, ".webp");
+
+  return (
+    <span
+      className="relative block shrink-0 overflow-hidden"
+      style={{
+        width: size,
+        height: size,
+        borderRadius: "22.37%",
+        boxShadow:
+          "0 1px 2px rgba(0,0,0,0.35), inset 0 0 0 0.5px rgba(255,255,255,0.18)",
+      }}
+      aria-hidden
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={webp}
+        alt=""
+        width={size}
+        height={size}
+        decoding="async"
+        loading="lazy"
+        draggable={false}
+        className="pointer-events-none h-full w-full object-cover"
+        onError={(e) => {
+          const el = e.currentTarget;
+          if (!el.src.endsWith(".png")) el.src = src;
+        }}
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[42%] bg-gradient-to-b from-white/20 to-transparent"
+      />
+    </span>
+  );
+}
+
+function Stars() {
+  return (
+    <span className="inline-flex items-center gap-[2px]" aria-label="4.9 out of 5">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg
+          key={i}
+          width="9"
+          height="9"
+          viewBox="0 0 12 12"
+          fill={i < 5 ? "#0a84ff" : "rgba(255,255,255,0.15)"}
+          aria-hidden
+        >
+          <path d="M6 0.8l1.5 3.2 3.5.4-2.6 2.4.7 3.4L6 8.6 2.9 10.2l.7-3.4L1 4.4l3.5-.4L6 .8z" />
+        </svg>
+      ))}
+      <span className="ml-1 text-[11px] font-medium tabular-nums text-white/35">
+        4.9
+      </span>
+    </span>
+  );
+}
+
+function Shot({
+  src,
+  delay,
+  reduce,
+}: {
+  src: string;
+  delay: number;
+  reduce: boolean | null;
+}) {
+  return (
+    <motion.div
+      initial={reduce ? false : { opacity: 0, y: 10, scale: 0.97 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.35 }}
+      transition={{ delay, ...soft }}
+      className="relative aspect-[9/19.5] min-w-0 flex-1 overflow-hidden rounded-[16px] bg-[#000] shadow-[0_8px_24px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.12]"
+    >
+      {/* Device status strip */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 z-10 flex h-4 items-center justify-between px-2"
+      >
+        <span className="text-[5px] font-semibold tabular-nums text-white/80">
+          9:41
+        </span>
+        <span className="h-[3px] w-[9px] rounded-[1px] bg-white/80" />
+      </div>
+      <Image
+        src={src}
+        alt=""
+        fill
+        className="object-cover object-top"
+        sizes="130px"
+      />
+    </motion.div>
+  );
+}
+
+function AppStoreCard({
   item,
   index,
-  onOpen,
 }: {
   item: CaseItem;
   index: number;
-  onOpen: (c: CaseItem) => void;
 }) {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 0.9", "start 0.4"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [56, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const flip = index % 2 === 1;
+  const reduce = useReducedMotion();
+  const href = `/drafts/${item.slug}`;
+  const shots = (
+    item.gallery.length
+      ? [...item.gallery]
+      : [item.image, item.image, item.image]
+  ).slice(0, 3);
+  while (shots.length < 3) shots.push(shots[shots.length - 1] ?? item.image);
+
+  const category = item.category.split("·")[0]?.trim() ?? "App";
 
   return (
     <motion.article
-      ref={ref}
-      style={{ y, opacity }}
-      className="overflow-hidden rounded-[32px] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04]"
+      initial={
+        reduce
+          ? false
+          : { opacity: 0, transform: "translateX(18px) scale(0.98)" }
+      }
+      whileInView={{
+        opacity: 1,
+        transform: "translateX(0px) scale(1)",
+      }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ ...springSoft, delay: Math.min(index, 2) * 0.06 }}
+      className="flex w-[min(80vw,310px)] shrink-0 flex-col rounded-[24px] bg-[#000000] p-4 ring-1 ring-white/[0.09] sm:w-[330px] sm:rounded-[28px] sm:p-5 lg:w-[min(350px,calc((100vw-5.5rem)/3))]"
+      style={{ scrollSnapAlign: "start" }}
     >
-      <div
-        className={`grid lg:grid-cols-2 ${flip ? "lg:[&>*:first-child]:order-2" : ""}`}
-      >
-        <button
-          type="button"
-          onClick={() => onOpen(item)}
-          className="relative min-h-[260px] overflow-hidden bg-[#f5f5f7] text-left sm:min-h-[300px] lg:min-h-[380px]"
-        >
-          <Image
-            src={item.image}
-            alt={item.title}
-            fill
-            className="object-cover transition duration-700 hover:scale-[1.03]"
-            sizes="(max-width:1024px) 100vw, 50vw"
-          />
-        </button>
-        <div className="flex flex-col justify-center px-5 py-8 sm:px-8 sm:py-12 md:px-12">
-          <p className="text-[12px] font-semibold tracking-[0.14em] text-[#86868b] uppercase">
-            {item.category}
-          </p>
-          <h3 className="mt-3 text-[24px] font-semibold tracking-[-0.03em] text-[#1d1d1f] sm:text-[28px] md:text-[34px]">
+      {/* Product header */}
+      <div className="flex items-center gap-3">
+        <AppIcon src={item.icon} size={64} />
+        <div className="min-w-0 flex-1 py-0.5">
+          <h3 className="truncate text-[17px] font-semibold leading-[1.15] tracking-[-0.022em] text-white">
             {item.title}
           </h3>
-          <p className="mt-2 text-[15px] font-medium text-[#0071e3]">
+          <p className="mt-[3px] truncate text-[13px] font-normal leading-tight text-[#98989d]">
             {item.tagline}
           </p>
-          <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-[#6e6e73]">
-            {item.summary}
-          </p>
-          <div className="mt-7 flex flex-wrap items-center gap-2.5">
-            <Link
-              href={`/drafts/${item.slug}`}
-              className="pressable inline-flex min-h-[44px] items-center gap-2 rounded-full bg-[#1d1d1f] px-5 py-3 text-[14px] font-semibold !text-white shadow-[0_8px_24px_rgba(0,0,0,0.16)] transition-[background-color,box-shadow] duration-200 hover:bg-black hover:shadow-[0_12px_28px_rgba(0,0,0,0.2)]"
-            >
-              View details
-              <span aria-hidden className="text-white/70">
-                →
-              </span>
-            </Link>
-            <button
-              type="button"
-              onClick={() => onOpen(item)}
-              className="pressable inline-flex min-h-[44px] items-center rounded-full bg-[#f5f5f7] px-4 py-3 text-[14px] font-semibold text-[#1d1d1f] ring-1 ring-black/[0.04] transition-colors duration-200 hover:bg-[#ebebed]"
-            >
-              Preview
-            </button>
+          <div className="mt-1.5">
+            <Stars />
           </div>
         </div>
+        <Link
+          href={href}
+          className="pressable shrink-0 rounded-full bg-[#0a84ff] px-[14px] py-[6px] text-[14px] font-semibold leading-none tracking-[-0.01em] !text-white"
+        >
+          Open
+        </Link>
+      </div>
+
+      {/* Category chip row — App Store chrome */}
+      <div className="mt-3 flex items-center gap-2 text-[11px] font-medium text-[#98989d]">
+        <span>{category}</span>
+        <span className="text-white/20">·</span>
+        <span>{item.year}</span>
+        <span className="text-white/20">·</span>
+        <span>17+</span>
+      </div>
+
+      {/* Screenshots */}
+      <div className="mt-3.5 flex gap-[7px]">
+        {shots.map((src, i) => (
+          <Shot
+            key={`${item.slug}-${i}`}
+            src={src}
+            delay={0.06 + i * 0.05}
+            reduce={reduce}
+          />
+        ))}
+      </div>
+
+      {/* What’s New */}
+      <div className="mt-4 border-t border-white/[0.08] pt-3.5">
+        <div className="flex items-baseline justify-between gap-2">
+          <p className="text-[17px] font-semibold tracking-[-0.022em] text-white">
+            What&apos;s New
+          </p>
+          <Link
+            href={href}
+            className="text-[13px] font-normal text-[#0a84ff]"
+          >
+            Version History
+          </Link>
+        </div>
+        <p className="mt-1 text-[12px] font-normal text-[#98989d]">
+          Version 1.0 · {item.year}
+        </p>
+        <p className="mt-2 line-clamp-2 text-[13px] leading-[1.35] text-white/80">
+          {item.summary}
+        </p>
       </div>
     </motion.article>
   );
 }
 
 export function WorkSection() {
-  const [active, setActive] = useState<CaseItem | null>(null);
-  const headRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: headRef,
-    offset: ["start 0.9", "start 0.5"],
-  });
-  const headY = useTransform(scrollYProgress, [0, 1], [32, 0]);
-  const headOp = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
-  useEffect(() => {
-    if (!active) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActive(null);
-    };
-    window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
-  }, [active]);
+  const reduce = useReducedMotion();
 
   return (
     <section id="work" className="scroll-mt-28 py-16 md:py-24">
       <Shell>
         <motion.div
-          ref={headRef}
-          style={{ y: headY, opacity: headOp }}
-          className="mx-auto max-w-xl text-center"
+          className="flex items-baseline justify-between gap-4"
+          initial={
+            reduce ? false : { opacity: 0, transform: "translateY(10px)" }
+          }
+          whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.35, ease: easeOut }}
         >
-          <p className="text-[12px] font-semibold tracking-[0.16em] text-white/45 uppercase">
+          <h2 className="text-[28px] font-bold tracking-[-0.03em] text-white sm:text-[34px]">
             Selected work
-          </p>
-          <h2 className="mt-3 text-[clamp(2rem,4vw,3rem)] font-semibold tracking-[-0.04em] text-white">
-            Things I’ve shipped
           </h2>
+          <Link
+            href="/cases"
+            className="text-[15px] font-normal text-[#0a84ff]"
+          >
+            See All
+          </Link>
         </motion.div>
-
-        <div className="mt-12 space-y-8 md:mt-14 md:space-y-10">
-          {featuredCases.map((item, i) => (
-            <CaseRow
-              key={item.slug}
-              item={item}
-              index={i}
-              onOpen={setActive}
-            />
-          ))}
-        </div>
       </Shell>
 
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/45 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-md"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.22, ease }}
-            onClick={() => setActive(null)}
-          >
-            <motion.div
-              role="dialog"
-              aria-modal
-              initial={{ opacity: 0, y: 20, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 12, scale: 0.98 }}
-              transition={springUi}
-              className="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[28px] bg-white p-5 shadow-2xl sm:p-8"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-[12px] font-semibold tracking-wide text-[#86868b] uppercase">
-                    {active.category}
-                  </p>
-                  <h3 className="mt-1 text-2xl font-semibold tracking-tight text-[#1d1d1f]">
-                    {active.title}
-                  </h3>
-                  <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-[#6e6e73]">
-                    {active.summary}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setActive(null)}
-                  className="pressable min-h-[44px] shrink-0 rounded-full bg-black/5 px-4 py-2.5 text-[13px] font-semibold text-[#1d1d1f] hover:bg-black/10"
-                >
-                  Close
-                </button>
-              </div>
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                {(active.gallery.length ? active.gallery : [active.image]).map(
-                  (src) => (
-                    <div
-                      key={src}
-                      className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#f5f5f7]"
-                    >
-                      <Image
-                        src={src}
-                        alt={`${active.title} screen`}
-                        fill
-                        className="object-cover object-top"
-                        sizes="(max-width:640px) 100vw, 50vw"
-                      />
-                    </div>
-                  ),
-                )}
-              </div>
-              <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-black/[0.06] pt-6">
-                <Link
-                  href={`/drafts/${active.slug}`}
-                  className="pressable inline-flex items-center gap-2 rounded-full bg-[#1d1d1f] px-5 py-3 text-[14px] font-semibold !text-white shadow-[0_10px_28px_rgba(0,0,0,0.18)] transition-[background-color] duration-200 hover:bg-black"
-                >
-                  View full details
-                  <span aria-hidden className="text-white/70">
-                    →
-                  </span>
-                </Link>
-                <p className="text-[13px] text-[#86868b]">
-                  Open the Apple-style product draft
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div
+        className="mt-6 flex gap-3 overflow-x-auto overscroll-x-contain pb-2 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-8 sm:gap-4 [&::-webkit-scrollbar]:hidden"
+        style={{
+          scrollSnapType: "x mandatory",
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-x",
+          paddingInline: "max(1.25rem, calc((100vw - 1120px) / 2))",
+        }}
+      >
+        {featuredCases.map((item, i) => (
+          <AppStoreCard key={item.slug} item={item} index={i} />
+        ))}
+      </div>
     </section>
   );
 }

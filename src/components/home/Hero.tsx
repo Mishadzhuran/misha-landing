@@ -1,54 +1,32 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { easeOut, springSoft, springUi } from "@/lib/motion";
 import { PremiumPhone } from "./PremiumPhone";
 import { ToolIcons } from "./ToolIcons";
 
 const HEADLINE = ["Turn your idea", "into a live product."];
 
-/**
- * Letter write — same layout as before.
- * Safari-safe: opacity + translateY only (no scale / blur — those glitch
- * the first glyph on iOS, especially with script fonts + inline-block).
- */
-function HandwrittenHeadline({ reduce }: { reduce: boolean | null }) {
+/** CSS letter settle — no Framer on the LCP path. */
+function HandwrittenHeadline() {
   let charIndex = 0;
 
   return (
     <h1
-      className="hand-write relative mx-auto max-w-full -rotate-[0.8deg] text-[clamp(2.9rem,10.5vw,7rem)] leading-[1.06] tracking-[-0.01em] text-[#111]"
+      className="hand-write hero-headline relative mx-auto max-w-full -rotate-[0.8deg] text-[clamp(2.9rem,10.5vw,7rem)] leading-[1.06] tracking-[-0.01em] text-[#111]"
       aria-label="Turn your idea into a live product."
     >
-      {HEADLINE.map((line, lineIndex) => (
+      {HEADLINE.map((line) => (
         <span key={line} className="block">
           {line.split("").map((ch) => {
             const i = charIndex++;
-            const delay = 0.12 + i * 0.028 + lineIndex * 0.04;
-
-            if (reduce) {
-              return (
-                <span key={`${line}-${i}`} className="inline-block">
-                  {ch === " " ? "\u00A0" : ch}
-                </span>
-              );
-            }
-
             return (
-              <motion.span
+              <span
                 key={`${line}-${i}`}
-                className="inline-block [backface-visibility:hidden]"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.32,
-                  delay,
-                  ease: easeOut,
-                }}
+                className="hero-letter inline-block [backface-visibility:hidden]"
+                style={{ animationDelay: `${32 + i * 16}ms` }}
               >
                 {ch === " " ? "\u00A0" : ch}
-              </motion.span>
+              </span>
             );
           })}
         </span>
@@ -58,13 +36,6 @@ function HandwrittenHeadline({ reduce }: { reduce: boolean | null }) {
 }
 
 export function Hero() {
-  const reduce = useReducedMotion();
-  const charCount = HEADLINE.join("").length;
-  const lastLineIndex = HEADLINE.length - 1;
-  const writeDone = reduce
-    ? 0
-    : 0.12 + (charCount - 1) * 0.028 + lastLineIndex * 0.04 + 0.32 + 0.08;
-
   return (
     <section className="relative overflow-x-clip pt-[max(14vh,env(safe-area-inset-top)+5.5rem)] pb-[max(1.5rem,env(safe-area-inset-bottom))] md:pb-10 md:pt-32">
       <div
@@ -78,75 +49,34 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-[1100px] px-5 md:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <HandwrittenHeadline reduce={reduce} />
+          <HandwrittenHeadline />
 
-          <motion.div
-            className="mt-6 flex flex-col items-center gap-3 md:mt-9"
-            initial={reduce ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              ...springSoft,
-              delay: writeDone,
-            }}
-          >
+          <div className="hero-cta mt-6 flex flex-col items-center gap-3 md:mt-9">
             <Link
               href="/contact"
               className="pressable inline-flex min-h-[48px] items-center rounded-full bg-[#0071e3] px-8 py-3.5 text-center text-[15px] font-semibold !text-white shadow-[0_10px_28px_rgba(0,113,227,0.3)] hover:bg-[#0077ed]"
             >
               Let&apos;s build yours
             </Link>
-            <motion.p
-              className="text-[14px] font-medium tracking-[-0.01em] text-[#6e6e73]"
-              initial={reduce ? false : { opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.45,
-                ease: easeOut,
-                delay: writeDone + 0.12,
-              }}
-            >
+            <p className="text-[14px] font-medium tracking-[-0.01em] text-[#6e6e73]">
               scroll to see more
-            </motion.p>
-          </motion.div>
+            </p>
+          </div>
         </div>
 
-        <motion.div
-          className="relative mt-8 overflow-x-clip md:mt-16 md:overflow-visible"
-          initial={reduce ? false : { opacity: 0, y: 28, scale: 0.975 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{
-            ...springSoft,
-            delay: writeDone + 0.18,
-          }}
-        >
+        {/* Headline → phone settle → icon burst */}
+        <div className="relative mt-8 overflow-x-clip md:mt-16 md:overflow-visible">
           <div className="relative mx-auto max-w-[520px] overflow-x-clip md:max-w-[780px] md:overflow-visible">
-            <motion.div
-              className="relative overflow-x-clip md:overflow-visible"
-              initial={reduce ? false : { y: 12 }}
-              animate={{ y: 0 }}
-              transition={{
-                duration: 0.65,
-                ease: easeOut,
-                delay: writeDone + 0.22,
-              }}
-            >
-              <ToolIcons startDelay={writeDone + 0.55} />
-              <div className="relative z-30 flex isolate justify-center px-[18%] pb-20 pt-6 sm:px-[16%] sm:pb-24 sm:pt-8 md:px-20 md:pb-40 md:pt-10">
-                <motion.div
-                  className="relative z-30"
-                  initial={reduce ? false : { y: 14, scale: 0.98 }}
-                  animate={{ y: 0, scale: 1 }}
-                  transition={{
-                    ...springUi,
-                    delay: writeDone + 0.28,
-                  }}
-                >
-                  <PremiumPhone enterDelay={writeDone + 0.28} />
-                </motion.div>
+            <div className="relative overflow-x-clip md:overflow-visible">
+              <ToolIcons startDelay={0.55} />
+                <div className="relative z-30 flex isolate justify-center px-[18%] pb-20 pt-6 sm:px-[16%] sm:pb-24 sm:pt-8 md:px-20 md:pb-40 md:pt-10">
+                <div className="hero-phone relative z-30">
+                  <PremiumPhone enterDelay={0.4} />
+                </div>
               </div>
-            </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
