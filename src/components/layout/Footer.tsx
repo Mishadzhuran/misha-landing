@@ -7,7 +7,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative pb-10 pt-6">
+    <footer className="relative pb-[max(2.5rem,env(safe-area-inset-bottom)+1rem)] pt-6">
       <div className="shell-wide">
         <div className="apple-card px-5 py-10 sm:px-7 sm:py-12 md:px-12 md:py-14">
           <div className="grid gap-10 md:grid-cols-12 md:gap-8">
@@ -32,14 +32,14 @@ export function Footer() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 md:col-span-7 md:grid-cols-3">
+            <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10 md:col-span-7 md:grid-cols-3">
               <FooterCol title="Navigate" links={navLinks} />
               <FooterCol title="Explore" links={footerNav.studio} />
               <FooterCol title="Legal" links={footerNav.legal} />
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col gap-3 border-t border-line pt-6 text-[12px] text-muted-soft md:flex-row md:items-center md:justify-between">
+          <div className="mt-12 flex flex-col gap-3 border-t border-line pt-6 text-[13px] text-muted-soft md:flex-row md:items-center md:justify-between">
             <span>
               © {year} {site.name}
             </span>

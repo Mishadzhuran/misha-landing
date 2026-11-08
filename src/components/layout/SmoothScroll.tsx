@@ -3,19 +3,21 @@
 import { ReactLenis } from "lenis/react";
 import { ReactNode } from "react";
 
-/** Lenis only. GSAP stays in the journey chunk, not the root layout */
+/**
+ * Lenis root everywhere — touch stays native (syncTouch: false)
+ * so phones feel smooth without sticky hitch or remount flash.
+ */
 export function SmoothScroll({ children }: { children: ReactNode }) {
   return (
     <ReactLenis
       root
       options={{
-        lerp: 0.075,
-        duration: 1.2,
+        lerp: 0.08,
+        duration: 1.15,
         smoothWheel: true,
         syncTouch: false,
-        wheelMultiplier: 0.78,
+        wheelMultiplier: 0.82,
         touchMultiplier: 1,
-        // Keeps sticky / pinned stages from hitching mid-gesture
         autoRaf: true,
       }}
     >

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import {
   Caveat,
   Fraunces,
@@ -20,8 +20,9 @@ import "./globals.css";
 const display = Syne({
   variable: "--font-syne",
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
+  weight: ["600", "700"],
   display: "swap",
+  preload: false,
 });
 
 const serif = Instrument_Serif({
@@ -30,14 +31,16 @@ const serif = Instrument_Serif({
   weight: "400",
   style: ["normal", "italic"],
   display: "swap",
+  preload: false,
 });
 
 const editorial = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["500", "600"],
+  style: ["normal"],
   display: "swap",
+  preload: false,
 });
 
 const hand = Italianno({
@@ -45,20 +48,24 @@ const hand = Italianno({
   subsets: ["latin"],
   weight: "400",
   display: "swap",
+  preload: false,
 });
 
+/** Hero LCP — preload only this script face */
 const write = Caveat({
   variable: "--font-caveat",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["700"],
   display: "swap",
+  preload: true,
 });
 
 const body = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600"],
   display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -73,6 +80,25 @@ export const metadata: Metadata = {
     type: "website",
     siteName: site.name,
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: site.shortName,
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f5f7" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -85,6 +111,15 @@ export default function RootLayout({
       lang="en"
       className={`${display.variable} ${serif.variable} ${editorial.variable} ${hand.variable} ${write.variable} ${body.variable} h-full antialiased`}
     >
+      <head>
+        <link
+          rel="preload"
+          as="image"
+          href="/devices/iphone-device-sm.webp"
+          type="image/webp"
+          fetchPriority="high"
+        />
+      </head>
       <body className="min-h-full font-body text-text">
         <SmoothScroll>
           <PageLoader />

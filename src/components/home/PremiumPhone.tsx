@@ -805,15 +805,15 @@ function ScreenLaunch() {
         </motion.span>
       </motion.div>
 
-      {/* Screenshot strip */}
-      <div className="mt-2.5 flex gap-[5px] overflow-hidden pr-1">
+      {/* Screenshot strip — three equal phone frames, no overflow clip */}
+      <div className="mt-2.5 flex gap-1.5">
         {shots.map((shot, i) => (
           <motion.div
             key={shot.key}
             initial={{ opacity: 0, y: 10, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: 0.12 + i * 0.06, ...soft }}
-            className="relative flex aspect-[9/15.5] w-[32%] shrink-0 flex-col overflow-hidden rounded-[10px] shadow-[0_3px_10px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.08]"
+            className="relative flex aspect-[9/19] min-w-0 flex-1 flex-col overflow-hidden rounded-[11px] shadow-[0_3px_10px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.08]"
             style={{ background: shot.shell }}
           >
             <ShotStatusBar dark={shot.dark} />
@@ -895,56 +895,64 @@ const TAB_ICONS = [
   />,
 ];
 
+/** Painted into iphone-device-sm — shifted down to cover camera bottoms. */
+const ISLAND = {
+  top: "3.44%",
+  height: "4.06%",
+  width: "28.8%",
+  liveWidth: "36%",
+} as const;
+
 function DynamicIsland({ live }: { live: boolean }) {
-  /**
-   * Opaque black mask above the device PNG (z above frame).
-   * Sized from the asset’s island: ~3.25 to 7.1% tall, ~28% wide.
-   */
+  // Static frame already has a crisp island baked in — no CSS pill (avoids double edge).
+  if (!live) return null;
+
   return (
     <div className="pointer-events-none absolute inset-0 z-50">
+      <motion.div
+        initial={false}
+        animate={{ width: ISLAND.liveWidth }}
+        transition={springUi}
+        className="absolute left-1/2 -translate-x-1/2 rounded-full bg-black"
+        style={{
+          top: ISLAND.top,
+          height: ISLAND.height,
+          width: ISLAND.width,
+        }}
+      >
         <motion.div
-          animate={{ width: live ? "40%" : "30%" }}
-          transition={springUi}
-          className="absolute left-0 right-0 mx-auto overflow-hidden rounded-full"
-          style={{ top: "3.2%", height: "4.05%" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.18 }}
+          className="flex h-full w-full items-center gap-1.5 px-2.5"
         >
-        {/* Dedicated paint layer. solid mask over PNG cameras */}
-        <div
-          className="absolute inset-[-2px] rounded-full"
-          style={{ backgroundColor: "#000000" }}
-        />
-        <AnimatePresence initial={false} mode="wait">
-          {live ? (
-            <motion.div
-              key="live"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              className="relative z-10 flex h-full w-full items-center gap-1.5 px-3"
-            >
-              <motion.span
-                animate={{ opacity: [1, 0.4, 1] }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#34c759]"
-              />
-              <span className="text-[7px] font-semibold tracking-wide !text-white/90">
-                Live
-              </span>
-              <span className="ml-auto h-[9px] w-[9px] shrink-0 rounded-full bg-[#0a0a0a] ring-1 ring-white/15" />
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+          <motion.span
+            animate={{ opacity: [1, 0.4, 1] }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#34c759]"
+          />
+          <span className="text-[6px] font-semibold tracking-wide !text-white/90">
+            Live
+          </span>
+          <span className="ml-auto h-[8px] w-[8px] shrink-0 rounded-full bg-[#0a0a0a] ring-1 ring-white/15" />
+        </motion.div>
       </motion.div>
     </div>
   );
 }
 
-export function PremiumPhone({ className = "" }: { className?: string }) {
+export function PremiumPhone({
+  className = "",
+  enterDelay = 0,
+}: {
+  className?: string;
+  /** Wait for hero headline write before settling in */
+  enterDelay?: number;
+}) {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   const reduce = useReducedMotion();
@@ -953,12 +961,14 @@ export function PremiumPhone({ className = "" }: { className?: string }) {
 
   useEffect(() => {
     if (paused || reduce) return;
+    // Don't advance screens until the entrance has landed
+    const wait = (i === 0 ? enterDelay * 1000 : 0) + STEP_DURATION_MS[i];
     const id = window.setTimeout(
       () => setI((n) => (n + 1) % FLOW.length),
-      STEP_DURATION_MS[i],
+      wait,
     );
     return () => window.clearTimeout(id);
-  }, [i, paused, reduce]);
+  }, [i, paused, reduce, enterDelay]);
 
   const go = (idx: number) => {
     setPaused(true);
@@ -968,120 +978,138 @@ export function PremiumPhone({ className = "" }: { className?: string }) {
   return (
     <div className={`relative mx-auto ${className}`}>
       <motion.div
-        className="relative mx-auto w-[min(220px,68vw)] sm:w-[min(240px,72vw)] md:w-[270px]"
-        style={{ aspectRatio: "391 / 800" }}
-        initial={reduce ? false : { opacity: 0, transform: "translateY(16px) scale(0.97)" }}
-        animate={{ opacity: 1, transform: "translateY(0px) scale(1)" }}
-        transition={springUi}
+        className="relative mx-auto w-[min(248px,70vw)] md:w-[270px]"
+        style={{ aspectRatio: "313 / 640" }}
+        // Transform-only settle — parent stage handles hide-until-write
+        initial={
+          reduce ? false : { transform: "translateY(14px) scale(0.97)" }
+        }
+        animate={{ transform: "translateY(0px) scale(1)" }}
+        transition={{ ...springUi, delay: reduce ? 0 : enterDelay }}
       >
+        {/*
+          Box-shadow on an unclipped shell — filter:drop-shadow followed PNG alpha
+          and painted a soft halo around the dual camera cutouts.
+        */}
         <div
-          className="absolute inset-0 overflow-hidden"
+          className="absolute inset-0"
           style={{
             borderRadius: "12.3%",
-            filter:
-              "drop-shadow(0 28px 50px rgba(0,0,0,0.18)) drop-shadow(0 8px 16px rgba(0,0,0,0.08))",
+            boxShadow:
+              "0 28px 50px rgba(0,0,0,0.18), 0 8px 16px rgba(0,0,0,0.08)",
           }}
         >
           <div
-            className="absolute z-0 overflow-hidden bg-[#f5f5f7]"
-            style={{
-              left: "5.2%",
-              right: "5.2%",
-              top: "1.55%",
-              bottom: "1.9%",
-              borderRadius: "10.2%",
-            }}
+            className="absolute inset-0 overflow-hidden"
+            style={{ borderRadius: "12.3%" }}
           >
-            <div className="absolute inset-0 flex flex-col">
-              <div
-                className="flex min-h-0 flex-1 flex-col px-2.5 pb-[4.5rem] sm:px-3"
-                style={{ paddingTop: "9.6%" }}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={step.id}
-                    initial={
-                      reduce
-                        ? false
-                        : { opacity: 0, y: 10, filter: "blur(4px)" }
-                    }
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={
-                      reduce
-                        ? { opacity: 0 }
-                        : { opacity: 0, y: -6, filter: "blur(3px)" }
-                    }
-                    transition={{ duration: 0.28, ease }}
-                    className="flex min-h-0 flex-1 flex-col"
-                  >
-                    <h3 className="text-[20px] font-semibold tracking-[-0.045em] text-[#1d1d1f]">
-                      {step.title}
-                    </h3>
-                    <div className="mt-2.5 min-h-0 flex-1">
-                      <Body />
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-2 pb-1">
-                <div className="liquid-glass pointer-events-auto relative flex items-center justify-between overflow-hidden rounded-full px-0.5 py-1">
-                  {FLOW.map((f, idx) => {
-                    const on = idx === i;
-                    return (
-                      <button
-                        key={f.id}
-                        type="button"
-                        onClick={() => go(idx)}
-                        className="relative flex min-h-[44px] flex-1 flex-col items-center justify-center gap-0.5 rounded-full px-0.5 py-1"
-                      >
-                        {on && (
-                          <motion.span
-                            layoutId="phone-tab-glow"
-                            className="absolute inset-[2px] rounded-full bg-white/85 shadow-[0_3px_12px_rgba(0,0,0,0.06)]"
-                            transition={spring}
-                          />
-                        )}
-                        <motion.span
-                          animate={{ scale: on ? 1.06 : 1 }}
-                          transition={spring}
-                          className={`relative z-10 ${
-                            on ? "text-[#0071e3]" : "text-[#8e8e93]"
-                          }`}
-                        >
-                          <svg width="16" height="16" viewBox="0 0 24 24">
-                            {TAB_ICONS[idx]}
-                          </svg>
-                        </motion.span>
-                        <span
-                          className={`relative z-10 text-[8px] font-semibold ${
-                            on ? "text-[#0071e3]" : "text-[#8e8e93]"
-                          }`}
-                        >
-                          {f.label}
-                        </span>
-                      </button>
-                    );
-                  })}
+            {/* Screen fill */}
+            <div
+              className="absolute z-0 overflow-hidden bg-[#f5f5f7]"
+              style={{
+                left: "4.55%",
+                right: "4.55%",
+                top: "1.35%",
+                bottom: "1.45%",
+                borderRadius: "12.5% / 6.1%",
+              }}
+            >
+              <div className="absolute inset-0 flex flex-col">
+                <div
+                  className="flex min-h-0 flex-1 flex-col px-2.5 pb-[4.25rem] sm:px-3"
+                  style={{ paddingTop: "10.8%" }}
+                >
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={step.id}
+                      initial={
+                        reduce
+                          ? false
+                          : { opacity: 0, y: 10, filter: "blur(4px)" }
+                      }
+                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      exit={
+                        reduce
+                          ? { opacity: 0 }
+                          : { opacity: 0, y: -6, filter: "blur(3px)" }
+                      }
+                      transition={{ duration: 0.28, ease }}
+                      className="flex min-h-0 flex-1 flex-col"
+                    >
+                      <p className="text-[20px] font-semibold tracking-[-0.045em] text-[#1d1d1f]">
+                        {step.title}
+                      </p>
+                      <div className="mt-2.5 min-h-0 flex-1">
+                        <Body />
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
-                <div className="mt-1 flex justify-center">
-                  <span className="h-[3px] w-[32%] rounded-full bg-[#1d1d1f]/9" />
+
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-1.5 pb-[2px]">
+                  <div className="liquid-glass pointer-events-auto relative flex items-center justify-between overflow-hidden rounded-full px-0.5 py-1">
+                    {FLOW.map((f, idx) => {
+                      const on = idx === i;
+                      return (
+                        <button
+                          key={f.id}
+                          type="button"
+                          onClick={() => go(idx)}
+                          className="relative flex min-h-[42px] flex-1 flex-col items-center justify-center gap-0.5 rounded-full px-0.5 py-1"
+                        >
+                          {on && (
+                            <motion.span
+                              layoutId="phone-tab-glow"
+                              className="absolute inset-[2px] rounded-full bg-white/85 shadow-[0_3px_12px_rgba(0,0,0,0.06)]"
+                              transition={spring}
+                            />
+                          )}
+                          <motion.span
+                            animate={{ scale: on ? 1.06 : 1 }}
+                            transition={spring}
+                            className={`relative z-10 ${
+                              on ? "text-[#0071e3]" : "text-[#8e8e93]"
+                            }`}
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24">
+                              {TAB_ICONS[idx]}
+                            </svg>
+                          </motion.span>
+                          <span
+                            className={`relative z-10 text-[8px] font-semibold ${
+                              on ? "text-[#0071e3]" : "text-[#8e8e93]"
+                            }`}
+                          >
+                            {f.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-0.5 flex justify-center pb-0.5">
+                    <span className="h-[3px] w-[34%] rounded-full bg-[#1d1d1f]/9" />
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Static WebP — skips /_next/image hop for LCP */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/devices/iphone-device-sm.webp?v=6"
+              alt=""
+              width={313}
+              height={640}
+              decoding="async"
+              fetchPriority="high"
+              className="pointer-events-none absolute inset-0 z-30 h-full w-full select-none object-contain"
+              draggable={false}
+            />
           </div>
-
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/devices/iphone-device.png?v=island3"
-            alt=""
-            className="pointer-events-none absolute inset-0 z-30 h-full w-full select-none"
-            draggable={false}
-          />
-
-          {/* After the frame so the solid mask always paints on top of PNG cameras */}
-          <DynamicIsland live={false} />
         </div>
+
+        {/* Sharp pill above the frame — covers soft dual-camera PNG silhouette */}
+        <DynamicIsland live={false} />
       </motion.div>
     </div>
   );

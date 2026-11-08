@@ -49,7 +49,7 @@ export function ScrollChapters() {
   return (
     <section
       id="services"
-      className="relative scroll-mt-28 overflow-x-clip py-16 md:py-24"
+      className="relative scroll-mt-28 overflow-x-clip py-14 md:py-24"
     >
       <div
         aria-hidden
@@ -70,7 +70,7 @@ export function ScrollChapters() {
           </p>
         </div>
 
-        <div className="mx-auto mt-12 grid max-w-5xl gap-3 sm:gap-4 md:grid-cols-4 md:gap-5">
+        <div className="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-4 md:gap-5">
           {steps.map((step, i) => {
             const on = i === active;
             return (
@@ -99,7 +99,7 @@ export function ScrollChapters() {
                         y: on ? -6 : 0,
                       }
                 }
-                className={`pressable relative overflow-hidden rounded-[24px] p-5 text-left sm:rounded-[28px] sm:p-6 md:rounded-[32px] md:p-7 ${
+                className={`pressable relative overflow-hidden rounded-[28px] p-5 text-left sm:p-6 md:rounded-[32px] md:p-7 ${
                   on
                     ? "bg-white shadow-[0_20px_50px_rgba(0,113,227,0.14)] ring-1 ring-[#0071e3]/22"
                     : "bg-white shadow-[0_10px_30px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.04]"
@@ -121,18 +121,18 @@ export function ScrollChapters() {
                       color: on ? "#ffffff" : "#1d1d1f",
                     }}
                     transition={springSnap}
-                    className="flex h-9 w-9 items-center justify-center rounded-full text-[12px] font-semibold sm:h-10 sm:w-10 sm:text-[13px]"
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-semibold"
                   >
                     {step.n}
                   </motion.span>
-                  <span className="text-[12px] font-medium text-[#86868b] sm:text-[13px]">
+                  <span className="text-[13px] font-medium text-[#86868b]">
                     {step.detail}
                   </span>
                 </div>
-                <h3 className="relative mt-4 text-[20px] font-semibold tracking-[-0.03em] text-[#1d1d1f] sm:mt-6 sm:text-[22px]">
+                <h3 className="relative mt-5 text-[20px] font-semibold tracking-[-0.03em] text-[#1d1d1f] sm:text-[22px]">
                   {step.title}
                 </h3>
-                <p className="relative mt-1.5 text-[14px] leading-relaxed text-[#6e6e73] sm:mt-2 sm:text-[15px]">
+                <p className="relative mt-2 text-[15px] leading-relaxed text-[#6e6e73]">
                   {step.line}
                 </p>
               </motion.button>

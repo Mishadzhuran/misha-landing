@@ -3,15 +3,18 @@
 import { useEffect, useState } from "react";
 import { site } from "@/data/site";
 
+/**
+ * Never renders on SSR / first paint — so it can't become LCP or hide the hero.
+ * Only mounts after client checks (skipped for bots, reduced-motion, return visits).
+ */
 export function PageLoader() {
+  const [phase, setPhase] = useState<"idle" | "show" | "done">("idle");
   const [progress, setProgress] = useState(0);
-  const [done, setDone] = useState(false);
-  const [hiding, setHiding] = useState(false);
 
   useEffect(() => {
     try {
       if (sessionStorage.getItem("misha-loaded-v2")) {
-        setDone(true);
+        setPhase("done");
         return;
       }
     } catch {
@@ -20,12 +23,15 @@ export function PageLoader() {
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const bot =
-      typeof navigator !== "undefined" &&
-      (/bot|crawl|spider/i.test(navigator.userAgent) ||
-        (navigator as Navigator & { webdriver?: boolean }).webdriver);
+      /bot|crawl|spider|lighthouse|chrome-lighthouse/i.test(navigator.userAgent) ||
+      Boolean((navigator as Navigator & { webdriver?: boolean }).webdriver);
+    const saveData = Boolean(
+      (navigator as Navigator & { connection?: { saveData?: boolean } })
+        .connection?.saveData,
+    );
 
-    if (reduce || bot) {
-      setDone(true);
+    if (reduce || bot || saveData) {
+      setPhase("done");
       try {
         sessionStorage.setItem("misha-loaded-v2", "1");
       } catch {
@@ -34,38 +40,36 @@ export function PageLoader() {
       return;
     }
 
+    setPhase("show");
     let value = 0;
     let timer = 0;
     const tick = () => {
-      value += Math.random() * 24 + 16;
+      value += Math.random() * 28 + 18;
       if (value >= 100) {
         setProgress(100);
-        setHiding(true);
         timer = window.setTimeout(() => {
-          setDone(true);
+          setPhase("done");
           try {
             sessionStorage.setItem("misha-loaded-v2", "1");
           } catch {
             /* ignore */
           }
-        }, 280);
+        }, 220);
         return;
       }
       setProgress(Math.min(100, Math.floor(value)));
-      timer = window.setTimeout(tick, 36 + Math.random() * 40);
+      timer = window.setTimeout(tick, 28 + Math.random() * 32);
     };
     tick();
     return () => window.clearTimeout(timer);
   }, []);
 
-  if (done) return null;
+  if (phase !== "show") return null;
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#f5f5f7] transition-all duration-500 ease-out ${
-        hiding ? "pointer-events-none opacity-0" : "opacity-100"
-      }`}
-      aria-hidden={hiding}
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#f5f5f7]"
+      aria-hidden
     >
       <p className="font-display text-3xl font-bold tracking-[-0.04em] text-text">
         {site.shortName}

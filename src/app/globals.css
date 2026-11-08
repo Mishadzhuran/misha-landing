@@ -8,7 +8,8 @@
   --accent-soft: rgba(0, 113, 227, 0.12);
   --text: #1d1d1f;
   --muted: #6e6e73;
-  --muted-soft: #86868b;
+  /* ≥4.5:1 on white for a11y (was #86868b @ 3.62) */
+  --muted-soft: #6e6e73;
   --line: rgba(0, 0, 0, 0.08);
   --line-strong: rgba(0, 0, 0, 0.12);
   --shadow: 0 18px 50px rgba(0, 0, 0, 0.06);
@@ -59,6 +60,11 @@ html {
   background: var(--bg);
   color: var(--text);
   scroll-behavior: auto;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Stop pull-to-refresh fighting sticky Deep Dive on phones */
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -76,6 +82,36 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   -webkit-tap-highlight-color: transparent;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* iOS zoom guard — never go below 16px on coarse pointers */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* Below-fold sections skip layout until near viewport */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 2400px;
+}
+
+@media (max-width: 767px) {
+  .cv-auto {
+    content-visibility: visible;
+    contain-intrinsic-size: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .will-change-transform,
+  .will-change-\[opacity\,filter\,transform\] {
+    will-change: auto !important;
+  }
 }
 
 /* Press feedback. scale, never opacity-only */

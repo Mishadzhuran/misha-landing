@@ -34,7 +34,7 @@ function CaseRow({
     <motion.article
       ref={ref}
       style={{ y, opacity }}
-      className="overflow-hidden rounded-[28px] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04] md:rounded-[32px]"
+      className="overflow-hidden rounded-[32px] bg-white shadow-[0_12px_40px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04]"
     >
       <div
         className={`grid lg:grid-cols-2 ${flip ? "lg:[&>*:first-child]:order-2" : ""}`}
@@ -42,7 +42,7 @@ function CaseRow({
         <button
           type="button"
           onClick={() => onOpen(item)}
-          className="relative min-h-[220px] overflow-hidden bg-[#f5f5f7] text-left sm:min-h-[280px] lg:min-h-[380px]"
+          className="relative min-h-[260px] overflow-hidden bg-[#f5f5f7] text-left sm:min-h-[300px] lg:min-h-[380px]"
         >
           <Image
             src={item.image}
@@ -52,7 +52,7 @@ function CaseRow({
             sizes="(max-width:1024px) 100vw, 50vw"
           />
         </button>
-        <div className="flex flex-col justify-center px-5 py-8 sm:px-8 sm:py-10 md:px-12">
+        <div className="flex flex-col justify-center px-5 py-8 sm:px-8 sm:py-12 md:px-12">
           <p className="text-[12px] font-semibold tracking-[0.14em] text-[#86868b] uppercase">
             {item.category}
           </p>
@@ -68,7 +68,7 @@ function CaseRow({
           <div className="mt-7 flex flex-wrap items-center gap-2.5">
             <Link
               href={`/drafts/${item.slug}`}
-              className="pressable inline-flex items-center gap-2 rounded-full bg-[#1d1d1f] px-5 py-2.5 text-[13px] font-semibold !text-white shadow-[0_8px_24px_rgba(0,0,0,0.16)] transition-[background-color,box-shadow] duration-200 hover:bg-black hover:shadow-[0_12px_28px_rgba(0,0,0,0.2)]"
+              className="pressable inline-flex min-h-[44px] items-center gap-2 rounded-full bg-[#1d1d1f] px-5 py-3 text-[14px] font-semibold !text-white shadow-[0_8px_24px_rgba(0,0,0,0.16)] transition-[background-color,box-shadow] duration-200 hover:bg-black hover:shadow-[0_12px_28px_rgba(0,0,0,0.2)]"
             >
               View details
               <span aria-hidden className="text-white/70">
@@ -78,7 +78,7 @@ function CaseRow({
             <button
               type="button"
               onClick={() => onOpen(item)}
-              className="pressable inline-flex items-center rounded-full bg-[#f5f5f7] px-4 py-2.5 text-[13px] font-semibold text-[#1d1d1f] ring-1 ring-black/[0.04] transition-colors duration-200 hover:bg-[#ebebed]"
+              className="pressable inline-flex min-h-[44px] items-center rounded-full bg-[#f5f5f7] px-4 py-3 text-[14px] font-semibold text-[#1d1d1f] ring-1 ring-black/[0.04] transition-colors duration-200 hover:bg-[#ebebed]"
             >
               Preview
             </button>
@@ -143,7 +143,7 @@ export function WorkSection() {
       <AnimatePresence>
         {active && (
           <motion.div
-            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/45 p-4 backdrop-blur-md"
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/45 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -157,7 +157,7 @@ export function WorkSection() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 12, scale: 0.98 }}
               transition={springUi}
-              className="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[28px] bg-white p-5 shadow-2xl md:p-8"
+              className="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[28px] bg-white p-5 shadow-2xl sm:p-8"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-start justify-between gap-4">
@@ -175,7 +175,7 @@ export function WorkSection() {
                 <button
                   type="button"
                   onClick={() => setActive(null)}
-                  className="pressable shrink-0 rounded-full bg-black/5 px-3 py-1.5 text-[13px] font-semibold text-[#1d1d1f] hover:bg-black/10"
+                  className="pressable min-h-[44px] shrink-0 rounded-full bg-black/5 px-4 py-2.5 text-[13px] font-semibold text-[#1d1d1f] hover:bg-black/10"
                 >
                   Close
                 </button>

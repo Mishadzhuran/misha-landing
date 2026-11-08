@@ -69,7 +69,7 @@ function Widget({
           ? undefined
           : { y: -2, boxShadow: shadowHover, transition: springUi }
       }
-      className={`relative flex h-full flex-col overflow-hidden rounded-[28px] backdrop-blur-xl md:rounded-[32px] ${className}`}
+      className={`relative flex h-full flex-col overflow-hidden rounded-[32px] backdrop-blur-xl ${className}`}
       style={{
         fontFamily: sf,
         boxShadow: shadow,
@@ -95,14 +95,14 @@ function CalendarCard() {
     <Widget
       delay={0.02}
       tone="dark"
-      className="relative p-5 md:min-h-[300px] md:p-6"
+      className="relative min-h-[300px] p-5 sm:p-6"
     >
-      <div className="flex gap-5">
-        <div className="flex w-[72px] shrink-0 flex-col items-center border-r border-white/[0.08] pt-0.5 pr-4">
+      <div className="flex h-full gap-4 sm:gap-5">
+        <div className="flex w-[64px] shrink-0 flex-col items-center border-r border-white/[0.08] pt-0.5 pr-3 sm:w-[72px] sm:pr-4">
           <p className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#FF453A]">
             Mon
           </p>
-          <p className="mt-0.5 text-[52px] font-semibold leading-none tracking-[-0.05em] tabular-nums text-white">
+          <p className="mt-0.5 text-[44px] font-semibold leading-none tracking-[-0.05em] tabular-nums text-white sm:text-[52px]">
             1
           </p>
           <p className="mt-2 text-center text-[11px] font-medium leading-tight text-white/45">
@@ -112,7 +112,7 @@ function CalendarCard() {
           </p>
         </div>
 
-        <ul className="min-w-0 flex-1 space-y-0 self-center">
+        <ul className="flex min-w-0 flex-1 flex-col justify-center space-y-0">
           {events.map((e, i) => (
             <motion.li
               key={e.title}
@@ -120,7 +120,7 @@ function CalendarCard() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ ...springSoft, delay: 0.16 + i * 0.06 }}
-              className={`flex items-start gap-2.5 py-2.5 ${
+              className={`flex items-start gap-2.5 py-2 sm:py-2.5 ${
                 i < events.length - 1 ? "border-b border-white/[0.08]" : ""
               }`}
             >
@@ -164,12 +164,12 @@ function StocksCard() {
     <Widget
       delay={0.06}
       tone="dark"
-      className="p-5 md:min-h-[300px] md:p-6"
+      className="min-h-[300px] p-5 sm:p-6"
     >
       <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
         Results
       </p>
-      <ul className="mt-3 flex-1">
+      <ul className="mt-2 flex flex-1 flex-col justify-center sm:mt-3">
         {rows.map((r, i) => (
           <motion.li
             key={r.label}
@@ -177,18 +177,18 @@ function StocksCard() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ ...springSoft, delay: 0.14 + i * 0.05 }}
-            className={`flex items-center justify-between gap-3 py-[11px] ${
+            className={`flex items-center justify-between gap-3 py-3 ${
               i < rows.length - 1 ? "border-b border-white/[0.08]" : ""
             }`}
           >
-            <p className="min-w-0 truncate text-[13px] font-medium text-white/45">
+            <p className="min-w-0 flex-1 truncate text-[14px] font-medium text-white/45">
               {r.label}
             </p>
-            <div className="flex shrink-0 items-center gap-2">
-              <p className="text-[17px] font-semibold tabular-nums tracking-[-0.03em] text-white">
+            <div className="flex shrink-0 items-center gap-2.5">
+              <p className="text-[18px] font-semibold tabular-nums tracking-[-0.03em] text-white">
                 {r.value}
               </p>
-              <span className="min-w-[42px] rounded-[6px] bg-[#34C759] px-1.5 py-[3px] text-center text-[11px] font-semibold tabular-nums leading-none !text-white">
+              <span className="min-w-[44px] rounded-[6px] bg-[#34C759] px-1.5 py-[4px] text-center text-[11px] font-semibold tabular-nums leading-none !text-white">
                 {r.delta}
               </span>
             </div>
@@ -239,15 +239,15 @@ function FitnessCard() {
     <Widget
       delay={0.1}
       tone="dark"
-      className="relative p-5 md:min-h-[300px] md:p-6"
+      className="relative min-h-[300px] p-5 sm:p-6"
     >
       <div className="relative flex h-full flex-col">
         <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
           Activity
         </p>
 
-        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
-          <ul className="space-y-3">
+        <div className="mt-auto flex items-center justify-between gap-3 pt-3">
+          <ul className="min-w-0 space-y-3">
             {metrics.map((m, i) => (
               <motion.li
                 key={m.key}
@@ -266,7 +266,7 @@ function FitnessCard() {
                 />
                 <div>
                   <p
-                    className="text-[20px] font-semibold leading-none tracking-[-0.04em] tabular-nums"
+                    className="text-[18px] font-semibold leading-none tracking-[-0.04em] tabular-nums sm:text-[20px]"
                     style={{ color: m.color }}
                   >
                     {m.value}
@@ -279,7 +279,13 @@ function FitnessCard() {
             ))}
           </ul>
 
-          <svg width="124" height="124" viewBox="0 0 124 124" aria-hidden>
+          <svg
+            className="h-[100px] w-[100px] shrink-0 sm:h-[124px] sm:w-[124px]"
+            width="124"
+            height="124"
+            viewBox="0 0 124 124"
+            aria-hidden
+          >
             <defs>
               <filter
                 id={`ag-${uid}`}
@@ -382,7 +388,7 @@ function ResponseCard() {
     <Widget
       delay={0.05}
       tone="dark"
-      className="relative flex flex-col p-5 md:min-h-[300px] md:p-6"
+      className="relative flex min-h-[300px] flex-col p-5 sm:p-6"
     >
       <div ref={ref} className="flex h-full flex-col">
         <div className="flex items-center gap-2.5 border-b border-white/[0.08] pb-3">
@@ -658,7 +664,7 @@ function MusicCard() {
     <Widget
       delay={0.09}
       tone="dark"
-      className="relative overflow-hidden p-5 md:min-h-[300px] md:p-6"
+      className="relative min-h-[300px] overflow-hidden p-5 sm:p-6"
     >
       <div
         aria-hidden
@@ -682,7 +688,7 @@ function MusicCard() {
                   href={`/drafts/${c.slug}`}
                   onFocus={() => selectTrack(i)}
                   onClick={() => selectTrack(i)}
-                  className={`flex items-center gap-3 rounded-[10px] px-1.5 py-2 transition-colors duration-[var(--duration-ui)] ease-[var(--ease-out)] ${
+                  className={`flex min-h-[44px] items-center gap-3 rounded-[10px] px-1.5 py-2.5 transition-colors duration-[var(--duration-ui)] ease-[var(--ease-out)] ${
                     active ? "bg-white/[0.08]" : "hover:bg-white/[0.04]"
                   }`}
                 >
@@ -729,7 +735,7 @@ function MusicCard() {
         {/* Scrubber above transport — Apple Music Now Playing order */}
         <div className="mt-3">
           <div
-            className="relative h-[5px] rounded-full"
+            className="relative h-2 rounded-full"
             style={{ background: "rgba(235,235,245,0.22)" }}
             role="slider"
             aria-label="Playback position"
@@ -744,7 +750,7 @@ function MusicCard() {
             />
             <div
               aria-hidden
-              className="absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
+              className="absolute top-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
               style={{
                 left: `${Math.min(100, Math.max(0, progress * 100))}%`,
                 boxShadow: "0 1px 4px rgba(0,0,0,0.35)",
@@ -761,7 +767,7 @@ function MusicCard() {
         </div>
 
         {/* Transport — 44pt hit targets, centered like Music */}
-        <div className="mt-1 flex items-center justify-center gap-10">
+        <div className="mt-1 flex items-center justify-center gap-6 sm:gap-10">
           <button
             type="button"
             aria-label="Previous track"
@@ -819,7 +825,7 @@ function TogetherCard() {
     <Widget
       delay={0.13}
       tone="dark"
-      className="p-5 md:min-h-[300px] md:p-6"
+      className="min-h-[300px] p-5 sm:p-6"
     >
       <p className="text-[15px] font-semibold tracking-[-0.02em] text-white">
         Working together
@@ -841,7 +847,7 @@ function TogetherCard() {
                 onClick={() =>
                   setDone((d) => d.map((v, j) => (j === i ? !v : v)))
                 }
-                className={`flex w-full items-center gap-3 py-2.5 text-left ${
+                className={`flex min-h-[44px] w-full items-center gap-3 py-2.5 text-left ${
                   i < items.length - 1 ? "border-b border-white/[0.08]" : ""
                 }`}
               >
@@ -885,7 +891,7 @@ function TogetherCard() {
 
       <Link
         href="/contact"
-        className="pressable mt-3 flex items-center justify-center rounded-full bg-[#0A84FF] py-3 text-[14px] font-semibold !text-white transition-[filter] hover:brightness-110"
+        className="pressable mt-3 flex min-h-[48px] items-center justify-center rounded-full bg-[#0A84FF] py-3 text-[15px] font-semibold !text-white transition-[filter] hover:brightness-110"
         style={{ boxShadow: "0 8px 20px rgba(10,132,255,0.3)" }}
       >
         Start a conversation
@@ -957,6 +963,21 @@ function lerpStops(v: number, stops: number[], values: number[]) {
   return values[values.length - 1];
 }
 
+function mixHex(a: string, b: string, t: number) {
+  const parse = (h: string) => [
+    parseInt(h.slice(1, 3), 16),
+    parseInt(h.slice(3, 5), 16),
+    parseInt(h.slice(5, 7), 16),
+  ];
+  const [ar, ag, ab] = parse(a);
+  const [br, bg, bb] = parse(b);
+  const c = (x: number, y: number) =>
+    Math.round(x + (y - x) * Math.min(1, Math.max(0, t)))
+      .toString(16)
+      .padStart(2, "0");
+  return `#${c(ar, br)}${c(ag, bg)}${c(ab, bb)}`;
+}
+
 /**
  * Italianno script — one string, scroll-linked write (undoes on scroll up).
  */
@@ -980,7 +1001,7 @@ function OverviewHandwrite({ reduce }: { reduce: boolean | null }) {
     lerpStops(v, [0, 0.35, 1], [0.94, 0.985, 1]),
   );
   const filter = useTransform(scrollYProgress, (v) => {
-    const blur = lerpStops(v, [0, 0.25, 0.7, 1], [10, 5, 1.2, 0]);
+    const blur = lerpStops(v, [0, 0.25, 0.7, 1], [8, 4, 1, 0]);
     return `blur(${blur}px)`;
   });
   const letterSpacing = useTransform(scrollYProgress, (v) => {
@@ -991,7 +1012,7 @@ function OverviewHandwrite({ reduce }: { reduce: boolean | null }) {
   return (
     <motion.h3
       ref={ref}
-      className="script-write pointer-events-none relative z-30 -mb-6 -translate-y-3 w-full overflow-visible pt-1 text-center text-[clamp(5.75rem,20vw,11rem)] text-white -rotate-[1.4deg] md:-mb-9 md:-translate-y-5 lg:-mb-11 lg:-translate-y-6"
+      className="script-write pointer-events-none relative z-30 -mb-3 -translate-y-1 w-full overflow-visible px-1 pt-1 text-center text-[clamp(3.35rem,12.5vw,11rem)] text-white -rotate-[1.4deg] md:-mb-9 md:-translate-y-5 md:will-change-[clip-path,opacity,filter,transform] lg:-mb-11 lg:-translate-y-6"
       aria-label="Overview"
       style={
         reduce
@@ -1004,7 +1025,6 @@ function OverviewHandwrite({ reduce }: { reduce: boolean | null }) {
               filter,
               letterSpacing,
               transformOrigin: "50% 70%",
-              willChange: "clip-path, opacity, filter, transform",
             }
       }
     >
@@ -1019,37 +1039,52 @@ export function TrustSection() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const titleInView = useInView(titleRef, { once: true, amount: 0.35 });
   const [lockedBlack, setLockedBlack] = useState(false);
+  const [coarse, setCoarse] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse)");
+    const sync = () => setCoarse(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: pinRef,
     offset: ["start start", "end start"],
   });
 
-  const stageBg = useTransform(
-    scrollYProgress,
-    EXIT,
-    [PAGE_BG, MID_BG, STAGE_BG],
+  const stageBg = useTransform(scrollYProgress, (v) => {
+    if (v <= EXIT[0]) return PAGE_BG;
+    if (v >= EXIT[2]) return STAGE_BG;
+    if (v <= EXIT[1]) {
+      const t = (v - EXIT[0]) / (EXIT[1] - EXIT[0]);
+      return mixHex(PAGE_BG, MID_BG, t);
+    }
+    const t = (v - EXIT[1]) / (EXIT[2] - EXIT[1]);
+    return mixHex(MID_BG, STAGE_BG, t);
+  });
+
+  // Gaussian dissolve — still lush on phone, just not 110px paint-heavy
+  const blurPeak = coarse ? [0, 10, 24, 42, 58, 72] : [0, 12, 36, 64, 90, 110];
+  const titleScale = useTransform(scrollYProgress, (v) =>
+    lerpStops(v, [0, 0.18, 0.4, 0.68], [1, 1.12, 1.32, 1.6]),
   );
-  // Heavy Gaussian dissolve — long haze before it fully vanishes
-  const titleScale = useTransform(
-    scrollYProgress,
-    [0, 0.18, 0.4, 0.68],
-    [1, 1.12, 1.35, 1.7],
+  const titleOpacity = useTransform(scrollYProgress, (v) =>
+    lerpStops(
+      v,
+      [0.06, 0.18, 0.32, 0.48, 0.62, 0.72],
+      [1, 0.7, 0.4, 0.18, 0.05, 0],
+    ),
   );
-  const titleOpacity = useTransform(
-    scrollYProgress,
-    [0.06, 0.18, 0.32, 0.48, 0.62, 0.72],
-    [1, 0.7, 0.4, 0.18, 0.05, 0],
-  );
-  const titleBlur = useTransform(
-    scrollYProgress,
-    [0.06, 0.16, 0.3, 0.46, 0.62, 0.72],
-    [0, 12, 36, 64, 90, 110],
-  );
-  const titleFilter = useTransform(
-    titleBlur,
-    (b) => `blur(${b.toFixed(2)}px)`,
-  );
+  const titleFilter = useTransform(scrollYProgress, (v) => {
+    const blur = lerpStops(
+      v,
+      [0.06, 0.16, 0.3, 0.46, 0.62, 0.72],
+      blurPeak,
+    );
+    return `blur(${blur.toFixed(2)}px)`;
+  });
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     if (reduce) return;
@@ -1079,10 +1114,10 @@ export function TrustSection() {
           : { backgroundColor: stageBg }
       }
     >
-      <div ref={pinRef} className="relative h-[120vh] md:h-[125vh]">
-        <div className="sticky top-0 flex h-svh w-full items-center justify-center overflow-hidden">
+      <div ref={pinRef} className="relative h-[115svh] md:h-[125vh]">
+        <div className="sticky top-0 flex h-svh w-full items-center justify-center overflow-hidden px-4 sm:px-6">
           <motion.div
-            className="px-3 text-center sm:px-6 will-change-[opacity,filter,transform]"
+            className="px-2 text-center sm:px-6 md:will-change-[opacity,filter,transform]"
             style={
               reduce
                 ? { opacity: 0 }
@@ -1096,7 +1131,7 @@ export function TrustSection() {
           >
             <h2
               ref={titleRef}
-              className="editorial-display mx-auto flex w-full max-w-[min(96vw,1100px)] flex-wrap justify-center pb-[0.18em] text-[clamp(3.2rem,11vw,6.25rem)] font-medium leading-[1.12] tracking-[-0.035em] text-[#1d1d1f]"
+              className="editorial-display mx-auto flex w-full max-w-[min(96vw,1100px)] flex-wrap justify-center pb-[0.18em] text-[clamp(2.85rem,10.5vw,6.25rem)] font-medium leading-[1.12] tracking-[-0.035em] text-[#1d1d1f]"
               aria-label="Deep Dive"
             >
               {STAGE_TITLE.split("").map((letter, i) => (
@@ -1128,7 +1163,7 @@ export function TrustSection() {
 
             <OverviewHandwrite reduce={reduce} />
 
-            <div className="relative z-10 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+            <div className="relative z-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
               <CalendarCard />
               <StocksCard />
               <FitnessCard />
