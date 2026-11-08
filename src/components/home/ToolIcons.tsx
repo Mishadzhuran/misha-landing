@@ -1,54 +1,14 @@
 "use client";
 
-import {
-  motion,
-  useAnimationControls,
-  useReducedMotion,
-} from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import {
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
 } from "react";
 import { easeOut } from "@/lib/motion";
-
-/** True once PageLoader (or skip path) releases the hero enter signal. */
-function useHeroEnter(): { ready: boolean; skip: boolean } {
-  const [state, setState] = useState({ ready: false, skip: false });
-
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const read = () => {
-      const v = document.documentElement.getAttribute("data-enter");
-      if (v === "1" || v === "skip") {
-        setState({ ready: true, skip: v === "skip" });
-        return true;
-      }
-      return false;
-    };
-    if (read()) return;
-    const onEnter = () => {
-      read();
-    };
-    window.addEventListener("misha:enter", onEnter);
-    const obs = new MutationObserver(() => {
-      if (read()) obs.disconnect();
-    });
-    obs.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-enter"],
-    });
-    return () => {
-      window.removeEventListener("misha:enter", onEnter);
-      obs.disconnect();
-    };
-  }, []);
-
-  return state;
-}
 
 /** Soft burst from the phone — settles without overshoot thrash. */
 const flyOut = {
@@ -74,10 +34,6 @@ type Tool = {
   contain?: boolean;
 };
 
-/**
- * Desktop: asymmetric side scatter. Mobile: tighter mx/my layout.
- * Entrance: every chip bursts out of the phone center to its seat.
- */
 /**
  * Desktop: wide asymmetric scatter (can go past 0/100).
  * Mobile: stay inside 0–86% so nothing widens the page or needs sideways scroll.
@@ -279,7 +235,6 @@ const tools: Tool[] = [
     peek: true,
     contain: true,
   },
-  // Below / low — desktop bridge; mobile stays in side gutters
   {
     name: "Python",
     src: "/icons/python-app.svg",
@@ -325,14 +280,12 @@ function IconChip({
   t,
   startDelay,
   reduce,
-  enterReady,
-  enterSkip,
+  play,
 }: {
   t: Tool;
   startDelay: number;
   reduce: boolean | null;
-  enterReady: boolean;
-  enterSkip: boolean;
+  play: boolean;
 }) {
   const behind = t.layer === "back";
   const enterAt = startDelay + t.delay;
@@ -347,9 +300,30 @@ function IconChip({
   const msize = t.msize ?? t.size;
 
   const ref = useRef<HTMLDivElement>(null);
-  const controls = useAnimationControls();
-  const [floating, setFloating] = useState(false);
-  const played = useRef(false);
+  const [burst, setBurst] = useState<{ x: number; y: number } | null>(null);
+
+  useLayoutEffect(() => {
+    if (!play) return;
+    if (reduce) {
+      setBurst({ x: 0, y: 0 });
+      return;
+    }
+    const el = ref.current;
+    const parent = el?.offsetParent as HTMLElement | null;
+    if (!el || !parent) {
+      // display:none on this breakpoint — mark ready so we don't stick invisible
+      setBurst({ x: 0, y: 0 });
+      return;
+    }
+
+    const pr = parent.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    const phoneCx = pr.width * 0.5;
+    const phoneCy = pr.height * 0.48;
+    const iconCx = er.left - pr.left + er.width / 2;
+    const iconCy = er.top - pr.top + er.height / 2;
+    setBurst({ x: phoneCx - iconCx, y: phoneCy - iconCy });
+  }, [play, reduce]);
 
   const seatStyle = {
     "--chip-x": t.x,
@@ -366,79 +340,58 @@ function IconChip({
     zIndex: behind ? 1 : 20,
   } as CSSProperties;
 
-  useLayoutEffect(() => {
-    if (!enterReady || played.current) return;
+  const hideClass = t.mobile === false ? "max-md:hidden" : "";
 
-    const el = ref.current;
-    const parent = el?.offsetParent as HTMLElement | null;
+  // Seat measure before burst — keep in DOM so layout is correct
+  if (!play || burst === null) {
+    return (
+      <div
+        ref={ref}
+        aria-hidden
+        className={`tool-chip absolute opacity-0 ${hideClass}`}
+        style={seatStyle}
+      />
+    );
+  }
 
-    // Hidden on this breakpoint (display:none) — skip forever for this mount
-    if (!el || !parent) {
-      if (t.mobile === false) return;
-      controls.set({ opacity: behind ? 0.88 : 1, x: 0, y: 0, scale: 1, rotate: 0 });
-      played.current = true;
-      setFloating(Boolean(float));
-      return;
-    }
-
-    if (reduce || enterSkip) {
-      controls.set({ opacity: behind ? 0.88 : 1, x: 0, y: 0, scale: 1, rotate: 0 });
-      played.current = true;
-      setFloating(Boolean(float && !reduce));
-      return;
-    }
-
-    const pr = parent.getBoundingClientRect();
-    const er = el.getBoundingClientRect();
-    const phoneCx = pr.width * 0.5;
-    const phoneCy = pr.height * 0.48;
-    const iconCx = er.left - pr.left + er.width / 2;
-    const iconCy = er.top - pr.top + er.height / 2;
-    const bx = phoneCx - iconCx;
-    const by = phoneCy - iconCy;
-
-    played.current = true;
-    controls.set({
-      opacity: 0,
-      x: bx,
-      y: by,
-      scale: 0.42,
-      rotate: spin,
-    });
-    void controls
-      .start({
+  return (
+    <motion.div
+      className={`tool-chip absolute will-change-transform ${hideClass}`}
+      style={seatStyle}
+      initial={
+        reduce
+          ? false
+          : {
+              opacity: 0,
+              x: burst.x,
+              y: burst.y,
+              scale: 0.42,
+              rotate: spin,
+            }
+      }
+      animate={{
         opacity: behind ? 0.88 : 1,
         x: 0,
         y: 0,
         scale: 1,
         rotate: 0,
-        transition: {
-          opacity: { duration: 0.45, delay: enterAt, ease: easeOut },
-          x: { ...flyOut, delay: enterAt },
-          y: { ...flyOut, delay: enterAt },
-          scale: { ...flyOut, delay: enterAt },
-          rotate: { duration: 0.95, delay: enterAt, ease: easeOut },
-        },
-      })
-      .then(() => setFloating(Boolean(float)));
-    // enterReady / enterSkip / reduce gate the burst; other values are stable per chip
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- play once when enter fires
-  }, [enterReady, enterSkip, reduce]);
-
-  return (
-    <motion.div
-      ref={ref}
-      className={`tool-chip absolute will-change-transform ${
-        t.mobile === false ? "max-md:hidden" : ""
-      }`}
-      style={seatStyle}
-      initial={{ opacity: 0 }}
-      animate={controls}
+      }}
+      transition={
+        reduce
+          ? { duration: 0 }
+          : {
+              opacity: { duration: 0.45, delay: enterAt, ease: easeOut },
+              x: { ...flyOut, delay: enterAt },
+              y: { ...flyOut, delay: enterAt },
+              scale: { ...flyOut, delay: enterAt },
+              rotate: { duration: 0.95, delay: enterAt, ease: easeOut },
+            }
+      }
     >
       <motion.div
         className="h-full w-full"
         animate={
-          floating
+          float
             ? {
                 y: [0, -floatAmp, 0],
                 x: [0, tilt >= 0 ? 2.5 : -2.5, 0],
@@ -446,11 +399,12 @@ function IconChip({
             : undefined
         }
         transition={
-          floating
+          float
             ? {
                 duration: floatDur,
                 repeat: Infinity,
                 ease: "easeInOut",
+                delay: enterAt + 1.15,
               }
             : undefined
         }
@@ -479,9 +433,15 @@ function IconChip({
   );
 }
 
-export function ToolIcons({ startDelay = 0 }: { startDelay?: number }) {
+export function ToolIcons({
+  startDelay = 0,
+  play = true,
+}: {
+  startDelay?: number;
+  /** When false, chips stay hidden until the hero enter kicks */
+  play?: boolean;
+}) {
   const reduce = useReducedMotion();
-  const { ready: enterReady, skip: enterSkip } = useHeroEnter();
 
   return (
     <div
@@ -496,8 +456,7 @@ export function ToolIcons({ startDelay = 0 }: { startDelay?: number }) {
             t={t}
             startDelay={startDelay}
             reduce={reduce}
-            enterReady={enterReady}
-            enterSkip={enterSkip}
+            play={play}
           />
         ))}
       {tools
@@ -508,8 +467,7 @@ export function ToolIcons({ startDelay = 0 }: { startDelay?: number }) {
             t={t}
             startDelay={startDelay}
             reduce={reduce}
-            enterReady={enterReady}
-            enterSkip={enterSkip}
+            play={play}
           />
         ))}
     </div>

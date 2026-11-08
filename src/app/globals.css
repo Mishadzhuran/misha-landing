@@ -129,39 +129,51 @@ body {
   }
 }
 
-/* Phone always has a transform origin for the settle */
+/* Hero phone transform origin */
 .hero-phone {
   transform-origin: 50% 80%;
   will-change: transform;
 }
 
 /*
-  PageLoader sets data-enter="1" (play) or "skip" (instant).
-  Until then, SSR content stays fully visible for LCP.
+  SSR: fully visible (LCP).
+  .hero-armed: client resting pose (hidden) before the enter.
+  .hero-enter: play the choreography.
 */
-html[data-enter="1"] .hero-letter {
-  animation: hero-letter-in 300ms var(--ease-out) both;
+.hero-armed:not(.hero-enter) .hero-letter {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
-html[data-enter="1"] .hero-cta {
-  animation: hero-cta-in 420ms var(--ease-out) 480ms both;
+.hero-armed:not(.hero-enter) .hero-cta {
+  opacity: 0;
+  transform: translateY(12px);
 }
 
-html[data-enter="1"] .hero-phone {
-  animation: hero-phone-in 560ms var(--ease-out) 360ms both;
+.hero-armed:not(.hero-enter) .hero-phone {
+  opacity: 0;
+  transform: translateY(20px) scale(0.97);
 }
 
-html[data-enter="skip"] .hero-letter,
-html[data-enter="skip"] .hero-cta,
-html[data-enter="skip"] .hero-phone {
-  opacity: 1;
-  transform: none;
+.hero-enter .hero-letter {
+  animation: hero-letter-in 320ms var(--ease-out) both;
+}
+
+.hero-enter .hero-cta {
+  animation: hero-cta-in 420ms var(--ease-out) 500ms both;
+}
+
+.hero-enter .hero-phone {
+  animation: hero-phone-in 580ms var(--ease-out) 380ms both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html[data-enter="1"] .hero-letter,
-  html[data-enter="1"] .hero-cta,
-  html[data-enter="1"] .hero-phone {
+  .hero-armed:not(.hero-enter) .hero-letter,
+  .hero-armed:not(.hero-enter) .hero-cta,
+  .hero-armed:not(.hero-enter) .hero-phone,
+  .hero-enter .hero-letter,
+  .hero-enter .hero-cta,
+  .hero-enter .hero-phone {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

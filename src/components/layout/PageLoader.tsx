@@ -3,31 +3,26 @@
 import { useEffect, useState } from "react";
 import { site } from "@/data/site";
 
-/** Signal hero choreography — CSS + icon burst wait on this. */
-function releaseEnter(mode: "1" | "skip" = "1") {
+function signalLoaderDone() {
   try {
-    document.documentElement.setAttribute("data-enter", mode);
-    window.dispatchEvent(new Event("misha:enter"));
+    window.dispatchEvent(new Event("misha:loader-done"));
   } catch {
     /* ignore */
   }
 }
 
 /**
- * Never renders on SSR / first paint — so it can't become LCP or hide the hero.
- * Only mounts after client checks (skipped for bots, reduced-motion, return visits).
- * Releases enter so hero motion starts as the cover lifts — not underneath it.
+ * Brief first-visit cover. Fires `misha:loader-done` when lifted so Hero
+ * can start its enter choreography in the clear.
  */
 export function PageLoader() {
   const [phase, setPhase] = useState<"idle" | "show" | "done">("idle");
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    let timer = 0;
-
-    const skip = () => {
+    const finishQuiet = () => {
       setPhase("done");
-      releaseEnter("skip");
+      signalLoaderDone();
       try {
         sessionStorage.setItem("misha-loaded-v2", "1");
       } catch {
@@ -37,7 +32,7 @@ export function PageLoader() {
 
     try {
       if (sessionStorage.getItem("misha-loaded-v2")) {
-        skip();
+        finishQuiet();
         return;
       }
     } catch {
@@ -54,18 +49,17 @@ export function PageLoader() {
     );
 
     if (reduce || bot || saveData) {
-      skip();
+      finishQuiet();
       return;
     }
 
     setPhase("show");
     let value = 0;
+    let timer = 0;
     const tick = () => {
       value += Math.random() * 28 + 18;
       if (value >= 100) {
         setProgress(100);
-        // Start enter under the cover, then lift so the choreography is visible
-        releaseEnter("1");
         timer = window.setTimeout(() => {
           setPhase("done");
           try {
@@ -73,7 +67,8 @@ export function PageLoader() {
           } catch {
             /* ignore */
           }
-        }, 120);
+          signalLoaderDone();
+        }, 160);
         return;
       }
       setProgress(Math.min(100, Math.floor(value)));
@@ -81,13 +76,10 @@ export function PageLoader() {
     };
     tick();
 
-    // Safety — never leave the page without an enter signal
     const safety = window.setTimeout(() => {
-      if (document.documentElement.getAttribute("data-enter") == null) {
-        releaseEnter("1");
-        setPhase("done");
-      }
-    }, 2400);
+      setPhase("done");
+      signalLoaderDone();
+    }, 2200);
 
     return () => {
       window.clearTimeout(timer);
