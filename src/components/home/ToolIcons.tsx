@@ -2,7 +2,20 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { easeOut } from "@/lib/motion";
+
+/** Slow, soft fly-out from the phone — longer than springSoft. */
+const flyOut = {
+  type: "spring" as const,
+  duration: 1.15,
+  bounce: 0.12,
+};
 
 type Tool = {
   name: string;
@@ -13,192 +26,257 @@ type Tool = {
   delay: number;
   layer: "front" | "back";
   peek?: boolean;
-  /** Hide below md — desktop always keeps the full set. */
   mobile?: boolean;
+  mx?: string;
+  my?: string;
+  msize?: number;
+  tilt?: number;
   contain?: boolean;
-  from?: "left" | "right" | "up" | "down";
 };
 
-/** Desktop composition — mobile only scales/hides via CSS, never remounts. */
+/**
+ * Desktop: asymmetric side scatter. Mobile: tighter mx/my layout.
+ * Entrance: every chip bursts out of the phone center to its seat.
+ */
 const tools: Tool[] = [
   {
     name: "GitHub",
     src: "/icons/github-mark.png",
-    x: "-3%",
-    y: "22%",
-    size: 64,
+    x: "-22%",
+    y: "2%",
+    size: 72,
+    mx: "-2%",
+    my: "3%",
+    msize: 56,
+    tilt: -11,
     delay: 0,
     layer: "front",
     peek: true,
     contain: true,
-    from: "left",
   },
   {
     name: "VS Code",
     src: "/icons/vscode.svg",
-    x: "91%",
-    y: "18%",
+    x: "72%",
+    y: "6%",
     size: 64,
-    delay: 0.11,
+    mx: "86%",
+    my: "5%",
+    msize: 52,
+    tilt: 9,
+    delay: 0.12,
     layer: "front",
     peek: true,
     contain: true,
-    from: "right",
   },
   {
     name: "Xcode",
     src: "/icons/xcode.png",
-    x: "10%",
-    y: "14%",
-    size: 52,
-    delay: 0.22,
+    x: "-6%",
+    y: "30%",
+    size: 56,
+    tilt: 8,
+    delay: 0.28,
     layer: "back",
-    from: "up",
     mobile: false,
   },
   {
     name: "App Store",
     src: "/icons/appstore.png",
-    x: "78%",
+    x: "108%",
     y: "10%",
-    size: 48,
-    delay: 0.33,
+    size: 54,
+    tilt: -6,
+    delay: 0.2,
     layer: "back",
-    from: "up",
     mobile: false,
   },
   {
     name: "TestFlight",
     src: "/icons/testflight.png",
-    x: "-4%",
-    y: "58%",
-    size: 68,
-    delay: 0.44,
+    x: "14%",
+    y: "44%",
+    size: 76,
+    mx: "-4%",
+    my: "38%",
+    msize: 60,
+    tilt: 7,
+    delay: 0.36,
     layer: "front",
     peek: true,
-    from: "left",
   },
   {
     name: "Figma",
     src: "/icons/figma-app.svg",
-    x: "92%",
-    y: "52%",
-    size: 62,
-    delay: 0.55,
+    x: "104%",
+    y: "40%",
+    size: 68,
+    mx: "87%",
+    my: "34%",
+    msize: 54,
+    tilt: -8,
+    delay: 0.44,
     layer: "front",
     peek: true,
-    from: "right",
   },
   {
     name: "React",
     src: "/icons/react.svg",
-    x: "14%",
-    y: "42%",
-    size: 50,
-    delay: 0.66,
+    x: "-18%",
+    y: "56%",
+    size: 58,
+    tilt: -5,
+    delay: 0.52,
     layer: "back",
     contain: true,
-    from: "left",
     mobile: false,
   },
   {
     name: "TypeScript",
     src: "/icons/typescript.svg",
-    x: "76%",
-    y: "38%",
-    size: 46,
-    delay: 0.77,
+    x: "70%",
+    y: "56%",
+    size: 54,
+    tilt: 6,
+    delay: 0.6,
     layer: "back",
     contain: true,
-    from: "right",
     mobile: false,
   },
   {
     name: "Kotlin",
     src: "/icons/kotlin.svg",
-    x: "18%",
-    y: "58%",
-    size: 42,
-    delay: 0.88,
+    x: "4%",
+    y: "70%",
+    size: 52,
+    tilt: 12,
+    delay: 0.68,
     layer: "back",
     contain: true,
-    from: "left",
     mobile: false,
   },
   {
     name: "Swift",
     src: "/icons/swift.png",
-    x: "88%",
-    y: "78%",
-    size: 58,
-    delay: 0.99,
+    x: "86%",
+    y: "72%",
+    size: 64,
+    mx: "84%",
+    my: "66%",
+    msize: 50,
+    tilt: 13,
+    delay: 0.76,
     layer: "front",
     peek: true,
-    from: "right",
   },
   {
     name: "Flutter",
     src: "/icons/flutter.svg",
-    x: "18%",
-    y: "72%",
-    size: 48,
-    delay: 1.1,
-    layer: "back",
+    x: "-16%",
+    y: "78%",
+    size: 58,
+    mx: "-2%",
+    my: "72%",
+    msize: 48,
+    tilt: -10,
+    delay: 0.84,
+    layer: "front",
+    peek: true,
     contain: true,
-    from: "down",
-    mobile: false,
   },
   {
     name: "Next.js",
     src: "/icons/nextjs.svg",
-    x: "72%",
-    y: "68%",
-    size: 46,
-    delay: 1.21,
+    x: "76%",
+    y: "24%",
+    size: 52,
+    tilt: -12,
+    delay: 0.24,
     layer: "back",
     contain: true,
-    from: "down",
     mobile: false,
   },
   {
     name: "Supabase",
     src: "/icons/supabase.svg",
-    x: "28%",
-    y: "86%",
-    size: 44,
-    delay: 1.32,
+    x: "22%",
+    y: "12%",
+    size: 50,
+    tilt: 4,
+    delay: 0.16,
     layer: "back",
     contain: true,
-    from: "down",
     mobile: false,
   },
   {
     name: "Notion",
     src: "/icons/notion.png",
-    x: "62%",
-    y: "88%",
-    size: 44,
-    delay: 1.43,
+    x: "112%",
+    y: "62%",
+    size: 56,
+    tilt: -9,
+    delay: 0.92,
     layer: "back",
-    from: "down",
     mobile: false,
   },
+  {
+    name: "Framer",
+    src: "/icons/framer-app.png",
+    x: "96%",
+    y: "86%",
+    size: 54,
+    mx: "82%",
+    my: "82%",
+    msize: 48,
+    tilt: 8,
+    delay: 1.0,
+    layer: "front",
+    peek: true,
+    contain: true,
+  },
+  // Below the phone — bridge toward Deep Dive
+  {
+    name: "Python",
+    src: "/icons/python-app.svg",
+    x: "8%",
+    y: "92%",
+    size: 56,
+    mx: "6%",
+    my: "88%",
+    msize: 46,
+    tilt: -7,
+    delay: 1.08,
+    layer: "front",
+    peek: true,
+  },
+  {
+    name: "Vercel",
+    src: "/icons/vercel-app.svg",
+    x: "78%",
+    y: "94%",
+    size: 58,
+    mx: "72%",
+    my: "90%",
+    msize: 48,
+    tilt: 11,
+    delay: 1.16,
+    layer: "front",
+    peek: true,
+  },
+  {
+    name: "JavaScript",
+    src: "/icons/javascript-app.png",
+    x: "42%",
+    y: "98%",
+    size: 52,
+    mx: "38%",
+    my: "94%",
+    msize: 44,
+    tilt: -4,
+    delay: 1.24,
+    layer: "back",
+  },
 ];
-
-function offsetFor(from: Tool["from"]) {
-  switch (from) {
-    case "left":
-      return { x: -42, y: 14 };
-    case "right":
-      return { x: 42, y: 14 };
-    case "up":
-      return { x: 0, y: -36 };
-    case "down":
-      return { x: 0, y: 40 };
-    default:
-      return { x: 0, y: 20 };
-  }
-}
 
 function IconChip({
   t,
@@ -210,82 +288,144 @@ function IconChip({
   reduce: boolean | null;
 }) {
   const behind = t.layer === "back";
-  const from = offsetFor(t.from);
   const enterAt = startDelay + t.delay;
-  const spin =
-    t.from === "left" ? -12 : t.from === "right" ? 12 : t.from === "up" ? -4 : 6;
-  const floatAmp = behind ? 3 + (t.delay % 0.3) * 4 : 5 + (t.delay % 0.4) * 5;
-  const floatDur = 6.8 + t.delay * 1.4;
+  const floatAmp = behind ? 4 + (t.delay % 0.3) * 5 : 6 + (t.delay % 0.4) * 6;
+  const floatDur = 5.8 + t.delay * 2.2;
   const float = !reduce;
+  const tilt = t.tilt ?? 0;
+  const spin = tilt === 0 ? 18 : tilt * 2.4;
+
+  const mx = t.mx ?? t.x;
+  const my = t.my ?? t.y;
+  const msize = t.msize ?? t.size;
+
+  const ref = useRef<HTMLDivElement>(null);
+  const [burst, setBurst] = useState<{ x: number; y: number } | null>(null);
+
+  useLayoutEffect(() => {
+    if (reduce) {
+      setBurst({ x: 0, y: 0 });
+      return;
+    }
+    const el = ref.current;
+    const parent = el?.offsetParent as HTMLElement | null;
+    if (!el || !parent) return;
+
+    const pr = parent.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    // Phone sits in the middle of this stage — burst origin
+    const phoneCx = pr.width * 0.5;
+    const phoneCy = pr.height * 0.48;
+    const iconCx = er.left - pr.left + er.width / 2;
+    const iconCy = er.top - pr.top + er.height / 2;
+    setBurst({ x: phoneCx - iconCx, y: phoneCy - iconCy });
+  }, [reduce]);
+
+  const ready = burst !== null;
+  const seatStyle = {
+    "--chip-x": t.x,
+    "--chip-y": t.y,
+    "--chip-s": `${t.size}px`,
+    "--chip-mx": mx,
+    "--chip-my": my,
+    "--chip-ms": `${msize}px`,
+    "--chip-tilt": `${tilt}deg`,
+    left: "var(--chip-x)",
+    top: "var(--chip-y)",
+    width: "var(--chip-s)",
+    height: "var(--chip-s)",
+    zIndex: behind ? 1 : 20,
+  } as CSSProperties;
+
+  // Invisible seat for one-frame measure before the burst plays
+  if (!ready) {
+    return (
+      <div
+        ref={ref}
+        aria-hidden
+        className={`tool-chip absolute opacity-0 ${
+          t.mobile === false ? "max-md:hidden" : ""
+        }`}
+        style={seatStyle}
+      />
+    );
+  }
 
   return (
     <motion.div
-      className={`absolute will-change-transform ${
+      className={`tool-chip absolute will-change-transform ${
         t.mobile === false ? "max-md:hidden" : ""
       }`}
-      style={{
-        left: t.x,
-        top: t.y,
-        width: t.size,
-        height: t.size,
-        zIndex: behind ? 1 : 20,
-      }}
+      style={seatStyle}
       initial={
         reduce
           ? false
           : {
               opacity: 0,
-              x: from.x,
-              y: from.y,
-              scale: 0.62,
+              x: burst.x,
+              y: burst.y,
+              scale: 0.2,
               rotate: spin,
             }
       }
       animate={{
-        opacity: behind ? 0.85 : 1,
+        opacity: behind ? 0.88 : 1,
         x: 0,
         y: 0,
         scale: 1,
         rotate: 0,
       }}
-      transition={{
-        opacity: { duration: 0.45, delay: enterAt, ease: easeOut },
-        x: { duration: 0.65, delay: enterAt, ease: easeOut },
-        y: { duration: 0.65, delay: enterAt, ease: easeOut },
-        scale: { type: "spring", stiffness: 380, damping: 22, delay: enterAt },
-        rotate: { duration: 0.55, delay: enterAt, ease: easeOut },
-      }}
+      transition={
+        reduce
+          ? { duration: 0 }
+          : {
+              opacity: { duration: 0.55, delay: enterAt, ease: easeOut },
+              x: { ...flyOut, delay: enterAt },
+              y: { ...flyOut, delay: enterAt },
+              scale: { ...flyOut, delay: enterAt },
+              rotate: { duration: 1.05, delay: enterAt, ease: easeOut },
+            }
+      }
     >
       <motion.div
         className="h-full w-full"
-        animate={float ? { y: [0, -floatAmp, 0] } : undefined}
+        animate={
+          float
+            ? {
+                y: [0, -floatAmp, 0],
+                x: [0, tilt >= 0 ? 3 : -3, 0],
+              }
+            : undefined
+        }
         transition={
           float
             ? {
                 duration: floatDur,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: enterAt + 0.85,
+                delay: enterAt + 1.35,
               }
             : undefined
         }
       >
-        <div
-          className={`relative h-full w-full overflow-hidden rounded-[16px] bg-white ring-1 ring-black/[0.06] ${
-            behind
-              ? "shadow-[0_8px_22px_rgba(0,0,0,0.08)]"
-              : "shadow-[0_14px_32px_rgba(0,0,0,0.12)]"
-          }`}
-        >
-          <Image
-            src={t.src}
-            alt=""
-            fill
-            loading="lazy"
-            decoding="async"
-            className={t.contain ? "object-contain p-[16%]" : "object-cover"}
-            sizes="72px"
-          />
+        <div className="tool-chip-tilt h-full w-full">
+          <div
+            className={`relative h-full w-full overflow-hidden rounded-[16px] bg-white ring-1 ring-black/[0.06] ${
+              behind
+                ? "shadow-[0_10px_26px_rgba(0,0,0,0.1)]"
+                : "shadow-[0_16px_36px_rgba(0,0,0,0.14)]"
+            }`}
+          >
+            <Image
+              src={t.src}
+              alt=""
+              fill
+              loading="lazy"
+              decoding="async"
+              className={t.contain ? "object-contain p-[16%]" : "object-cover"}
+              sizes="80px"
+            />
+          </div>
         </div>
       </motion.div>
     </motion.div>
@@ -298,7 +438,7 @@ export function ToolIcons({ startDelay = 0 }: { startDelay?: number }) {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-0 origin-center overflow-visible max-md:scale-[0.72]"
+      className="pointer-events-none absolute inset-0 origin-center overflow-visible max-md:scale-[0.88]"
     >
       {tools
         .filter((t) => t.layer === "back")

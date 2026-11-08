@@ -57,7 +57,7 @@ function ScreenTalk() {
         className="ml-auto max-w-[86%] rounded-[18px] rounded-br-[5px] bg-[#0071e3] px-3.5 py-2.5 shadow-[0_8px_20px_rgba(0,113,227,0.25)]"
       >
         <p className="text-[12px] leading-snug !text-white">
-          Hey — thinking about building an app
+          Hey, thinking about building an app
         </p>
       </motion.div>
 
@@ -104,7 +104,7 @@ function ScreenTalk() {
               Discovery call
             </p>
             <p className="mt-0.5 text-[10px] font-medium text-[#86868b]">
-              10:00 – 10:30 AM
+              10:00 to 10:30 AM
             </p>
           </div>
           <motion.span
@@ -302,7 +302,7 @@ function ScreenAgree() {
                   className="mt-3 text-[10px] leading-[1.55] text-[#3a3a3c]"
                   style={{ fontFamily: "ui-serif, Georgia, 'Times New Roman', serif" }}
                 >
-                  We’ll design and build your product MVP in six weeks for a fixed fee — from first screens to a live release.
+                  We’ll design and build your product MVP in six weeks for a fixed fee, from first screens to a live release.
                 </motion.p>
 
                 <p
@@ -323,7 +323,7 @@ function ScreenAgree() {
                         fontFamily: "ui-serif, Georgia, 'Times New Roman', serif",
                       }}
                     >
-                      — {b}
+                      • {b}
                     </motion.p>
                   ))}
                 </div>
@@ -978,7 +978,7 @@ export function PremiumPhone({
   return (
     <div className={`relative mx-auto ${className}`}>
       <motion.div
-        className="relative mx-auto w-[min(248px,70vw)] md:w-[270px]"
+        className="relative mx-auto w-[min(300px,78vw)] md:w-[320px]"
         style={{ aspectRatio: "313 / 640" }}
         // Transform-only settle — parent stage handles hide-until-write
         initial={
@@ -988,127 +988,114 @@ export function PremiumPhone({
         transition={{ ...springUi, delay: reduce ? 0 : enterDelay }}
       >
         {/*
-          Box-shadow on an unclipped shell — filter:drop-shadow followed PNG alpha
-          and painted a soft halo around the dual camera cutouts.
+          Screen lives only in the display hole. Device PNG sits on top.
+          Shadow follows the PNG alpha — no rectangular card behind the phone.
         */}
         <div
-          className="absolute inset-0"
+          className="absolute z-0 overflow-hidden bg-[#f5f5f7]"
           style={{
-            borderRadius: "12.3%",
-            boxShadow:
-              "0 28px 50px rgba(0,0,0,0.18), 0 8px 16px rgba(0,0,0,0.08)",
+            left: "5.1%",
+            right: "5.1%",
+            top: "2.05%",
+            bottom: "2.1%",
+            borderRadius: "16.5% / 7.8%",
           }}
         >
           <div
-            className="absolute inset-0 overflow-hidden"
-            style={{ borderRadius: "12.3%" }}
+            className="absolute inset-0 flex flex-col overflow-hidden"
+            style={{ paddingTop: "8.8%" }}
           >
-            {/* Screen fill */}
-            <div
-              className="absolute z-0 overflow-hidden bg-[#f5f5f7]"
-              style={{
-                left: "4.55%",
-                right: "4.55%",
-                top: "1.35%",
-                bottom: "1.45%",
-                borderRadius: "12.5% / 6.1%",
-              }}
-            >
-              <div className="absolute inset-0 flex flex-col">
-                <div
-                  className="flex min-h-0 flex-1 flex-col px-2.5 pb-[4.25rem] sm:px-3"
-                  style={{ paddingTop: "10.8%" }}
+            <div className="flex min-h-0 flex-1 flex-col px-2.5 pb-[4.5rem] sm:px-3">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={step.id}
+                  initial={
+                    reduce
+                      ? false
+                      : { opacity: 0, y: 10, filter: "blur(4px)" }
+                  }
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={
+                    reduce
+                      ? { opacity: 0 }
+                      : { opacity: 0, y: -6, filter: "blur(3px)" }
+                  }
+                  transition={{ duration: 0.28, ease }}
+                  className="flex min-h-0 flex-1 flex-col"
                 >
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={step.id}
-                      initial={
-                        reduce
-                          ? false
-                          : { opacity: 0, y: 10, filter: "blur(4px)" }
-                      }
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      exit={
-                        reduce
-                          ? { opacity: 0 }
-                          : { opacity: 0, y: -6, filter: "blur(3px)" }
-                      }
-                      transition={{ duration: 0.28, ease }}
-                      className="flex min-h-0 flex-1 flex-col"
-                    >
-                      <p className="text-[20px] font-semibold tracking-[-0.045em] text-[#1d1d1f]">
-                        {step.title}
-                      </p>
-                      <div className="mt-2.5 min-h-0 flex-1">
-                        <Body />
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-1.5 pb-[2px]">
-                  <div className="liquid-glass pointer-events-auto relative flex items-center justify-between overflow-hidden rounded-full px-0.5 py-1">
-                    {FLOW.map((f, idx) => {
-                      const on = idx === i;
-                      return (
-                        <button
-                          key={f.id}
-                          type="button"
-                          onClick={() => go(idx)}
-                          className="relative flex min-h-[42px] flex-1 flex-col items-center justify-center gap-0.5 rounded-full px-0.5 py-1"
-                        >
-                          {on && (
-                            <motion.span
-                              layoutId="phone-tab-glow"
-                              className="absolute inset-[2px] rounded-full bg-white/85 shadow-[0_3px_12px_rgba(0,0,0,0.06)]"
-                              transition={spring}
-                            />
-                          )}
-                          <motion.span
-                            animate={{ scale: on ? 1.06 : 1 }}
-                            transition={spring}
-                            className={`relative z-10 ${
-                              on ? "text-[#0071e3]" : "text-[#8e8e93]"
-                            }`}
-                          >
-                            <svg width="16" height="16" viewBox="0 0 24 24">
-                              {TAB_ICONS[idx]}
-                            </svg>
-                          </motion.span>
-                          <span
-                            className={`relative z-10 text-[8px] font-semibold ${
-                              on ? "text-[#0071e3]" : "text-[#8e8e93]"
-                            }`}
-                          >
-                            {f.label}
-                          </span>
-                        </button>
-                      );
-                    })}
+                  <p className="text-[20px] font-semibold tracking-[-0.045em] text-[#1d1d1f]">
+                    {step.title}
+                  </p>
+                  <div className="mt-2.5 min-h-0 flex-1">
+                    <Body />
                   </div>
-                  <div className="mt-0.5 flex justify-center pb-0.5">
-                    <span className="h-[3px] w-[34%] rounded-full bg-[#1d1d1f]/9" />
-                  </div>
-                </div>
-              </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
-            {/* Static WebP — skips /_next/image hop for LCP */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/devices/iphone-device-sm.webp?v=6"
-              alt=""
-              width={313}
-              height={640}
-              decoding="async"
-              fetchPriority="high"
-              className="pointer-events-none absolute inset-0 z-30 h-full w-full select-none object-contain"
-              draggable={false}
-            />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-3 pb-1.5">
+              <div className="liquid-glass pointer-events-auto relative flex max-w-full items-center justify-between overflow-hidden rounded-full px-0.5 py-1">
+                {FLOW.map((f, idx) => {
+                  const on = idx === i;
+                  return (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => go(idx)}
+                      className="relative flex min-h-[40px] min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-full px-0.5 py-1"
+                    >
+                      {on && (
+                        <motion.span
+                          layoutId="phone-tab-glow"
+                          className="absolute inset-[2px] rounded-full bg-white/85 shadow-[0_3px_12px_rgba(0,0,0,0.06)]"
+                          transition={spring}
+                        />
+                      )}
+                      <motion.span
+                        animate={{ scale: on ? 1.06 : 1 }}
+                        transition={spring}
+                        className={`relative z-10 ${
+                          on ? "text-[#0071e3]" : "text-[#8e8e93]"
+                        }`}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24">
+                          {TAB_ICONS[idx]}
+                        </svg>
+                      </motion.span>
+                      <span
+                        className={`relative z-10 text-[8px] font-semibold ${
+                          on ? "text-[#0071e3]" : "text-[#8e8e93]"
+                        }`}
+                      >
+                        {f.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="mt-0.5 flex justify-center pb-0.5">
+                <span className="h-[3px] w-[34%] rounded-full bg-[#1d1d1f]/9" />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Sharp pill above the frame — covers soft dual-camera PNG silhouette */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/devices/iphone-device-sm.webp?v=7"
+          alt=""
+          width={313}
+          height={640}
+          decoding="async"
+          fetchPriority="high"
+          className="pointer-events-none absolute inset-0 z-30 h-full w-full select-none object-contain"
+          draggable={false}
+          style={{
+            filter:
+              "drop-shadow(0 28px 50px rgba(0,0,0,0.18)) drop-shadow(0 8px 16px rgba(0,0,0,0.08))",
+          }}
+        />
+
         <DynamicIsland live={false} />
       </motion.div>
     </div>

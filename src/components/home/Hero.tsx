@@ -59,7 +59,7 @@ export function Hero() {
     : 0.08 + (charCount - 1) * 0.026 + lastLineIndex * 0.03 + 0.34 + 0.08;
 
   return (
-    <section className="relative overflow-x-clip pt-[max(2.5rem,env(safe-area-inset-top)+1.5rem)] pb-[max(1.5rem,env(safe-area-inset-bottom))] md:overflow-visible md:pb-10 md:pt-32">
+    <section className="relative overflow-x-clip pt-[max(14vh,env(safe-area-inset-top)+5.5rem)] pb-[max(1.5rem,env(safe-area-inset-bottom))] md:overflow-visible md:pb-10 md:pt-32">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -74,7 +74,7 @@ export function Hero() {
           <HandwrittenHeadline reduce={reduce} />
 
           <motion.div
-            className="mt-7 flex flex-col items-center gap-3 sm:mt-9"
+            className="mt-6 flex flex-col items-center gap-3 md:mt-9"
             initial={reduce ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -98,32 +98,14 @@ export function Hero() {
                 delay: writeDone + 0.12,
               }}
             >
-              <motion.span
-                className="inline-flex items-center gap-1.5"
-                animate={reduce ? undefined : { y: [0, 3, 0] }}
-                transition={
-                  reduce
-                    ? undefined
-                    : {
-                        duration: 1.8,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: writeDone + 0.4,
-                      }
-                }
-              >
-                scroll to see more
-                <span aria-hidden className="text-[13px]">
-                  ↓
-                </span>
-              </motion.span>
+              scroll to see more
             </motion.p>
           </motion.div>
         </div>
 
         {/* Phone + icons wait until the headline has finished writing */}
         <motion.div
-          className="relative mt-10 overflow-visible md:mt-16"
+          className="relative mt-8 overflow-visible md:mt-16"
           initial={reduce ? false : { opacity: 0, y: 28, scale: 0.975 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{
@@ -131,9 +113,9 @@ export function Hero() {
             delay: writeDone + 0.18,
           }}
         >
-          <div className="relative mx-1 sm:mx-3 md:mx-6">
+          <div className="relative mx-auto max-w-[520px] md:max-w-[780px]">
             <motion.div
-              className="relative overflow-visible rounded-[28px] bg-gradient-to-b from-white/90 to-white/55 ring-1 ring-black/[0.04] md:rounded-[44px]"
+              className="relative overflow-visible"
               initial={reduce ? false : { y: 12 }}
               animate={{ y: 0 }}
               transition={{
@@ -143,7 +125,7 @@ export function Hero() {
               }}
             >
               <ToolIcons startDelay={writeDone + 0.55} />
-              <div className="relative z-10 flex justify-center px-4 py-12 sm:px-8 sm:py-16 md:px-16 md:py-20">
+              <div className="relative z-30 flex justify-center px-12 pb-28 pt-6 sm:px-14 sm:pb-32 sm:pt-8 md:px-20 md:pb-40 md:pt-10">
                 <motion.div
                   className="relative"
                   initial={reduce ? false : { y: 14, scale: 0.98 }}

@@ -100,10 +100,23 @@ body {
   contain-intrinsic-size: 1px 2400px;
 }
 
+/* Hero tool icons — resting tilt on every breakpoint */
+.tool-chip-tilt {
+  transform: rotate(var(--chip-tilt, 0deg));
+}
+
 @media (max-width: 767px) {
   .cv-auto {
     content-visibility: visible;
     contain-intrinsic-size: auto;
+  }
+
+  /* Mobile tightens positions/sizes via CSS vars (no remount) */
+  .tool-chip {
+    left: var(--chip-mx) !important;
+    top: var(--chip-my) !important;
+    width: var(--chip-ms) !important;
+    height: var(--chip-ms) !important;
   }
 }
 
