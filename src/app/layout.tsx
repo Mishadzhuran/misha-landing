@@ -5,6 +5,7 @@ import {
   Instrument_Serif,
   Italianno,
   Outfit,
+  Sora,
   Syne,
 } from "next/font/google";
 import { CustomCursor } from "@/components/layout/ClientChrome";
@@ -29,7 +30,7 @@ const serif = Instrument_Serif({
   weight: "400",
   style: ["normal", "italic"],
   display: "swap",
-  preload: false,
+  preload: true,
 });
 
 const editorial = Fraunces({
@@ -37,6 +38,14 @@ const editorial = Fraunces({
   subsets: ["latin"],
   weight: ["500", "600"],
   style: ["normal"],
+  display: "swap",
+  preload: false,
+});
+
+const heading = Sora({
+  variable: "--font-sora",
+  subsets: ["latin"],
+  weight: ["600", "700"],
   display: "swap",
   preload: false,
 });
@@ -61,7 +70,7 @@ const write = Caveat({
 const body = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   preload: true,
 });
@@ -122,7 +131,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${serif.variable} ${editorial.variable} ${hand.variable} ${write.variable} ${body.variable} h-full antialiased`}
+      className={`${display.variable} ${serif.variable} ${editorial.variable} ${heading.variable} ${hand.variable} ${write.variable} ${body.variable} h-full antialiased`}
     >
       <head>
         <link

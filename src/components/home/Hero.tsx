@@ -7,29 +7,20 @@ import { ToolIcons } from "./ToolIcons";
 
 const HEADLINE = ["Turn your idea", "into a live product."];
 
-/** CSS letter settle — no Framer on the LCP path. */
-function HandwrittenHeadline() {
-  let charIndex = 0;
-
+/** Line settle — whole lines only so words never split mid-glyph. */
+function HeroHeadline() {
   return (
     <h1
-      className="hand-write hero-headline relative mx-auto max-w-full -rotate-[0.8deg] text-[clamp(2.9rem,10.5vw,7rem)] leading-[1.06] tracking-[-0.01em] text-[#111]"
+      className="deepdive-display hero-headline relative mx-auto max-w-full text-[clamp(2.4rem,8.5vw,5.5rem)] text-[#111]"
       aria-label="Turn your idea into a live product."
     >
-      {HEADLINE.map((line) => (
-        <span key={line} className="block">
-          {line.split("").map((ch) => {
-            const i = charIndex++;
-            return (
-              <span
-                key={`${line}-${i}`}
-                className="hero-letter inline-block [backface-visibility:hidden]"
-                style={{ animationDelay: `${40 + i * 18}ms` }}
-              >
-                {ch === " " ? "\u00A0" : ch}
-              </span>
-            );
-          })}
+      {HEADLINE.map((line, i) => (
+        <span
+          key={line}
+          className="hero-letter block [backface-visibility:hidden]"
+          style={{ animationDelay: `${60 + i * 100}ms` }}
+        >
+          {line}
         </span>
       ))}
     </h1>
@@ -94,7 +85,7 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-[1100px] px-5 md:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <HandwrittenHeadline />
+          <HeroHeadline />
 
           <div className="hero-cta mt-6 flex flex-col items-center gap-3 md:mt-9">
             <Link

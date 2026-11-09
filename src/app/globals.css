@@ -40,7 +40,7 @@
   --color-red: var(--accent);
   --color-red-bright: #2997ff;
   --color-red-deep: #0058b0;
-  --font-display: var(--font-syne);
+  --font-display: var(--font-outfit);
   --font-serif: var(--font-instrument);
   --font-editorial: var(--font-fraunces);
   --font-hand: var(--font-italianno);
@@ -381,11 +381,41 @@ textarea {
 }
 
 .soft-title {
-  font-family: var(--font-syne), sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.045em;
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.04em;
   line-height: 0.95;
   text-transform: none;
+}
+
+.stage-display {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  text-transform: none;
+  font-synthesis: none;
+}
+
+/* Shared headers — hero, Deep Dive, Overview, Selected work */
+.deepdive-display {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  text-transform: none;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.overview-display {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-transform: none;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 .serif-italic {
@@ -397,7 +427,8 @@ textarea {
 
 .editorial-display {
   font-family: var(--font-fraunces), "Times New Roman", serif;
-  font-variation-settings: "SOFT" 45, "opsz" 144, "WONK" 0.5;
+  font-variation-settings: "SOFT" 40, "opsz" 144, "WONK" 0;
+  font-synthesis: none;
 }
 
 .hand-script {
@@ -501,7 +532,8 @@ textarea {
 .legal-prose h2 {
   margin-top: 2.5rem;
   margin-bottom: 0.85rem;
-  font-family: var(--font-syne), sans-serif;
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-weight: 600;
   font-size: clamp(1.5rem, 3vw, 2rem);
   letter-spacing: -0.02em;
 }

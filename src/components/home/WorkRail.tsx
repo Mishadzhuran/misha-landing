@@ -226,7 +226,7 @@ export function WorkSection() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.35, ease: easeOut }}
         >
-          <h2 className="text-[28px] font-bold tracking-[-0.03em] text-white sm:text-[34px]">
+          <h2 className="deepdive-display text-[28px] text-white sm:text-[34px]">
             Selected work
           </h2>
           <Link

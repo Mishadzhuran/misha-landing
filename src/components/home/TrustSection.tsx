@@ -981,45 +981,6 @@ function setPageBlack(on: boolean) {
   document.body.style.backgroundColor = bg;
 }
 
-function StageTitleLetter({
-  letter,
-  index,
-  reduce,
-  entered,
-}: {
-  letter: string;
-  index: number;
-  reduce: boolean | null;
-  entered: boolean;
-}) {
-  if (letter === " ") {
-    return <span className="inline-block w-[0.26em]" aria-hidden />;
-  }
-
-  if (reduce) {
-    return <span className="inline-block">{letter}</span>;
-  }
-
-  return (
-    <motion.span
-      className="inline-block"
-      initial={{ opacity: 0, transform: "translateY(16px)" }}
-      animate={
-        entered
-          ? { opacity: 1, transform: "translateY(0px)" }
-          : { opacity: 0, transform: "translateY(16px)" }
-      }
-      transition={{
-        duration: 0.36,
-        delay: 0.04 + index * 0.035,
-        ease: easeOut,
-      }}
-    >
-      {letter}
-    </motion.span>
-  );
-}
-
 /** Piecewise lerp — avoids framer range-transform edge cases */
 function lerpStops(v: number, stops: number[], values: number[]) {
   if (v <= stops[0]) return values[0];
@@ -1051,64 +1012,65 @@ function mixHex(a: string, b: string, t: number) {
 }
 
 /**
- * Italianno script — one string, scroll-linked write (undoes on scroll up).
+ * Overview — same soft dissolve as Deep Dive (blur + scale + fade), inverted to enter.
  */
-function OverviewHandwrite({ reduce }: { reduce: boolean | null }) {
+function OverviewTitle({ reduce }: { reduce: boolean | null }) {
   const ref = useRef<HTMLHeadingElement>(null);
   const phone = useIsPhone();
+  const [coarse, setCoarse] = useState(false);
   const [motionReady, setMotionReady] = useState(false);
+
   useEffect(() => {
     setMotionReady(true);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse)");
+    const sync = () => setCoarse(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: phone
-      ? ["start 0.95", "start 0.5"]
-      : ["start 0.98", "start 0.42"],
+      ? ["start 0.98", "start 0.55"]
+      : ["start 1", "start 0.48"],
   });
 
-  // Function form of useTransform — stable in FM 13; reverses on scroll up
-  const clipPath = useTransform(scrollYProgress, (v) => {
-    const wipe = lerpStops(v, [0, 0.15, 0.55, 1], [102, 78, 22, -2]);
-    return `inset(-10% ${wipe}% -14% -3%)`;
-  });
+  const blurPeak =
+    coarse || phone ? [28, 18, 8, 2, 0] : [48, 28, 12, 3, 0];
+
   const opacity = useTransform(scrollYProgress, (v) =>
-    lerpStops(v, [0, 0.06, 0.18, 1], [0, 0.4, 1, 1]),
-  );
-  const y = useTransform(scrollYProgress, (v) =>
-    lerpStops(v, [0, 1], [phone ? 18 : 22, 0]),
+    lerpStops(v, [0, 0.2, 0.45, 0.7, 1], [0, 0.35, 0.75, 1, 1]),
   );
   const scale = useTransform(scrollYProgress, (v) =>
-    lerpStops(v, [0, 0.35, 1], [phone ? 0.96 : 0.94, 0.985, 1]),
+    lerpStops(
+      v,
+      [0, 0.25, 0.55, 1],
+      phone ? [1.12, 1.05, 1.01, 1] : [1.22, 1.1, 1.03, 1],
+    ),
   );
   const filter = useTransform(scrollYProgress, (v) => {
-    // Blur is paint-heavy on iOS — keep the style key stable, zero it on phone
     if (phone) return "blur(0px)";
-    const blur = lerpStops(v, [0, 0.25, 0.7, 1], [8, 4, 1, 0]);
-    return `blur(${blur}px)`;
-  });
-  const letterSpacing = useTransform(scrollYProgress, (v) => {
-    const em = lerpStops(v, [0, 1], [0.05, 0.012]);
-    return `${em}em`;
+    const blur = lerpStops(v, [0, 0.2, 0.45, 0.7, 1], blurPeak);
+    return `blur(${blur.toFixed(2)}px)`;
   });
 
   return (
     <motion.h3
       ref={ref}
-      className="script-write pointer-events-none relative z-30 -mb-6 w-full overflow-visible px-0.5 pt-2 text-center text-[clamp(6.25rem,26vw,11rem)] leading-[0.95] text-white -rotate-[1.4deg] sm:text-[clamp(5.5rem,20vw,11rem)] md:-mb-9 md:-translate-y-5 md:text-[clamp(5.5rem,18vw,11rem)] md:will-change-[clip-path,opacity,filter,transform] lg:-mb-11 lg:-translate-y-6"
+      className="deepdive-display pointer-events-none relative z-20 mb-7 w-full px-1 pt-1 text-center text-[clamp(3rem,12vw,5.75rem)] text-white will-change-[opacity,filter,transform] sm:mb-8 sm:text-[clamp(3.5rem,10vw,6.25rem)] md:mb-10 md:pt-0 md:text-[clamp(3.75rem,9vw,6.75rem)]"
       aria-label="Overview"
       style={
         reduce || !motionReady
-          ? { transformOrigin: "50% 70%" }
+          ? undefined
           : {
-              clipPath,
               opacity,
-              y,
               scale,
               filter,
-              letterSpacing,
-              transformOrigin: "50% 70%",
+              transformOrigin: "50% 50%",
             }
       }
     >
@@ -1122,7 +1084,6 @@ export function TrustSection() {
   const phone = useIsPhone();
   const pinRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const titleInView = useInView(titleRef, { once: true, amount: 0.35 });
   const [lockedBlack, setLockedBlack] = useState(false);
   const [coarse, setCoarse] = useState(false);
   /** Gate scroll-linked styles until after hydrate — avoids opacity number/string mismatch. */
@@ -1156,8 +1117,9 @@ export function TrustSection() {
     return mixHex(MID_BG, STAGE_BG, t);
   });
 
-  // Soft dissolve — skip heavy blur on phone for scroll smoothness
-  const blurPeak = coarse || phone ? [0, 6, 14, 22, 30, 36] : [0, 12, 36, 64, 90, 110];
+  // Soft dissolve — blur + scale + fade (whole title, no per-letter jump)
+  const blurPeak =
+    coarse || phone ? [0, 6, 14, 22, 30, 36] : [0, 12, 36, 64, 90, 110];
   const titleScale = useTransform(scrollYProgress, (v) =>
     lerpStops(
       v,
@@ -1220,7 +1182,6 @@ export function TrustSection() {
               reduce || !motionReady
                 ? { transformOrigin: "50% 50%" }
                 : {
-                    // Same keys every client frame — phone zeros blur inside titleFilter
                     scale: titleScale,
                     opacity: titleOpacity,
                     filter: titleFilter,
@@ -1230,18 +1191,9 @@ export function TrustSection() {
           >
             <h2
               ref={titleRef}
-              className="editorial-display mx-auto flex w-full max-w-[min(96vw,1100px)] flex-wrap justify-center pb-[0.18em] text-[clamp(3.1rem,11vw,6.25rem)] font-medium leading-[1.12] tracking-[-0.035em] text-[#1d1d1f]"
-              aria-label="Deep Dive"
+              className="deepdive-display mx-auto max-w-[min(96vw,1100px)] pb-[0.12em] text-[clamp(3.1rem,11vw,6.25rem)] text-[#1d1d1f]"
             >
-              {STAGE_TITLE.split("").map((letter, i) => (
-                <StageTitleLetter
-                  key={`${letter}-${i}`}
-                  letter={letter}
-                  index={i}
-                  reduce={reduce}
-                  entered={Boolean(reduce || titleInView)}
-                />
-              ))}
+              {STAGE_TITLE}
             </h2>
           </motion.div>
         </div>
@@ -1260,7 +1212,7 @@ export function TrustSection() {
               }}
             />
 
-            <OverviewHandwrite reduce={reduce} />
+            <OverviewTitle reduce={reduce} />
 
             {/*
               Phone: 1 full-width column (bigger, native). Tablet: 2. Large: 3.
