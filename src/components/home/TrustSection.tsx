@@ -8,6 +8,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import {
   useCallback,
@@ -875,6 +876,46 @@ function MusicCard() {
   );
 }
 
+/** Personal note: portrait + one quote line, marks close to the text */
+function AboutQuoteCard() {
+  return (
+    <Widget
+      delay={0.08}
+      tone="dark"
+      className="relative min-h-0 overflow-hidden px-6 py-6 sm:px-8 sm:py-7"
+    >
+      <div className="relative z-10 flex items-center gap-4 sm:gap-5">
+        <div className="relative size-14 shrink-0 overflow-hidden rounded-full bg-white/10 shadow-[0_10px_24px_rgba(0,0,0,0.4)] ring-[2.5px] ring-white/20 sm:size-16">
+          <Image
+            src="/me/portrait.jpg"
+            alt={site.name}
+            fill
+            className="object-cover object-[center_12%]"
+            sizes="64px"
+          />
+        </div>
+
+        <blockquote className="relative min-w-0 flex-1 px-8 font-display text-[clamp(1.05rem,2.5vw,1.4rem)] font-semibold leading-[1.3] tracking-[-0.03em] text-white sm:px-10">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute left-0 top-0 select-none font-serif text-[2.4em] leading-none text-white/50"
+          >
+            “
+          </span>
+          I take care of the whole project with you, so building your app feels
+          simple and clear.
+          <span
+            aria-hidden
+            className="pointer-events-none absolute bottom-0 right-0 select-none font-serif text-[2.4em] leading-none text-white/50"
+          >
+            ”
+          </span>
+        </blockquote>
+      </div>
+    </Widget>
+  );
+}
+
 /** Reminders widget. working together */
 function TogetherCard() {
   const reduce = useReducedMotion();
@@ -1225,6 +1266,10 @@ export function TrustSection() {
               <ResponseCard />
               <MusicCard />
               <TogetherCard />
+            </div>
+
+            <div className="relative z-10 mt-5 sm:mt-4 md:mt-5">
+              <AboutQuoteCard />
             </div>
 
             <div className="relative z-10 mt-5 sm:mt-4 md:mt-5">

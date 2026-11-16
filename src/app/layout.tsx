@@ -1,12 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import {
   Caveat,
   Fraunces,
   Instrument_Serif,
   Italianno,
   Outfit,
-  Sora,
-  Syne,
 } from "next/font/google";
 import { CustomCursor } from "@/components/layout/ClientChrome";
 import { PageLoader } from "@/components/layout/PageLoader";
@@ -16,12 +15,28 @@ import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { site } from "@/data/site";
 import "./globals.css";
 
-const display = Syne({
-  variable: "--font-syne",
-  subsets: ["latin"],
-  weight: ["600", "700"],
+/** Headers / display — General Sans (Fontshare) */
+const generalSans = localFont({
+  src: [
+    {
+      path: "../fonts/general-sans/GeneralSans-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../fonts/general-sans/GeneralSans-Semibold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../fonts/general-sans/GeneralSans-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-general-sans",
   display: "swap",
-  preload: false,
+  preload: true,
 });
 
 const serif = Instrument_Serif({
@@ -38,14 +53,6 @@ const editorial = Fraunces({
   subsets: ["latin"],
   weight: ["500", "600"],
   style: ["normal"],
-  display: "swap",
-  preload: false,
-});
-
-const heading = Sora({
-  variable: "--font-sora",
-  subsets: ["latin"],
-  weight: ["600", "700"],
   display: "swap",
   preload: false,
 });
@@ -131,7 +138,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${serif.variable} ${editorial.variable} ${heading.variable} ${hand.variable} ${write.variable} ${body.variable} h-full antialiased`}
+      className={`${generalSans.variable} ${serif.variable} ${editorial.variable} ${hand.variable} ${write.variable} ${body.variable} h-full antialiased`}
     >
       <head>
         <link

@@ -241,9 +241,11 @@ export function WorkSection() {
       <div
         className="mt-6 flex gap-3 overflow-x-auto overscroll-x-contain pb-2 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-8 sm:gap-4 [&::-webkit-scrollbar]:hidden"
         style={{
-          scrollSnapType: "x mandatory",
+          scrollSnapType: "x proximity",
           WebkitOverflowScrolling: "touch",
-          touchAction: "pan-x",
+          // Allow vertical page scroll while still enabling horizontal swipe
+          touchAction: "pan-x pan-y",
+          overscrollBehaviorY: "auto",
           paddingInline: "max(1.25rem, calc((100vw - 1120px) / 2))",
         }}
       >

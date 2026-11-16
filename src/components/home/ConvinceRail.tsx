@@ -35,9 +35,10 @@ function Rail({ children }: { children: React.ReactNode }) {
     <div
       className="flex gap-4 overflow-x-auto overscroll-x-contain px-5 pb-4 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] md:gap-5 md:px-8 [&::-webkit-scrollbar]:hidden"
       style={{
-        scrollSnapType: "x mandatory",
+        scrollSnapType: "x proximity",
         WebkitOverflowScrolling: "touch",
-        touchAction: "pan-x",
+        touchAction: "pan-x pan-y",
+        overscrollBehaviorY: "auto",
       }}
     >
       {children}

@@ -40,7 +40,7 @@
   --color-red: var(--accent);
   --color-red-bright: #2997ff;
   --color-red-deep: #0058b0;
-  --font-display: var(--font-outfit);
+  --font-display: var(--font-general-sans);
   --font-serif: var(--font-instrument);
   --font-editorial: var(--font-fraunces);
   --font-hand: var(--font-italianno);
@@ -145,6 +145,11 @@ body {
   transform: translateY(10px);
 }
 
+.hero-armed:not(.hero-enter) .hero-subline {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
 .hero-armed:not(.hero-enter) .hero-cta {
   opacity: 0;
   transform: translateY(12px);
@@ -159,6 +164,10 @@ body {
   animation: hero-letter-in 320ms var(--ease-out) both;
 }
 
+.hero-enter .hero-subline {
+  animation: hero-cta-in 400ms var(--ease-out) 380ms both;
+}
+
 .hero-enter .hero-cta {
   animation: hero-cta-in 420ms var(--ease-out) 500ms both;
 }
@@ -169,9 +178,11 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .hero-armed:not(.hero-enter) .hero-letter,
+  .hero-armed:not(.hero-enter) .hero-subline,
   .hero-armed:not(.hero-enter) .hero-cta,
   .hero-armed:not(.hero-enter) .hero-phone,
   .hero-enter .hero-letter,
+  .hero-enter .hero-subline,
   .hero-enter .hero-cta,
   .hero-enter .hero-phone {
     animation: none !important;
@@ -381,7 +392,7 @@ textarea {
 }
 
 .soft-title {
-  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-family: var(--font-general-sans), system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 0.95;
@@ -389,7 +400,7 @@ textarea {
 }
 
 .stage-display {
-  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-family: var(--font-general-sans), system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 0.98;
@@ -399,7 +410,7 @@ textarea {
 
 /* Shared headers — hero, Deep Dive, Overview, Selected work */
 .deepdive-display {
-  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-family: var(--font-general-sans), system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1.02;
@@ -409,7 +420,7 @@ textarea {
 }
 
 .overview-display {
-  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-family: var(--font-general-sans), system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.035em;
   line-height: 1;
@@ -532,7 +543,7 @@ textarea {
 .legal-prose h2 {
   margin-top: 2.5rem;
   margin-bottom: 0.85rem;
-  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-family: var(--font-general-sans), system-ui, sans-serif;
   font-weight: 600;
   font-size: clamp(1.5rem, 3vw, 2rem);
   letter-spacing: -0.02em;

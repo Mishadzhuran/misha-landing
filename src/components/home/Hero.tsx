@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useLayoutEffect, useState } from "react";
+import { site } from "@/data/site";
 import { PremiumPhone } from "./PremiumPhone";
 import { ToolIcons } from "./ToolIcons";
 
@@ -87,7 +88,11 @@ export function Hero() {
         <div className="mx-auto max-w-3xl text-center">
           <HeroHeadline />
 
-          <div className="hero-cta mt-6 flex flex-col items-center gap-3 md:mt-9">
+          <p className="hero-subline mx-auto mt-4 max-w-md text-[17px] font-medium leading-relaxed tracking-[-0.015em] text-[#424245] md:mt-5 md:max-w-lg md:text-[18px]">
+            {site.heroSubline}
+          </p>
+
+          <div className="hero-cta mt-6 flex flex-col items-center gap-3 md:mt-8">
             <Link
               href="/contact"
               className="pressable inline-flex min-h-[48px] items-center rounded-full bg-[#0071e3] px-8 py-3.5 text-center text-[15px] font-semibold !text-white shadow-[0_10px_28px_rgba(0,113,227,0.3)] hover:bg-[#0077ed]"

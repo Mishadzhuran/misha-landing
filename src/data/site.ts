@@ -18,6 +18,8 @@ export const site = {
     "Your product should feel calm, clear, and ready, so people open it, trust it, and come back.",
   pitch:
     "I help people build apps and websites that make life easier: design, development, and a clean launch.",
+  heroSubline:
+    "Design, development, and a clean launch. Apps and websites from first sketch to a polished release.",
 };
 
 export const navLinks = [

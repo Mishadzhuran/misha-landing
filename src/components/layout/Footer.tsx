@@ -7,53 +7,42 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative pb-[max(2.5rem,env(safe-area-inset-bottom)+1rem)] pt-6">
+    <footer className="relative bg-[#0a0a0a] pb-[max(2rem,env(safe-area-inset-bottom)+0.75rem)] pt-16 text-white md:pt-20">
       <div className="shell-wide">
-        <div className="apple-card px-5 py-10 sm:px-7 sm:py-12 md:px-12 md:py-14">
-          <div className="grid gap-10 md:grid-cols-12 md:gap-8">
-            <div className="md:col-span-5">
+        <div className="border-t border-white/[0.08] pt-10 md:pt-12">
+          <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-16">
+            <div className="max-w-sm">
               <Link
                 href="/"
-                className="font-display text-[22px] font-bold tracking-[-0.04em] sm:text-2xl"
+                className="font-display text-[18px] font-semibold tracking-[-0.03em] text-white"
               >
                 {site.name}
               </Link>
-              <p className="mt-4 max-w-xs text-[15px] leading-relaxed text-muted">
+              <p className="mt-3 text-[14px] leading-relaxed text-white/40">
                 {site.tagline}
-              </p>
-              <a
-                href={`mailto:${site.email}`}
-                className="mt-6 inline-block text-[15px] font-medium text-accent"
-              >
-                {site.email}
-              </a>
-              <p className="mt-2 text-[14px] text-muted-soft">
-                {site.role}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10 md:col-span-7 md:grid-cols-3">
+            <nav
+              aria-label="Footer"
+              className="grid grid-cols-2 gap-x-10 gap-y-8 sm:grid-cols-3 sm:gap-x-14"
+            >
               <FooterCol title="Navigate" links={navLinks} />
               <FooterCol title="Explore" links={footerNav.studio} />
               <FooterCol title="Legal" links={footerNav.legal} />
-            </div>
+            </nav>
           </div>
 
-          <div className="mt-12 flex flex-col gap-3 border-t border-line pt-6 text-[13px] text-muted-soft md:flex-row md:items-center md:justify-between">
+          <div className="mt-12 flex flex-col gap-4 border-t border-white/[0.06] pt-6 text-[13px] text-white/30 sm:mt-14 sm:flex-row sm:items-center sm:justify-between">
             <span>
               © {year} {site.name}
             </span>
-            <div className="flex flex-wrap gap-x-5 gap-y-2">
-              <Link href="/privacy" className="hover:text-text">
-                Privacy
-              </Link>
-              <Link href="/terms" className="hover:text-text">
-                Terms
-              </Link>
-              <Link href="/cookies" className="hover:text-text">
-                Cookies
-              </Link>
-            </div>
+            <a
+              href={`mailto:${site.email}`}
+              className="transition-colors duration-[var(--duration-ui)] ease-[var(--ease-out)] hover:text-white/60"
+            >
+              {site.email}
+            </a>
           </div>
         </div>
       </div>
@@ -70,13 +59,16 @@ function FooterCol({
 }) {
   return (
     <div>
-      <p className="mb-4 text-[12px] font-medium uppercase tracking-[0.12em] text-muted-soft">
+      <p className="mb-3.5 text-[11px] font-medium uppercase tracking-[0.14em] text-white/30">
         {title}
       </p>
-      <ul className="space-y-2.5 text-[15px]">
+      <ul className="space-y-2.5 text-[14px]">
         {links.map((l) => (
           <li key={`${title}-${l.href}-${l.label}`}>
-            <Link href={l.href} className="text-text/80 transition hover:text-text">
+            <Link
+              href={l.href}
+              className="text-white/55 transition-colors duration-[var(--duration-ui)] ease-[var(--ease-out)] hover:text-white"
+            >
               {l.label}
             </Link>
           </li>
