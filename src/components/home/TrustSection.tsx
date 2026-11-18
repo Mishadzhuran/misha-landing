@@ -876,41 +876,42 @@ function MusicCard() {
   );
 }
 
-/** Personal note: portrait + one quote line, marks close to the text */
+/** Personal note: one text style, quote marks tied to the copy */
 function AboutQuoteCard() {
   return (
     <Widget
       delay={0.08}
       tone="dark"
-      className="relative min-h-0 overflow-hidden px-6 py-6 sm:px-8 sm:py-7"
+      className="relative min-h-0 overflow-hidden p-7 sm:p-8 md:p-10"
     >
-      <div className="relative z-10 flex items-center gap-4 sm:gap-5">
-        <div className="relative size-14 shrink-0 overflow-hidden rounded-full bg-white/10 shadow-[0_10px_24px_rgba(0,0,0,0.4)] ring-[2.5px] ring-white/20 sm:size-16">
+      <div className="relative z-10 flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:gap-8">
+        <div className="relative size-[88px] shrink-0 overflow-hidden rounded-full bg-white/10 shadow-[0_14px_36px_rgba(0,0,0,0.45)] ring-[3px] ring-white/20 sm:size-[104px]">
           <Image
             src="/me/portrait.jpg"
             alt={site.name}
             fill
             className="object-cover object-[center_12%]"
-            sizes="64px"
+            sizes="104px"
           />
         </div>
 
-        <blockquote className="relative min-w-0 flex-1 px-8 font-display text-[clamp(1.05rem,2.5vw,1.4rem)] font-semibold leading-[1.3] tracking-[-0.03em] text-white sm:px-10">
+        <p className="relative max-w-3xl px-1 pt-8 pb-8 text-center font-body text-[clamp(1.2rem,3vw,1.7rem)] font-normal leading-[1.4] tracking-[-0.02em] text-white/55 sm:pt-9 sm:pb-9 sm:text-left">
           <span
             aria-hidden
-            className="pointer-events-none absolute left-0 top-0 select-none font-serif text-[2.4em] leading-none text-white/50"
+            className="pointer-events-none absolute left-0 top-0 select-none font-serif text-[3.4em] leading-none text-white/28"
           >
             “
           </span>
-          I take care of the whole project with you, so building your app feels
-          simple and clear.
+          I like building things with people. From the first idea to the day it
+          goes live, I stay close, keep the path clear, and care about how it
+          feels when someone opens it for the first time.
           <span
             aria-hidden
-            className="pointer-events-none absolute bottom-0 right-0 select-none font-serif text-[2.4em] leading-none text-white/50"
+            className="pointer-events-none absolute right-0 bottom-0 select-none font-serif text-[3.4em] leading-none text-white/28"
           >
             ”
           </span>
-        </blockquote>
+        </p>
       </div>
     </Widget>
   );

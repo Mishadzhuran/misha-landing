@@ -6,10 +6,10 @@ import {
 } from "@/components/home/PortfolioSections";
 import { TechMarquee } from "@/components/home/TechMarquee";
 
-/** Lazy below-fold chunk — keeps hero LCP lean */
+/** Below-fold dark band. No content-visibility: height estimate was clipping scroll. */
 export function HomeBelowFold() {
   return (
-    <div className="cv-auto bg-[#0a0a0a] text-white">
+    <div className="bg-[#0a0a0a] text-white">
       <TechMarquee />
       <WorkSection />
       <FinalCTA />

@@ -18,8 +18,11 @@ export function Footer() {
               >
                 {site.name}
               </Link>
+              <p className="mt-1 text-[13px] font-medium text-white/35">
+                Studio
+              </p>
               <p className="mt-3 text-[14px] leading-relaxed text-white/40">
-                {site.tagline}
+                Product design and development for iOS, Android, and web.
               </p>
             </div>
 
