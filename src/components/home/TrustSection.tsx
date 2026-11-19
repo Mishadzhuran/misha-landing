@@ -895,23 +895,31 @@ function AboutQuoteCard() {
           />
         </div>
 
-        <p className="relative max-w-3xl px-1 pt-8 pb-8 text-center font-body text-[clamp(1.2rem,3vw,1.7rem)] font-normal leading-[1.4] tracking-[-0.02em] text-white/55 sm:pt-9 sm:pb-9 sm:text-left">
-          <span
-            aria-hidden
-            className="pointer-events-none absolute left-0 top-0 select-none font-serif text-[3.4em] leading-none text-white/28"
-          >
-            “
-          </span>
-          I like building things with people. From the first idea to the day it
-          goes live, I stay close, keep the path clear, and care about how it
-          feels when someone opens it for the first time.
-          <span
-            aria-hidden
-            className="pointer-events-none absolute right-0 bottom-0 select-none font-serif text-[3.4em] leading-none text-white/28"
-          >
-            ”
-          </span>
-        </p>
+        <div className="relative min-w-0 flex-1">
+          <div className="relative px-9 pt-3 sm:px-12 sm:pt-4">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -left-1 -top-2 select-none font-serif text-[5.5em] leading-none text-white/28 sm:-left-2 sm:-top-3 sm:text-[6.5em]"
+            >
+              “
+            </span>
+            <p className="text-center font-body text-[clamp(1.15rem,2.8vw,1.55rem)] font-medium leading-[1.45] tracking-[-0.02em] text-white/78 sm:text-left">
+              I run a small studio, and that is how I like it. You work with me
+              directly, and I take your idea from the first sketch to a product
+              people love to use. When a project calls for a designer or a web
+              developer, I bring in people I trust.
+            </p>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -bottom-6 right-0 select-none font-serif text-[5.5em] leading-none text-white/28 sm:-bottom-7 sm:right-1 sm:text-[6.5em]"
+            >
+              ”
+            </span>
+          </div>
+          <p className="mt-6 px-9 text-center text-[14px] font-medium tracking-[-0.01em] text-white/45 sm:mt-7 sm:px-12 sm:text-left">
+            Misha, Founder
+          </p>
+        </div>
       </div>
     </Widget>
   );
