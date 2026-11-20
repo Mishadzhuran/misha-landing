@@ -63,7 +63,7 @@ function WorkCard({
     >
       <motion.a
         ref={ref}
-        href={`/cases#${item.slug}`}
+        href={`/drafts/${item.slug}`}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
         style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
@@ -102,7 +102,7 @@ function WorkCard({
           <div className="relative mt-5 overflow-hidden rounded-2xl bg-gradient-to-br from-[#111] via-[#1a1a1a] to-[#0c0c0c] p-4 shadow-inner">
             <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/10 blur-2xl transition-transform duration-500 group-hover:scale-150" />
             <p className="text-[9px] uppercase tracking-[0.16em] text-white/35">
-              {item.category.split("·")[0]?.trim()}
+              {item.category.split(",")[0]?.trim()}
             </p>
             <p className="mt-2 font-display text-lg font-semibold tracking-[-0.03em] text-white md:text-xl">
               {item.metric}
@@ -164,7 +164,7 @@ export function WorkSection() {
         <Reveal delay={0.15}>
           <div className="mt-10 flex justify-center md:mt-12">
             <Link
-              href="/cases"
+              href="/#work"
               className="group inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-[11px] font-medium uppercase tracking-[0.18em] text-text backdrop-blur-md transition-all duration-300 hover:border-white hover:bg-white hover:text-bg"
             >
               View all work

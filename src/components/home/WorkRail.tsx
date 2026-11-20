@@ -126,7 +126,7 @@ function AppStoreCard({
   ).slice(0, 3);
   while (shots.length < 3) shots.push(shots[shots.length - 1] ?? item.image);
 
-  const category = item.category.split("·")[0]?.trim() ?? "App";
+  const category = item.category.split(",")[0]?.trim() ?? "App";
 
   return (
     <motion.article
@@ -166,14 +166,10 @@ function AppStoreCard({
         </Link>
       </div>
 
-      {/* Category chip row — App Store chrome */}
-      <div className="mt-3 flex items-center gap-2 text-[11px] font-medium text-[#98989d]">
-        <span>{category}</span>
-        <span className="text-white/20">·</span>
-        <span>{item.year}</span>
-        <span className="text-white/20">·</span>
-        <span>17+</span>
-      </div>
+      {/* Category chip row. App Store chrome. */}
+      <p className="mt-3 text-[11px] font-medium text-[#98989d]">
+        {category}, {item.year}, 17+
+      </p>
 
       {/* Screenshots */}
       <div className="mt-3.5 flex gap-[7px]">
@@ -201,7 +197,7 @@ function AppStoreCard({
           </Link>
         </div>
         <p className="mt-1 text-[12px] font-normal text-[#98989d]">
-          Version 1.0 · {item.year}
+          Version 1.0, {item.year}
         </p>
         <p className="mt-2 line-clamp-2 text-[13px] leading-[1.35] text-white/80">
           {item.summary}
@@ -230,7 +226,7 @@ export function WorkSection() {
             Selected work
           </h2>
           <Link
-            href="/cases"
+            href="/#work"
             className="text-[15px] font-normal text-[#0a84ff]"
           >
             See All

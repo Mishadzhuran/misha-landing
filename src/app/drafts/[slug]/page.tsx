@@ -14,10 +14,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const draft = getDraft(slug);
-  if (!draft) return { title: "Draft" };
+  if (!draft) return { title: "Project" };
   return {
-    title: `${draft.title} draft`,
-    description: draft.support,
+    title: draft.title,
+    description: draft.overview || draft.support,
   };
 }
 

@@ -26,8 +26,14 @@ export function Navbar() {
     return pathname === href;
   };
 
-  // Home + individual product drafts use their own chrome
-  if (pathname === "/" || pathname.startsWith("/drafts/")) return null;
+  // Home, contact form, and product pages use their own chrome
+  if (
+    pathname === "/" ||
+    pathname === "/contact" ||
+    pathname.startsWith("/drafts/")
+  ) {
+    return null;
+  }
 
   return (
     <>

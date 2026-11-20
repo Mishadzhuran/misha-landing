@@ -336,7 +336,7 @@ function WorkCard() {
           <CardTitle>Recent ships</CardTitle>
         </div>
         <Link
-          href="/drafts"
+          href="/#work"
           className="pressable text-[13px] font-semibold tracking-[-0.01em] text-[#0071e3]"
         >
           See all

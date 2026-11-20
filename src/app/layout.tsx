@@ -7,7 +7,6 @@ import {
   Italianno,
   Outfit,
 } from "next/font/google";
-import { CustomCursor } from "@/components/layout/ClientChrome";
 import { PageLoader } from "@/components/layout/PageLoader";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
@@ -158,7 +157,6 @@ export default function RootLayout({
         </a>
         <SmoothScroll>
           <PageLoader />
-          <CustomCursor />
           <Navbar />
           <main id="main" className="flex-1">
             {children}

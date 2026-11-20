@@ -133,7 +133,7 @@ export function ServicesPreview() {
           {services.map((service, i) => (
             <Reveal key={service.id} delay={i * 0.04}>
               <Link
-                href="/services"
+                href="/contact"
                 className="group flex flex-col gap-3 border-b border-line py-7 transition-colors md:flex-row md:items-baseline md:justify-between md:gap-10 md:py-8"
               >
                 <div className="flex items-baseline gap-5 md:gap-8">
@@ -167,8 +167,8 @@ export function CasesPreview() {
               <span className="text-red">took to market</span>
             </BigTitle>
           </div>
-          <MagneticButton href="/cases" variant="outline">
-            All cases
+          <MagneticButton href="/#work" variant="outline">
+            Selected work
           </MagneticButton>
         </div>
 
@@ -176,12 +176,12 @@ export function CasesPreview() {
           {cases.slice(0, 4).map((c, i) => (
             <Reveal key={c.slug} delay={i * 0.05}>
               <Link
-                href={`/cases#${c.slug}`}
+                href={`/drafts/${c.slug}`}
                 className="group relative flex flex-col gap-5 border-b border-line py-8 transition-colors md:flex-row md:items-center md:justify-between md:gap-10 md:py-9"
               >
                 <div className="max-w-2xl">
                   <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-muted-soft">
-                    {c.category} · {c.year}
+                    {c.category}, {c.year}
                   </p>
                   <h3 className="soft-title mt-3 text-3xl transition-colors duration-300 group-hover:text-red md:text-4xl">
                     {c.title}
@@ -220,8 +220,8 @@ export function FinalCTA() {
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             <MagneticButton href="/contact">Book a scope call</MagneticButton>
-            <MagneticButton href="/services" variant="outline">
-              See services
+            <MagneticButton href="/#work" variant="outline">
+              Selected work
             </MagneticButton>
           </div>
           <p className="mt-6 text-[13px] text-muted-soft">

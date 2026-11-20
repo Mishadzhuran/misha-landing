@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function StudioRedirect() {
-  redirect("/services");
+export default function StudioPage() {
+  redirect("/");
 }

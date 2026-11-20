@@ -456,7 +456,7 @@ export function PhoneJourney() {
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
                 <MagneticButton href="/contact">Start a project</MagneticButton>
-                <MagneticButton href="/cases" variant="outline">
+                <MagneticButton href="/#work" variant="outline">
                   Cases
                 </MagneticButton>
               </div>

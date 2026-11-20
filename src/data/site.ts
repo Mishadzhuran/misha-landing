@@ -24,16 +24,12 @@ export const site = {
 
 export const navLinks = [
   { href: "/#work", label: "Work" },
-  { href: "/services", label: "Services" },
-  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
 export const footerNav = {
   studio: [
     { href: "/#work", label: "Selected work" },
-    { href: "/services", label: "Services" },
-    { href: "/about", label: "About" },
     { href: "/contact", label: "Get in touch" },
   ],
   legal: [
@@ -237,16 +233,16 @@ export const cases = [
   {
     slug: "lifemaxxing",
     title: "Lifemaxxing",
-    category: "Social · Flutter · Maps",
+    category: "Social, Flutter, Maps",
     year: "2026",
     metric: "Live product",
     tagline: "The IMDb of your life",
     summary:
-      "A location-anchored social network where every post is an Experience, activity, place, date, media. Builds a life map, feed, and place pages people actually return to.",
-    result: "iOS / Android · NestJS · Supabase · Mapbox",
+      "A location anchored social network where every post is an Experience: activity, place, date, media. Builds a life map, feed, and place pages people actually return to.",
+    result: "iOS / Android, NestJS, Supabase, Mapbox",
     highlights: [
-      "Experience-first social graph (not another feed clone)",
-      "Map-native memory layer with deep place pages",
+      "Experience first social graph (not another feed clone)",
+      "Map native memory layer with deep place pages",
       "Production stack: Flutter, NestJS BFF, PostGIS, R2",
     ],
     color: "#c9a227",
@@ -264,13 +260,13 @@ export const cases = [
   {
     slug: "big-red-map",
     title: "Big Red Map",
-    category: "Travel · Next.js · Web",
+    category: "Travel, Next.js, Web",
     year: "2026",
     metric: "Hero product",
     tagline: "Live wild. Collect moments. Leave a map.",
     summary:
-      "A cinematic map-as-profile product: paint countries red, drop gold memory pins, and leave a public page for the life you’ve lived, phone-first storytelling from day one.",
-    result: "Brand system · Launch site · MapLibre · Supabase",
+      "A cinematic map as profile product: paint countries red, drop gold memory pins, and leave a public page for the life you’ve lived, phone first storytelling from day one.",
+    result: "Brand system, Launch site, MapLibre, Supabase",
     highlights: [
       "Bold red brand language that reads in one glance",
       "Interactive globe + country paint + gold pins",
@@ -290,15 +286,15 @@ export const cases = [
   {
     slug: "anita",
     title: "Anita",
-    category: "Fintech · AI · iOS / Web",
+    category: "Fintech, AI, iOS / Web",
     year: "2025",
     metric: "In build",
     tagline: "Chat with your money",
     summary:
-      "AI-native personal finance companion, conversational money clarity, goals, spending, and optional bank linking via Stripe, synced across SwiftUI iOS and React web.",
-    result: "SwiftUI · Express · Supabase · Stripe · PostHog",
+      "AI native personal finance companion, conversational money clarity, goals, spending, and optional bank linking via Stripe, synced across SwiftUI iOS and React web.",
+    result: "SwiftUI, Express, Supabase, Stripe, PostHog",
     highlights: [
-      "Chat-first finance UX instead of spreadsheet dashboards",
+      "Chat first finance UX instead of spreadsheet dashboards",
       "Stripe Financial Connections for real bank data",
       "Native iOS + web parity on one backend",
     ],
@@ -314,27 +310,6 @@ export const cases = [
       "/work/anita/06-assets.png",
       "/work/anita/01-hero.png",
     ],
-  },
-  {
-    slug: "mitkovt",
-    title: "Mitkovt Coaching",
-    category: "Brand · Performance web",
-    year: "2024",
-    metric: "Brand site",
-    tagline: "Built through experience. Driven by discipline.",
-    summary:
-      "High-contrast coaching brand and conversion landing for Slobodan Mitkov, athletic visual system, DE/EN, PayPal/SEPA checkout paths, and German legal pages.",
-    result: "Landing · Visual identity · Checkout",
-    highlights: [
-      "Hard athletic brand presence without template fluff",
-      "Bilingual DE/EN conversion flow",
-      "Payment + WhatsApp paths wired for real clients",
-    ],
-    color: "#1d1d1f",
-    image: "/work/mitkovt-hero.jpg",
-    icon: "/work/mitkovt-hero.jpg",
-    coverMode: "cover" as const,
-    gallery: ["/work/mitkovt-hero.jpg", "/work/mitkovt-stage.jpg"],
   },
 ];
 
@@ -352,7 +327,7 @@ export const liveUsersCount = 5000;
 /** Production systems & APIs across shipped work (see capabilities). */
 export const systemsWiredCount = 40;
 
-/** Home showcases. Mitkovt off; BRM last in the Music queue. */
+/** Home showcases. BRM last in the Music queue. */
 export const featuredCases = [
   cases.find((c) => c.slug === "lifemaxxing")!,
   cases.find((c) => c.slug === "anita")!,

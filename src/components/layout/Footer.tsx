@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { footerNav, navLinks, site } from "@/data/site";
+import { footerNav, site } from "@/data/site";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -28,10 +28,9 @@ export function Footer() {
 
             <nav
               aria-label="Footer"
-              className="grid grid-cols-2 gap-x-10 gap-y-8 sm:grid-cols-3 sm:gap-x-14"
+              className="grid grid-cols-2 gap-x-10 gap-y-8 sm:gap-x-14"
             >
-              <FooterCol title="Navigate" links={navLinks} />
-              <FooterCol title="Explore" links={footerNav.studio} />
+              <FooterCol title="Navigate" links={footerNav.studio} />
               <FooterCol title="Legal" links={footerNav.legal} />
             </nav>
           </div>
