@@ -252,12 +252,12 @@ function FitnessCard() {
     },
     {
       key: "score",
-      label: "Client score",
-      value: "4.9",
-      /** Visual fill a bit under full. still reads as strong 4.9 */
-      progress: 0.72,
-      color: "#30D158",
-      track: "#14301A",
+      label: "Upwork",
+      value: "5.0",
+      /** Full five-star Upwork client reviews */
+      progress: 1,
+      color: "#14A800",
+      track: "#0F2E0A",
       r: 36,
     },
     {
@@ -305,15 +305,51 @@ function FitnessCard() {
                   }}
                 />
                 <div className="min-w-0">
-                  <p
-                    className="text-[22px] font-semibold leading-none tracking-[-0.04em] tabular-nums sm:text-[20px]"
-                    style={{ color: m.color }}
-                  >
-                    {m.value}
-                  </p>
-                  <p className="mt-0.5 text-[13px] font-medium leading-snug text-white/75 sm:text-[11px]">
-                    {m.label}
-                  </p>
+                  {m.key === "score" ? (
+                    <a
+                      href={site.upwork}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex flex-col gap-1.5 rounded-[10px] outline-none ring-[#14A800]/0 transition-[box-shadow,background-color] hover:bg-[#14A800]/10 focus-visible:ring-2 focus-visible:ring-[#14A800]/55"
+                      aria-label="Open Upwork profile, 5.0 rating"
+                    >
+                      <span className="inline-flex items-center gap-1.5">
+                        <span
+                          className="text-[22px] font-semibold leading-none tracking-[-0.04em] tabular-nums sm:text-[20px]"
+                          style={{ color: m.color }}
+                        >
+                          {m.value}
+                        </span>
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 12 12"
+                          fill="#FC8A06"
+                          aria-hidden
+                        >
+                          <path d="M6 0.8l1.5 3.2 3.5.4-2.6 2.4.7 3.4L6 8.6 2.9 10.2l.7-3.4L1 4.4l3.5-.4L6 .8z" />
+                        </svg>
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[13px] font-semibold leading-snug text-[#6FCF5B] underline decoration-[#6FCF5B]/55 underline-offset-[3px] group-hover:text-[#8DDB7A] group-hover:decoration-[#8DDB7A] sm:text-[12px]">
+                        {m.label}
+                        <span aria-hidden className="translate-y-[-0.5px] no-underline">
+                          →
+                        </span>
+                      </span>
+                    </a>
+                  ) : (
+                    <>
+                      <p
+                        className="text-[22px] font-semibold leading-none tracking-[-0.04em] tabular-nums sm:text-[20px]"
+                        style={{ color: m.color }}
+                      >
+                        {m.value}
+                      </p>
+                      <p className="mt-0.5 text-[13px] font-medium leading-snug text-white/85 sm:text-[12px]">
+                        {m.label}
+                      </p>
+                    </>
+                  )}
                 </div>
               </motion.li>
             ))}
@@ -778,7 +814,7 @@ function MusicCard() {
                     </span>
                     <span
                       className="mt-0.5 block truncate text-[13px] font-normal"
-                      style={{ color: "rgba(235,235,245,0.4)" }}
+                      style={{ color: "rgba(235,235,245,0.62)" }}
                     >
                       {active ? "Now Playing" : c.tagline}
                     </span>
@@ -788,7 +824,7 @@ function MusicCard() {
                   ) : (
                     <span
                       className="text-[13px] font-normal tabular-nums"
-                      style={{ color: "rgba(235,235,245,0.3)" }}
+                      style={{ color: "rgba(235,235,245,0.55)" }}
                     >
                       {trackTimes[i] ?? "3:00"}
                     </span>
@@ -826,7 +862,7 @@ function MusicCard() {
           </div>
           <div
             className="mt-1.5 flex justify-between text-[11px] font-normal tabular-nums"
-            style={{ color: "rgba(235,235,245,0.4)" }}
+            style={{ color: "rgba(235,235,245,0.6)" }}
           >
             <span>{formatTrackTime(elapsedSec)}</span>
             <span>−{formatTrackTime(remainingSec)}</span>

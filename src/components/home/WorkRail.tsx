@@ -50,23 +50,24 @@ function AppIcon({ src, size = 64 }: { src: string; size?: number }) {
   );
 }
 
+/** App Store chrome only. Upwork rating lives in Activity (FitnessCard). */
 function Stars() {
   return (
-    <span className="inline-flex items-center gap-[2px]" aria-label="4.9 out of 5">
+    <span className="inline-flex items-center gap-[2px]" aria-label="5.0 rating">
       {Array.from({ length: 5 }).map((_, i) => (
         <svg
           key={i}
-          width="9"
-          height="9"
+          width="10"
+          height="10"
           viewBox="0 0 12 12"
-          fill={i < 5 ? "#0a84ff" : "rgba(255,255,255,0.15)"}
+          fill="#0A84FF"
           aria-hidden
         >
           <path d="M6 0.8l1.5 3.2 3.5.4-2.6 2.4.7 3.4L6 8.6 2.9 10.2l.7-3.4L1 4.4l3.5-.4L6 .8z" />
         </svg>
       ))}
-      <span className="ml-1 text-[11px] font-medium tabular-nums text-white/35">
-        4.9
+      <span className="ml-1.5 text-[12px] font-semibold tabular-nums text-white/80">
+        5.0
       </span>
     </span>
   );
@@ -151,7 +152,7 @@ function AppStoreCard({
           <h3 className="truncate text-[17px] font-semibold leading-[1.15] tracking-[-0.022em] text-white">
             {item.title}
           </h3>
-          <p className="mt-[3px] truncate text-[13px] font-normal leading-tight text-[#98989d]">
+          <p className="mt-[3px] truncate text-[13px] font-normal leading-tight text-[#C7C7CC]">
             {item.tagline}
           </p>
           <div className="mt-1.5">
@@ -167,7 +168,7 @@ function AppStoreCard({
       </div>
 
       {/* Category chip row. App Store chrome. */}
-      <p className="mt-3 text-[11px] font-medium text-[#98989d]">
+      <p className="mt-3 text-[11px] font-medium text-[#AEAEB2]">
         {category}, {item.year}, 17+
       </p>
 
@@ -196,10 +197,10 @@ function AppStoreCard({
             Version History
           </Link>
         </div>
-        <p className="mt-1 text-[12px] font-normal text-[#98989d]">
+        <p className="mt-1 text-[12px] font-normal text-[#AEAEB2]">
           Version 1.0, {item.year}
         </p>
-        <p className="mt-2 line-clamp-2 text-[13px] leading-[1.35] text-white/80">
+        <p className="mt-2 line-clamp-2 text-[13px] leading-[1.35] text-white/88">
           {item.summary}
         </p>
       </div>

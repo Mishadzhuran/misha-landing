@@ -298,7 +298,7 @@ function NumbersCard() {
   const items = [
     { value: "120+", label: "Shipped" },
     { value: "38", label: "Markets" },
-    { value: "4.9", label: "Score" },
+    { value: "5.0", label: "Upwork" },
     { value: "1 day", label: "Reply" },
   ];
 

@@ -4,7 +4,6 @@ import {
   ChangeEvent,
   DragEvent,
   FormEvent,
-  useEffect,
   useId,
   useRef,
   useState,
@@ -161,24 +160,13 @@ export function FinalCTA() {
 
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [platforms, setPlatforms] = useState<string[]>(["iOS"]);
   const [timeline, setTimeline] =
     useState<(typeof TIMELINES)[number]>("2 to 3 months");
   const [files, setFiles] = useState<File[]>([]);
   const [fileError, setFileError] = useState("");
   const [dragging, setDragging] = useState(false);
-
-  useEffect(() => {
-    if (!sending) return;
-    const t = window.setTimeout(
-      () => {
-        setSending(false);
-        setSent(true);
-      },
-      reduce ? 0 : 520,
-    );
-    return () => window.clearTimeout(t);
-  }, [sending, reduce]);
 
   const addFiles = (incoming: FileList | File[]) => {
     const next = Array.from(incoming);
@@ -223,10 +211,45 @@ export function FinalCTA() {
     if (e.dataTransfer.files?.length) addFiles(e.dataTransfer.files);
   };
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!platforms.length || sending || sent) return;
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    data.set("platforms", platforms.join(", "));
+    data.set("timeline", timeline);
+    data.delete("files");
+    for (const file of files) data.append("files", file);
+
     setSending(true);
+    setSubmitError("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: data,
+      });
+      const json = (await res.json().catch(() => null)) as
+        | { ok?: boolean; error?: string }
+        | null;
+
+      if (!res.ok || !json?.ok) {
+        throw new Error(json?.error || "Could not send your message.");
+      }
+
+      setSent(true);
+      setFiles([]);
+      form.reset();
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Could not send your message. Try again.",
+      );
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -282,6 +305,45 @@ export function FinalCTA() {
                   Share what you want to build. I will get back to you within a
                   day.
                 </p>
+
+                <a
+                  href={site.upwork}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pressable mt-6 block max-w-sm rounded-[16px] border border-white/[0.1] bg-white/[0.04] p-4 transition-colors hover:border-white/[0.16] hover:bg-white/[0.06]"
+                  aria-label="Read 5.0 Upwork review"
+                >
+                  <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span className="inline-flex items-center gap-[2px]" aria-hidden>
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <svg
+                          key={i}
+                          width="12"
+                          height="12"
+                          viewBox="0 0 12 12"
+                          fill="#FC8A06"
+                        >
+                          <path d="M6 0.8l1.5 3.2 3.5.4-2.6 2.4.7 3.4L6 8.6 2.9 10.2l.7-3.4L1 4.4l3.5-.4L6 .8z" />
+                        </svg>
+                      ))}
+                    </span>
+                    <span className="font-display text-[14px] font-semibold tabular-nums tracking-[-0.02em] text-white">
+                      {site.upworkReview.rating}
+                    </span>
+                    <span className="text-white/25" aria-hidden>
+                      |
+                    </span>
+                    <span className="font-body text-[12px] text-white/45">
+                      {site.upworkReview.dateRange}
+                    </span>
+                  </span>
+                  <p className="mt-3 font-body text-[14px] italic leading-relaxed tracking-[-0.01em] text-white/80">
+                    “{site.upworkReview.quote}”
+                  </p>
+                  <p className="mt-3 font-body text-[12px] font-medium text-white/50">
+                    {site.upworkReview.endorsement}
+                  </p>
+                </a>
 
                 <div className="mt-auto flex items-center gap-3.5 pt-8">
                   <div className="relative size-12 shrink-0 overflow-hidden rounded-full bg-white/10 shadow-[0_10px_28px_rgba(0,0,0,0.35)] ring-[2px] ring-white/18 sm:size-14">
@@ -350,7 +412,7 @@ export function FinalCTA() {
                 ) : (
                   <motion.form
                     key="form"
-                    onSubmit={onSubmit}
+                    onSubmit={(e) => void onSubmit(e)}
                     initial={false}
                     exit={
                       reduce
@@ -358,8 +420,23 @@ export function FinalCTA() {
                         : { opacity: 0, transform: "translateY(-8px)" }
                     }
                     transition={{ duration: 0.28, ease: easeOut }}
-                    className="space-y-5"
+                    className="relative space-y-5"
                   >
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+                    >
+                      <label>
+                        Company
+                        <input
+                          name="company"
+                          type="text"
+                          tabIndex={-1}
+                          autoComplete="off"
+                        />
+                      </label>
+                    </div>
+
                     <div className="grid gap-4 sm:grid-cols-2">
                       <label className="block">
                         <span className="mb-2 block font-display text-[11px] font-semibold uppercase tracking-[0.08em] text-white/35">
@@ -560,6 +637,15 @@ export function FinalCTA() {
                         </ul>
                       ) : null}
                     </div>
+
+                    {submitError ? (
+                      <p
+                        role="alert"
+                        className="font-body text-[13px] leading-relaxed text-[#ff453a]"
+                      >
+                        {submitError}
+                      </p>
+                    ) : null}
 
                     <div className="flex justify-end pt-1">
                       <button

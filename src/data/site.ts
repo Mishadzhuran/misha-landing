@@ -9,7 +9,22 @@ export const site = {
   email: "hello@mishadzhuran.com",
   phone: "",
   locations: [] as string[],
-  socials: [] as { label: string; href: string }[],
+  upwork:
+    "https://www.upwork.com/freelancers/~0141994d698dbe3b62?mp_source=share",
+  /** Shown on the contact panel — real client review from Upwork. */
+  upworkReview: {
+    rating: "5.0",
+    dateRange: "Aug 18, 2026 – Nov 20, 2026",
+    quote:
+      "Misha has been absolutely brilliant to work with. He’s trustworthy, knowledgeable and highly skilled, with excellent communication throughout. I’m so happy with his work and would highly recommend him to anyone.",
+    endorsement: "Endorsed by client",
+  },
+  socials: [
+    {
+      label: "Upwork",
+      href: "https://www.upwork.com/freelancers/~0141994d698dbe3b62?mp_source=share",
+    },
+  ] as { label: string; href: string }[],
   governingLaw: "Poland",
   headOffice: "",
   responseTime: "1 business day",
@@ -317,7 +332,7 @@ export const stats = [
   { value: "20+", label: "Projects delivered" },
   { value: "170+", label: "Markets" },
   { value: "40+", label: "Systems wired" },
-  { value: "4.9", label: "Client rating" },
+  { value: "5.0", label: "Upwork rating" },
   { value: "1 day", label: "Typical reply" },
 ];
 
