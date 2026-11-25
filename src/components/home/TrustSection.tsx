@@ -923,7 +923,7 @@ function AboutQuoteCard() {
       <div className="relative z-10 flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:gap-8">
         <div className="relative size-[88px] shrink-0 overflow-hidden rounded-full bg-white/10 shadow-[0_14px_36px_rgba(0,0,0,0.45)] ring-[3px] ring-white/20 sm:size-[104px]">
           <Image
-            src="/me/portrait.jpg"
+            src={site.portrait}
             alt={site.name}
             fill
             className="object-cover object-[center_12%]"
@@ -953,7 +953,7 @@ function AboutQuoteCard() {
             </span>
           </div>
           <p className="mt-6 px-9 text-center text-[14px] font-medium tracking-[-0.01em] text-white/45 sm:mt-7 sm:px-12 sm:text-left">
-            Misha, Founder
+            Misha, {site.roleLabel}
           </p>
         </div>
       </div>
@@ -1232,15 +1232,24 @@ export function TrustSection() {
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     if (reduce) return;
+    const top = pinRef.current?.getBoundingClientRect().top ?? 0;
+
+    // Pin still below the fold (hero / above Deep Dive) — never leave page black.
+    // Old unlock only ran while "still in pin", so scrolling back to the hero
+    // kept html/body at #0a0a0a and made the light headline look ghosted.
+    if (top > 48) {
+      setLockedBlack(false);
+      setPageBlack(false);
+      return;
+    }
+
     if (v >= EXIT[2]) {
       setLockedBlack(true);
       setPageBlack(true);
       return;
     }
-    // Only unlock while scrolling back through the pin — not after it leaves view
-    const top = pinRef.current?.getBoundingClientRect().top ?? -Infinity;
-    const stillInPin = top > -48 && top < window.innerHeight * 0.6;
-    if (v < EXIT[2] - 0.08 && stillInPin) {
+
+    if (v < EXIT[2] - 0.08) {
       setLockedBlack(false);
       setPageBlack(false);
     }

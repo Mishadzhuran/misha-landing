@@ -34,8 +34,8 @@ const ACCEPT =
 /** Same settle as Overview widgets */
 const windowEnter = {
   ...springSoft,
-  duration: 0.58,
-  bounce: 0.08,
+  duration: 0.5,
+  bounce: 0.06,
 };
 
 const rowEnter = {
@@ -43,11 +43,31 @@ const rowEnter = {
   ease: easeOut,
 };
 
+const formStagger = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.045, delayChildren: 0.06 },
+  },
+};
+
+const formItem = {
+  hidden: { opacity: 0, transform: "translateY(10px)" },
+  show: {
+    opacity: 1,
+    transform: "translateY(0px)",
+    transition: { duration: 0.28, ease: easeOut },
+  },
+};
+
+/** 16px+ so iOS Safari does not zoom the page on focus */
 const fieldClass =
-  "w-full rounded-full border-0 bg-white/[0.07] px-5 py-[14px] font-body text-[15px] tracking-[-0.01em] text-white outline-none transition-[background-color,box-shadow] duration-[var(--duration-ui)] ease-[var(--ease-out)] placeholder:text-white/28 focus:bg-white/[0.1] focus:shadow-[0_0_0_3px_rgba(10,132,255,0.18)]";
+  "w-full rounded-full border-0 bg-white/[0.07] px-5 py-[14px] font-body text-[16px] tracking-[-0.01em] text-white outline-none transition-[background-color,box-shadow] duration-[var(--duration-ui)] ease-[var(--ease-out)] placeholder:text-white/28 focus:bg-white/[0.1] focus:shadow-[0_0_0_3px_rgba(10,132,255,0.18)]";
 
 const areaClass =
-  "w-full rounded-[28px] border-0 bg-white/[0.07] px-5 py-4 font-body text-[15px] tracking-[-0.01em] text-white outline-none transition-[background-color,box-shadow] duration-[var(--duration-ui)] ease-[var(--ease-out)] placeholder:text-white/28 focus:bg-white/[0.1] focus:shadow-[0_0_0_3px_rgba(10,132,255,0.18)]";
+  "w-full rounded-[28px] border-0 bg-white/[0.07] px-5 py-4 font-body text-[16px] tracking-[-0.01em] text-white outline-none transition-[background-color,box-shadow] duration-[var(--duration-ui)] ease-[var(--ease-out)] placeholder:text-white/28 focus:bg-white/[0.1] focus:shadow-[0_0_0_3px_rgba(10,132,255,0.18)]";
+
+const labelClass =
+  "mb-2 block font-display text-[11px] font-semibold uppercase tracking-[0.08em] text-white/35";
 
 function toggleInList<T extends string>(list: T[], value: T): T[] {
   return list.includes(value)
@@ -82,10 +102,10 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`pressable inline-flex min-h-[42px] items-center gap-1.5 rounded-full px-4 py-2 font-display text-[13px] font-semibold tracking-[-0.02em] transition-[background-color,color,box-shadow] duration-[var(--duration-ui)] ease-[var(--ease-out)] ${
+      className={`pressable inline-flex min-h-[44px] touch-manipulation items-center gap-1.5 rounded-full px-4 py-2.5 font-display text-[14px] font-semibold tracking-[-0.02em] transition-[background-color,color] duration-[var(--duration-ui)] ease-[var(--ease-out)] select-none ${
         active
           ? activeClass
-          : "bg-white/[0.07] text-white/60 hover:bg-white/[0.11] hover:text-white/85"
+          : "bg-white/[0.07] text-white/60 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.11] [@media(hover:hover)_and_(pointer:fine)]:hover:text-white/85"
       }`}
     >
       {active ? (
@@ -255,130 +275,39 @@ export function FinalCTA() {
   return (
     <section
       id="contact"
-      className="relative scroll-mt-28 overflow-hidden bg-[#0a0a0a] pb-16 pt-12 md:pb-24 md:pt-20"
+      className="relative scroll-mt-24 overflow-hidden bg-[#0a0a0a] pb-[max(4rem,env(safe-area-inset-bottom)+2rem)] pt-10 md:pb-24 md:pt-20"
     >
-      {/* Soft ambient so glass has something to catch — stays dark */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 45% at 50% 30%, rgba(255,255,255,0.09), transparent 68%), radial-gradient(ellipse 45% 40% at 18% 75%, rgba(10,132,255,0.1), transparent 62%), radial-gradient(ellipse 35% 30% at 85% 60%, rgba(255,255,255,0.04), transparent 55%)",
+            "radial-gradient(ellipse 60% 45% at 50% 30%, rgba(255,255,255,0.09), transparent 68%), radial-gradient(ellipse 45% 40% at 18% 75%, rgba(10,132,255,0.1), transparent 62%)",
         }}
       />
 
       <Shell className="relative z-10">
-        <motion.div
-          initial={
-            reduce
-              ? false
-              : { opacity: 0, transform: "translateY(28px) scale(0.97)" }
-          }
-          whileInView={{
-            opacity: 1,
-            transform: "translateY(0px) scale(1)",
-          }}
-          viewport={{ once: true, amount: 0.15, margin: "0px 0px -8% 0px" }}
-          transition={reduce ? { duration: 0 } : windowEnter}
-          className="liquid-glass-dark relative mx-auto max-w-5xl overflow-hidden rounded-[22px] sm:rounded-[28px]"
-        >
-          <div className="absolute left-5 top-5 z-10 sm:left-6 sm:top-6">
-            <TrafficLights />
-          </div>
+        <div className="mx-auto flex w-full max-w-4xl flex-col gap-5 sm:gap-6">
+          {/* Form window only */}
+          <motion.div
+            initial={
+              reduce
+                ? false
+                : { opacity: 0, transform: "translateY(28px) scale(0.97)" }
+            }
+            whileInView={{
+              opacity: 1,
+              transform: "translateY(0px) scale(1)",
+            }}
+            viewport={{ once: true, amount: 0.12, margin: "0px 0px -8% 0px" }}
+            transition={reduce ? { duration: 0 } : windowEnter}
+            className="liquid-glass-dark relative overflow-hidden rounded-[26px] sm:rounded-[32px]"
+          >
+            <div className="absolute left-5 top-5 z-10 sm:left-6 sm:top-6">
+              <TrafficLights />
+            </div>
 
-          <div className="grid lg:grid-cols-[0.92fr_1.2fr]">
-            {/* Meet pane — no separator */}
-            <motion.div
-              initial={
-                reduce ? false : { opacity: 0, transform: "translateY(12px)" }
-              }
-              whileInView={{ opacity: 1, transform: "translateY(0px)" }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={reduce ? { duration: 0 } : { ...rowEnter, delay: 0.1 }}
-              className="relative flex min-h-[520px] flex-col px-6 pb-6 pt-12 sm:min-h-[560px] sm:px-8 sm:pb-8 sm:pt-14 lg:min-h-full lg:px-10 lg:pb-10 lg:pt-14"
-            >
-              <div className="relative flex flex-1 flex-col">
-                <h2 className="font-display text-[clamp(2rem,4.2vw,2.75rem)] font-semibold leading-[1.05] tracking-[-0.045em] text-white">
-                  Let’s get it started
-                </h2>
-                <p className="mt-4 max-w-sm font-body text-[15px] leading-relaxed tracking-[-0.01em] text-white/45 sm:text-[16px]">
-                  Share what you want to build. I will get back to you within a
-                  day.
-                </p>
-
-                <a
-                  href={site.upwork}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pressable mt-6 block max-w-sm rounded-[16px] border border-white/[0.1] bg-white/[0.04] p-4 transition-colors hover:border-white/[0.16] hover:bg-white/[0.06]"
-                  aria-label="Read 5.0 Upwork review"
-                >
-                  <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                    <span className="inline-flex items-center gap-[2px]" aria-hidden>
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <svg
-                          key={i}
-                          width="12"
-                          height="12"
-                          viewBox="0 0 12 12"
-                          fill="#FC8A06"
-                        >
-                          <path d="M6 0.8l1.5 3.2 3.5.4-2.6 2.4.7 3.4L6 8.6 2.9 10.2l.7-3.4L1 4.4l3.5-.4L6 .8z" />
-                        </svg>
-                      ))}
-                    </span>
-                    <span className="font-display text-[14px] font-semibold tabular-nums tracking-[-0.02em] text-white">
-                      {site.upworkReview.rating}
-                    </span>
-                    <span className="text-white/25" aria-hidden>
-                      |
-                    </span>
-                    <span className="font-body text-[12px] text-white/45">
-                      {site.upworkReview.dateRange}
-                    </span>
-                  </span>
-                  <p className="mt-3 font-body text-[14px] italic leading-relaxed tracking-[-0.01em] text-white/80">
-                    “{site.upworkReview.quote}”
-                  </p>
-                  <p className="mt-3 font-body text-[12px] font-medium text-white/50">
-                    {site.upworkReview.endorsement}
-                  </p>
-                </a>
-
-                <div className="mt-auto flex items-center gap-3.5 pt-8">
-                  <div className="relative size-12 shrink-0 overflow-hidden rounded-full bg-white/10 shadow-[0_10px_28px_rgba(0,0,0,0.35)] ring-[2px] ring-white/18 sm:size-14">
-                    <Image
-                      src="/me/portrait.jpg"
-                      alt={site.name}
-                      fill
-                      className="object-cover object-[center_12%]"
-                      sizes="56px"
-                    />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-display text-[15px] font-semibold tracking-[-0.02em] text-white">
-                      {site.name}
-                    </p>
-                    <p className="mt-0.5 font-body text-[13px] text-white/40">
-                      Founder
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Form pane */}
-            <motion.div
-              initial={
-                reduce ? false : { opacity: 0, transform: "translateY(12px)" }
-              }
-              whileInView={{ opacity: 1, transform: "translateY(0px)" }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={
-                reduce ? { duration: 0 } : { ...rowEnter, delay: 0.16 }
-              }
-              className="px-6 py-8 pt-12 sm:px-8 sm:py-10 sm:pt-14 lg:px-9 lg:py-11 lg:pt-14"
-            >
+            <div className="px-5 pb-7 pt-12 sm:px-8 sm:pb-9 sm:pt-14 lg:px-10">
               <AnimatePresence mode="wait" initial={false}>
                 {sent ? (
                   <motion.div
@@ -397,7 +326,7 @@ export function FinalCTA() {
                     }}
                     exit={{ opacity: 0 }}
                     transition={springSoft}
-                    className="flex min-h-[360px] flex-col items-start justify-center"
+                    className="flex min-h-[280px] flex-col items-start justify-center"
                   >
                     <span className="flex size-12 items-center justify-center rounded-full bg-[#30d158]/15 text-[#30d158] ring-1 ring-[#30d158]/28">
                       <IconCheck size={20} />
@@ -413,7 +342,9 @@ export function FinalCTA() {
                   <motion.form
                     key="form"
                     onSubmit={(e) => void onSubmit(e)}
-                    initial={false}
+                    initial={reduce ? false : "hidden"}
+                    animate="show"
+                    variants={reduce ? undefined : formStagger}
                     exit={
                       reduce
                         ? undefined
@@ -422,6 +353,15 @@ export function FinalCTA() {
                     transition={{ duration: 0.28, ease: easeOut }}
                     className="relative space-y-5"
                   >
+                    <motion.div variants={reduce ? undefined : formItem}>
+                      <h2 className="font-display text-[clamp(1.85rem,4.5vw,2.5rem)] font-semibold leading-[1.05] tracking-[-0.045em] text-white">
+                        Let’s get it started
+                      </h2>
+                      <p className="mt-2 max-w-md font-body text-[15px] leading-relaxed text-white/45 sm:text-[16px]">
+                        Tell me what you want to build. I reply within a day.
+                      </p>
+                    </motion.div>
+
                     <div
                       aria-hidden
                       className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
@@ -437,11 +377,12 @@ export function FinalCTA() {
                       </label>
                     </div>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <label className="block">
-                        <span className="mb-2 block font-display text-[11px] font-semibold uppercase tracking-[0.08em] text-white/35">
-                          Name
-                        </span>
+                    <motion.div
+                      variants={reduce ? undefined : formItem}
+                      className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4"
+                    >
+                      <label className="block min-w-0">
+                        <span className={labelClass}>Name</span>
                         <input
                           name="name"
                           required
@@ -450,25 +391,22 @@ export function FinalCTA() {
                           className={fieldClass}
                         />
                       </label>
-                      <label className="block">
-                        <span className="mb-2 block font-display text-[11px] font-semibold uppercase tracking-[0.08em] text-white/35">
-                          Email
-                        </span>
+                      <label className="block min-w-0">
+                        <span className={labelClass}>Email</span>
                         <input
                           name="email"
                           type="email"
                           required
                           autoComplete="email"
+                          inputMode="email"
                           placeholder="you@company.com"
                           className={fieldClass}
                         />
                       </label>
-                    </div>
+                    </motion.div>
 
-                    <fieldset>
-                      <legend className="mb-2.5 font-display text-[11px] font-semibold uppercase tracking-[0.08em] text-white/35">
-                        Platforms
-                      </legend>
+                    <motion.fieldset variants={reduce ? undefined : formItem}>
+                      <legend className={labelClass}>Platforms</legend>
                       <input
                         type="hidden"
                         name="platforms"
@@ -487,12 +425,10 @@ export function FinalCTA() {
                           </Chip>
                         ))}
                       </div>
-                    </fieldset>
+                    </motion.fieldset>
 
-                    <fieldset>
-                      <legend className="mb-2.5 font-display text-[11px] font-semibold uppercase tracking-[0.08em] text-white/35">
-                        Timeline
-                      </legend>
+                    <motion.fieldset variants={reduce ? undefined : formItem}>
+                      <legend className={labelClass}>Timeline</legend>
                       <input type="hidden" name="timeline" value={timeline} />
                       <div className="flex flex-wrap gap-2">
                         {TIMELINES.map((item) => (
@@ -506,12 +442,13 @@ export function FinalCTA() {
                           </Chip>
                         ))}
                       </div>
-                    </fieldset>
+                    </motion.fieldset>
 
-                    <label className="block">
-                      <span className="mb-2 block font-display text-[11px] font-semibold uppercase tracking-[0.08em] text-white/35">
-                        About the product
-                      </span>
+                    <motion.label
+                      variants={reduce ? undefined : formItem}
+                      className="block"
+                    >
+                      <span className={labelClass}>About the product</span>
                       <textarea
                         name="brief"
                         required
@@ -519,15 +456,10 @@ export function FinalCTA() {
                         placeholder="What are you building, who is it for, and what matters most?"
                         className={`${areaClass} min-h-[112px] resize-none`}
                       />
-                    </label>
+                    </motion.label>
 
-                    <div>
-                      <div className="mb-2">
-                        <span className="font-display text-[11px] font-semibold uppercase tracking-[0.08em] text-white/35">
-                          Attachments
-                        </span>
-                      </div>
-
+                    <motion.div variants={reduce ? undefined : formItem}>
+                      <span className={labelClass}>Attachments</span>
                       <input
                         ref={fileRef}
                         id={fileInputId}
@@ -537,7 +469,6 @@ export function FinalCTA() {
                         className="sr-only"
                         onChange={onFileChange}
                       />
-
                       <label
                         htmlFor={fileInputId}
                         onDragEnter={(e) => {
@@ -556,11 +487,11 @@ export function FinalCTA() {
                         className={`group flex cursor-pointer items-center gap-3.5 rounded-full px-4 py-3.5 transition-[background-color,box-shadow] duration-[var(--duration-ui)] ease-[var(--ease-out)] ${
                           dragging
                             ? "bg-[#0a84ff]/16 shadow-[0_0_0_3px_rgba(10,132,255,0.18)]"
-                            : "bg-white/[0.07] hover:bg-white/[0.1]"
+                            : "bg-white/[0.07] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.1]"
                         }`}
                       >
                         <span
-                          className={`flex size-9 shrink-0 items-center justify-center rounded-full text-white/80 transition-[background-color,color] duration-[var(--duration-ui)] ease-[var(--ease-out)] ${
+                          className={`flex size-9 shrink-0 items-center justify-center rounded-full text-white/80 ${
                             dragging
                               ? "bg-[#0a84ff] text-white"
                               : "bg-white/[0.08]"
@@ -582,10 +513,8 @@ export function FinalCTA() {
                             />
                           </svg>
                         </span>
-                        <span className="min-w-0 text-left">
-                          <span className="block font-display text-[13px] font-semibold tracking-[-0.02em] text-white/85">
-                            Add files
-                          </span>
+                        <span className="font-display text-[13px] font-semibold tracking-[-0.02em] text-white/85">
+                          Add files
                         </span>
                       </label>
 
@@ -602,17 +531,11 @@ export function FinalCTA() {
                               key={`${file.name}-${file.size}-${file.lastModified}`}
                               className="flex items-center gap-3 rounded-full bg-white/[0.07] px-3.5 py-2"
                             >
-                              <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-white/[0.1] font-display text-[10px] font-semibold uppercase tracking-wide text-white/60">
-                                {file.name.split(".").pop()?.slice(0, 3) ||
-                                  "file"}
+                              <span className="min-w-0 flex-1 truncate font-body text-[13px] font-medium text-white/85">
+                                {file.name}
                               </span>
-                              <span className="min-w-0 flex-1">
-                                <span className="block truncate font-body text-[13px] font-medium text-white/85">
-                                  {file.name}
-                                </span>
-                                <span className="font-body text-[11px] text-white/35">
-                                  {formatBytes(file.size)}
-                                </span>
+                              <span className="font-body text-[11px] text-white/35">
+                                {formatBytes(file.size)}
                               </span>
                               <button
                                 type="button"
@@ -628,7 +551,7 @@ export function FinalCTA() {
                                     ),
                                   )
                                 }
-                                className="pressable rounded-full px-2 py-1 font-display text-[12px] font-medium text-white/45 hover:bg-white/[0.06] hover:text-white/75"
+                                className="pressable rounded-full px-2 py-1 font-display text-[12px] font-medium text-white/45 [@media(hover:hover)_and_(pointer:fine)]:hover:text-white/75"
                               >
                                 Remove
                               </button>
@@ -636,7 +559,7 @@ export function FinalCTA() {
                           ))}
                         </ul>
                       ) : null}
-                    </div>
+                    </motion.div>
 
                     {submitError ? (
                       <p
@@ -647,19 +570,35 @@ export function FinalCTA() {
                       </p>
                     ) : null}
 
-                    <div className="flex justify-end pt-1">
+                    <motion.div
+                      variants={reduce ? undefined : formItem}
+                      className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <p className="order-2 text-center font-body text-[13px] text-white/35 sm:order-1 sm:text-left">
+                        No spam. Reply in about a day.
+                      </p>
                       <button
                         type="submit"
                         disabled={!platforms.length || sending}
-                        className="pressable relative inline-flex min-h-[48px] w-full items-center justify-center overflow-hidden rounded-full bg-[#0a84ff] px-7 font-display text-[15px] font-semibold tracking-[-0.02em] !text-white transition-[filter] duration-[var(--duration-ui)] ease-[var(--ease-out)] hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto sm:min-w-[168px]"
+                        className="pressable relative order-1 inline-flex min-h-[52px] w-full touch-manipulation items-center justify-center overflow-hidden rounded-full bg-[#0a84ff] px-7 font-display text-[16px] font-semibold tracking-[-0.02em] !text-white select-none transition-[filter] duration-[var(--duration-ui)] ease-[var(--ease-out)] disabled:cursor-not-allowed disabled:opacity-45 sm:order-2 sm:w-auto sm:min-h-[48px] sm:min-w-[168px] [@media(hover:hover)_and_(pointer:fine)]:hover:brightness-110"
                       >
                         <AnimatePresence mode="wait" initial={false}>
                           {sending ? (
                             <motion.span
                               key="sending"
-                              initial={reduce ? false : { opacity: 0, y: 6 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -6 }}
+                              initial={
+                                reduce
+                                  ? false
+                                  : { opacity: 0, transform: "translateY(6px)" }
+                              }
+                              animate={{
+                                opacity: 1,
+                                transform: "translateY(0px)",
+                              }}
+                              exit={{
+                                opacity: 0,
+                                transform: "translateY(-6px)",
+                              }}
                               transition={springSnap}
                               className="inline-flex items-center gap-2"
                             >
@@ -672,9 +611,19 @@ export function FinalCTA() {
                           ) : (
                             <motion.span
                               key="idle"
-                              initial={reduce ? false : { opacity: 0, y: 6 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -6 }}
+                              initial={
+                                reduce
+                                  ? false
+                                  : { opacity: 0, transform: "translateY(6px)" }
+                              }
+                              animate={{
+                                opacity: 1,
+                                transform: "translateY(0px)",
+                              }}
+                              exit={{
+                                opacity: 0,
+                                transform: "translateY(-6px)",
+                              }}
                               transition={springSnap}
                             >
                               Send message
@@ -682,13 +631,123 @@ export function FinalCTA() {
                           )}
                         </AnimatePresence>
                       </button>
-                    </div>
+                    </motion.div>
                   </motion.form>
                 )}
               </AnimatePresence>
-            </motion.div>
-          </div>
-        </motion.div>
+            </div>
+          </motion.div>
+
+          {/* About + links under the form window */}
+          <motion.div
+            initial={
+              reduce
+                ? false
+                : { opacity: 0, transform: "translateY(18px) scale(0.985)" }
+            }
+            whileInView={{
+              opacity: 1,
+              transform: "translateY(0px) scale(1)",
+            }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={
+              reduce
+                ? { duration: 0 }
+                : { ...windowEnter, delay: 0.1 }
+            }
+            className="w-full"
+          >
+            <div className="flex flex-col gap-5 rounded-[26px] bg-white/[0.05] p-5 sm:rounded-[32px] sm:gap-5 sm:p-6">
+              <div className="flex items-center gap-3.5">
+                <div className="relative size-12 shrink-0 overflow-hidden rounded-full bg-white/10 ring-[1.5px] ring-white/18">
+                  <Image
+                    src={site.portrait}
+                    alt={site.name}
+                    fill
+                    className="object-cover object-[center_12%]"
+                    sizes="48px"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-display text-[15px] font-semibold tracking-[-0.02em] text-white">
+                    {site.name}
+                  </p>
+                  <p className="mt-0.5 font-body text-[13px] text-white/40">
+                    {site.roleLabel}
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href={site.upwork}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pressable block rounded-[22px] bg-black/25 px-4 py-4 transition-colors [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/35"
+                aria-label="Read 5.0 Upwork review"
+              >
+                <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span
+                    className="inline-flex items-center gap-[2px]"
+                    aria-hidden
+                  >
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <svg
+                        key={i}
+                        width="10"
+                        height="10"
+                        viewBox="0 0 12 12"
+                        fill="#FC8A06"
+                      >
+                        <path d="M6 0.8l1.5 3.2 3.5.4-2.6 2.4.7 3.4L6 8.6 2.9 10.2l.7-3.4L1 4.4l3.5-.4L6 .8z" />
+                      </svg>
+                    ))}
+                  </span>
+                  <span className="font-display text-[13px] font-semibold tabular-nums tracking-[-0.02em] text-white">
+                    {site.upworkReview.rating}
+                  </span>
+                  <span className="font-body text-[11px] text-white/40">
+                    Upwork
+                  </span>
+                </span>
+                <p className="mt-3 font-body text-[13px] leading-relaxed tracking-[-0.01em] text-white/70">
+                  “{site.upworkReview.quote}”
+                </p>
+                <p className="mt-3 font-body text-[11px] font-medium text-white/40">
+                  {site.upworkReview.endorsement}
+                </p>
+              </a>
+
+              <ul
+                className="grid grid-cols-3 gap-2.5 sm:gap-3"
+                aria-label="Profiles"
+              >
+                {site.socials.map((social) => (
+                  <li key={social.label} className="min-w-0">
+                    <a
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="pressable flex min-h-[44px] w-full touch-manipulation items-center justify-center gap-1.5 rounded-full bg-white/[0.07] px-2 text-[12px] font-medium text-white/70 select-none transition-colors sm:text-[13px] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.11] [@media(hover:hover)_and_(pointer:fine)]:hover:text-white"
+                    >
+                      <Image
+                        src={social.icon}
+                        alt=""
+                        width={14}
+                        height={14}
+                        className={
+                          social.label === "GitHub"
+                            ? "brightness-0 invert opacity-90"
+                            : undefined
+                        }
+                      />
+                      <span className="truncate">{social.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        </div>
       </Shell>
     </section>
   );

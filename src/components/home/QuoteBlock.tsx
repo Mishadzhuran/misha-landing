@@ -21,7 +21,7 @@ export function QuoteBlock() {
           <div className="grid lg:grid-cols-12">
             <div className="relative min-h-[280px] lg:col-span-4 lg:min-h-[380px]">
               <Image
-                src="/me/portrait.jpg"
+                src={site.portrait}
                 alt={site.name}
                 fill
                 sizes="(max-width:1024px) 100vw, 33vw"

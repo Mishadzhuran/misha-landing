@@ -9,22 +9,38 @@ export const site = {
   email: "hello@mishadzhuran.com",
   phone: "",
   locations: [] as string[],
+  /** Single canonical headshot — do not add alternate portrait files. */
+  portrait: "/me/misha.jpg",
+  roleLabel: "Developer",
+  github: "https://github.com/Mishadzhuran",
+  linkedin: "https://www.linkedin.com/in/misha-dzhuran-5b869b305",
   upwork:
     "https://www.upwork.com/freelancers/~0141994d698dbe3b62?mp_source=share",
   /** Shown on the contact panel — real client review from Upwork. */
   upworkReview: {
     rating: "5.0",
-    dateRange: "Aug 18, 2026 – Nov 20, 2026",
+    dateRange: "Aug 18, 2026 to Nov 20, 2026",
     quote:
       "Misha has been absolutely brilliant to work with. He’s trustworthy, knowledgeable and highly skilled, with excellent communication throughout. I’m so happy with his work and would highly recommend him to anyone.",
     endorsement: "Endorsed by client",
   },
   socials: [
     {
+      label: "GitHub",
+      href: "https://github.com/Mishadzhuran",
+      icon: "/icons/github.svg",
+    },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/misha-dzhuran-5b869b305",
+      icon: "/icons/linkedin.svg",
+    },
+    {
       label: "Upwork",
       href: "https://www.upwork.com/freelancers/~0141994d698dbe3b62?mp_source=share",
+      icon: "/icons/upwork.svg",
     },
-  ] as { label: string; href: string }[],
+  ] as { label: string; href: string; icon: string }[],
   governingLaw: "Poland",
   headOffice: "",
   responseTime: "1 business day",
@@ -291,12 +307,13 @@ export const cases = [
     image: "/work/bigred-cover.jpg",
     icon: "/work/icons/big-red-map.png",
     coverMode: "cover" as const,
+    /** Portrait product frames only — desk/tokyo crops look wrong in App Store shots. */
     gallery: [
       "/work/bigred-phone.png",
-      "/work/bigred-desk.png",
-      "/work/bigred-tokyo.jpg",
+      "/work/bigred-cover.jpg",
       "/work/bigred-login.png",
     ],
+    shotFit: "contain" as const,
   },
   {
     slug: "anita",

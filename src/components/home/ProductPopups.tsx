@@ -276,7 +276,7 @@ function ReleaseCard() {
       <div className="relative mt-auto flex items-center gap-3 rounded-[18px] bg-[#f5f5f7] p-3.5 pt-4">
         <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-white shadow-sm">
           <Image
-            src="/me/portrait.jpg"
+            src={site.portrait}
             alt=""
             fill
             className="object-cover object-[center_18%]"

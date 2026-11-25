@@ -5,11 +5,12 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { featuredCases } from "@/data/site";
 import { Shell } from "@/components/ui/Primitives";
-import { easeOut, springSoft } from "@/lib/motion";
+import { easeOut } from "@/lib/motion";
 
 type CaseItem = (typeof featuredCases)[number];
 
-const soft = { duration: 0.36, ease: easeOut } as const;
+/** Short ease-out enter — no spring bounce (feels jumpy on mobile scroll). */
+const cardEnter = { duration: 0.32, ease: easeOut } as const;
 
 /** iOS continuous-corner squircle (~22.37%) */
 function AppIcon({ src, size = 64 }: { src: string; size?: number }) {
@@ -75,39 +76,44 @@ function Stars() {
 
 function Shot({
   src,
-  delay,
-  reduce,
+  fit = "cover",
 }: {
   src: string;
-  delay: number;
-  reduce: boolean | null;
+  fit?: "cover" | "contain";
 }) {
+  const contain = fit === "contain";
+
   return (
-    <motion.div
-      initial={reduce ? false : { opacity: 0, y: 10, scale: 0.97 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.35 }}
-      transition={{ delay, ...soft }}
-      className="relative aspect-[9/19.5] min-w-0 flex-1 overflow-hidden rounded-[16px] bg-[#000] shadow-[0_8px_24px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.12]"
+    <div
+      className={`relative aspect-[9/19.5] min-w-0 flex-1 overflow-hidden rounded-[16px] shadow-[0_8px_24px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.12] ${
+        contain ? "bg-[#f2f2f7]" : "bg-[#000]"
+      }`}
     >
-      {/* Device status strip */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 top-0 z-10 flex h-4 items-center justify-between px-2"
-      >
-        <span className="text-[5px] font-semibold tabular-nums text-white/80">
-          9:41
-        </span>
-        <span className="h-[3px] w-[9px] rounded-[1px] bg-white/80" />
-      </div>
+      {/* Device status strip — only when covering a full bleed shot */}
+      {!contain ? (
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 z-10 flex h-4 items-center justify-between px-2"
+        >
+          <span className="text-[5px] font-semibold tabular-nums text-white/80">
+            9:41
+          </span>
+          <span className="h-[3px] w-[9px] rounded-[1px] bg-white/80" />
+        </div>
+      ) : null}
       <Image
         src={src}
         alt=""
         fill
-        className="object-cover object-top"
-        sizes="130px"
+        className={
+          contain
+            ? "object-contain object-center p-[1px]"
+            : "object-cover object-top"
+        }
+        sizes="(max-width: 640px) 28vw, 130px"
+        quality={82}
       />
-    </motion.div>
+    </div>
   );
 }
 
@@ -128,22 +134,31 @@ function AppStoreCard({
   while (shots.length < 3) shots.push(shots[shots.length - 1] ?? item.image);
 
   const category = item.category.split(",")[0]?.trim() ?? "App";
+  const shotFit =
+    "shotFit" in item && item.shotFit === "contain" ? "contain" : "cover";
 
   return (
     <motion.article
       initial={
         reduce
           ? false
-          : { opacity: 0, transform: "translateX(18px) scale(0.98)" }
+          : { opacity: 0, transform: "translateY(12px)" }
       }
       whileInView={{
         opacity: 1,
-        transform: "translateX(0px) scale(1)",
+        transform: "translateY(0px)",
       }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ ...springSoft, delay: Math.min(index, 2) * 0.06 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{
+        ...cardEnter,
+        delay: Math.min(index, 2) * 0.05,
+      }}
       className="flex w-[min(80vw,310px)] shrink-0 flex-col rounded-[24px] bg-[#000000] p-4 ring-1 ring-white/[0.09] sm:w-[330px] sm:rounded-[28px] sm:p-5 lg:w-[min(350px,calc((100vw-5.5rem)/3))]"
-      style={{ scrollSnapAlign: "start" }}
+      style={{
+        scrollSnapAlign: "start",
+        contentVisibility: "auto",
+        containIntrinsicSize: "310px 420px",
+      }}
     >
       {/* Product header */}
       <div className="flex items-center gap-3">
@@ -172,14 +187,13 @@ function AppStoreCard({
         {category}, {item.year}, 17+
       </p>
 
-      {/* Screenshots */}
+      {/* Screenshots — no per-shot motion (was jumpy / costly on mobile) */}
       <div className="mt-3.5 flex gap-[7px]">
         {shots.map((src, i) => (
           <Shot
             key={`${item.slug}-${i}`}
             src={src}
-            delay={0.06 + i * 0.05}
-            reduce={reduce}
+            fit={shotFit}
           />
         ))}
       </div>
@@ -221,7 +235,7 @@ export function WorkSection() {
           }
           whileInView={{ opacity: 1, transform: "translateY(0px)" }}
           viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.35, ease: easeOut }}
+          transition={{ duration: 0.3, ease: easeOut }}
         >
           <h2 className="deepdive-display text-[28px] text-white sm:text-[34px]">
             Selected work
@@ -236,13 +250,13 @@ export function WorkSection() {
       </Shell>
 
       <div
-        className="mt-6 flex gap-3 overflow-x-auto overscroll-x-contain pb-2 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-8 sm:gap-4 [&::-webkit-scrollbar]:hidden"
+        className="work-rail mt-6 flex gap-3 overflow-x-auto overscroll-x-contain pb-2 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-8 sm:gap-4 [&::-webkit-scrollbar]:hidden"
         style={{
           scrollSnapType: "x proximity",
           WebkitOverflowScrolling: "touch",
-          // Allow vertical page scroll while still enabling horizontal swipe
+          // Keep both axes — pan-x alone traps vertical page scroll under the cards
           touchAction: "pan-x pan-y",
-          overscrollBehaviorY: "auto",
+          overscrollBehaviorX: "contain",
           paddingInline: "max(1.25rem, calc((100vw - 1120px) / 2))",
         }}
       >
